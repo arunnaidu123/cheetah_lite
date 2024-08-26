@@ -107,13 +107,6 @@ int main(int argc, char** argv) {
             rv = beam.exec();
             config.pool_manager().wait();
         }
-#ifdef ENABLE_PSRDADA
-        else if(stream_name == "psrdada") {
-            pipelines::search_pipeline::BeamLauncher<psrdada::SigProcDadaStream, NumericalT> beam( config.beams_config(), [&](pipelines::search_pipeline::BeamConfig<NumericalT> const& config) -> psrdada::Config const& { return config.psrdada_config(); }, runtime_handler_factory);
-            rv = beam.exec();
-            config.pool_manager().wait();
-        }
-#endif
         else {
             rv = io::producers::rcpt::SkaSelector::select<int,SelectUdpBeam>(stream_name, config, runtime_handler_factory);
         }

@@ -57,7 +57,7 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/arun/oxford/cheetah_lite/ska-pss-cheetah
+CMAKE_SOURCE_DIR = /home/arun/oxford/cheetah_lite/cheetah_lite
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/arun/oxford/cheetah_lite/build
@@ -162,14 +162,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/arun/oxford/cheetah_lite/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/arun/oxford/cheetah_lite/build/CMakeFiles /home/arun/oxford/cheetah_lite/ska-pss-cheetah/thirdparty/googletest/googletest-build//CMakeFiles/progress.marks
-	cd /home/arun/oxford/cheetah_lite/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 /home/arun/oxford/cheetah_lite/ska-pss-cheetah/thirdparty/googletest/googletest-build/all
+	cd /home/arun/oxford/cheetah_lite/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/arun/oxford/cheetah_lite/build/CMakeFiles /home/arun/oxford/cheetah_lite/cheetah_lite/thirdparty/googletest/googletest-build//CMakeFiles/progress.marks
+	cd /home/arun/oxford/cheetah_lite/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 /home/arun/oxford/cheetah_lite/cheetah_lite/thirdparty/googletest/googletest-build/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/arun/oxford/cheetah_lite/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/arun/oxford/cheetah_lite/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 /home/arun/oxford/cheetah_lite/ska-pss-cheetah/thirdparty/googletest/googletest-build/clean
+	cd /home/arun/oxford/cheetah_lite/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 /home/arun/oxford/cheetah_lite/cheetah_lite/thirdparty/googletest/googletest-build/clean
 .PHONY : clean
 
 # The main clean target
@@ -178,12 +178,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/arun/oxford/cheetah_lite/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 /home/arun/oxford/cheetah_lite/ska-pss-cheetah/thirdparty/googletest/googletest-build/preinstall
+	cd /home/arun/oxford/cheetah_lite/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 /home/arun/oxford/cheetah_lite/cheetah_lite/thirdparty/googletest/googletest-build/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/arun/oxford/cheetah_lite/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 /home/arun/oxford/cheetah_lite/ska-pss-cheetah/thirdparty/googletest/googletest-build/preinstall
+	cd /home/arun/oxford/cheetah_lite/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 /home/arun/oxford/cheetah_lite/cheetah_lite/thirdparty/googletest/googletest-build/preinstall
 .PHONY : preinstall/fast
 
 # clear depends

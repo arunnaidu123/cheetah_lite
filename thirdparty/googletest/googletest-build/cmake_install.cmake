@@ -1,4 +1,4 @@
-# Install script for directory: /home/arun/oxford/cheetah_lite/ska-pss-cheetah/thirdparty/googletest/googletest-src
+# Install script for directory: /home/arun/oxford/cheetah_lite/cheetah_lite/thirdparty/googletest/googletest-src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/arun/oxford/cheetah_lite/ska-pss-cheetah/thirdparty/googletest/googletest-build/googlemock/cmake_install.cmake")
+  include("/home/arun/oxford/cheetah_lite/cheetah_lite/thirdparty/googletest/googletest-build/googlemock/cmake_install.cmake")
 
 endif()
 

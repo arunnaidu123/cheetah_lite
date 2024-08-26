@@ -1,4 +1,4 @@
-# Install script for directory: /home/arun/oxford/cheetah_lite/ska-pss-cheetah/thirdparty/googletest/googletest-subbuild
+# Install script for directory: /home/arun/oxford/cheetah_lite/cheetah_lite/thirdparty/googletest/googletest-subbuild
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/arun/oxford/cheetah_lite/ska-pss-cheetah/thirdparty/googletest/googletest-subbuild/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/arun/oxford/cheetah_lite/cheetah_lite/thirdparty/googletest/googletest-subbuild/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

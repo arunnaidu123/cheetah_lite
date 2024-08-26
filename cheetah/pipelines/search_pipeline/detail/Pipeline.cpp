@@ -32,7 +32,6 @@ namespace search_pipeline {
 template<typename InputDataStream, typename PipelineHandlerType>
 std::shared_ptr<panda::Pipeline<InputDataStream>> create_pipeline(InputDataStream& stream, PipelineHandlerType& fn )
 {
-    //return std::make_shared<Pipeline<InputDataStream>>(stream, config, std::bind(&PipelineHandler::operator(), &fn, std::placeholders::_1));
     return std::make_shared<panda::Pipeline<InputDataStream>>(stream, std::bind(&PipelineHandlerType::operator(), &fn, std::placeholders::_1));
 }
 
