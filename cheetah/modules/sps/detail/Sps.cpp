@@ -34,8 +34,8 @@ namespace sps {
 
 
 template<class ConfigType, typename NumericalRep>
-Sps<ConfigType, NumericalRep>::Sps(ConfigType const& config, DedispersionHandler const& dm_handler, SpHandler const& sp_handler)
-    : BaseT(config, dm_handler, sp_handler)
+Sps<ConfigType, NumericalRep>::Sps(ConfigType const& config, SpHandler const& sp_handler)
+    : BaseT(config, sp_handler)
 {
 }
 

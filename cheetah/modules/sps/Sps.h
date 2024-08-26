@@ -65,44 +65,23 @@ class Sps : public SpsAlgos<ConfigType, NumericalT>
         typedef data::TimeFrequency<Cpu, NumericalT> TimeFrequencyType;
         typedef typename SpsTraits::SpType SpType;
         typedef typename SpsTraits::SpHandler SpHandler;
-        typedef typename SpsTraits::DedispersionHandler DedispersionHandler;
-        typedef DedispersionHandler DmHandler;
         typedef typename SpsTraits::DmTrialsType DmTrialType;
 
     public:
         /**
-         * @brief Constructor takes two Handlers
+         * @brief Constructor takes config and sp_handler
          * @details passes the arguments to BaseT
-         * @param dedispersion_handler A functor to be called with the shared pointer to resultant DmTrials object with a signature of
-         * '''void(std::shared_ptr<data::DmTrials<Cpu, float>>)'''
          * @param sp_handler A functor to be called with the Sps results. Its signature should be '''void(std::shared_ptr<data::SpCcl<NumericalT>>)'''.
          */
-        Sps(ConfigType const& config, DedispersionHandler const& dedispersion_handler, SpHandler const& sp_handler);
+        Sps(ConfigType const& config, SpHandler const& sp_handler);
         ~Sps();
 
         /**
-         * @brief dedisperses chunk of buffer data to a dm-time chunk.
+         * @brief operator which takes in DmTrails object to search for candidates in DMTime space.
          *
-         * @details the DedispersionHandler will be called when dedispersion is complete. The method
-         *         is delegated to device specific implementations.
-         *
-         * @param input A TimeFequency data type (or equivalent) of data to dedisperse.
+         * @param data A shared_ptr of DmTrailsType data type.
          */
-        template<typename TimeFreqDataT
-                , typename data::EnableIfIsTimeFrequency<TimeFreqDataT, bool> = true>
-        void operator()(TimeFreqDataT const& input);
-
-        /**
-         * @brief dedisperses chunk of buffer data to a dm-time chunk.
-         *
-         * @details the DedispersionHandler will be called when dedispersion is complete. The method
-         *         is delegated to device specific implementations.
-         *
-         * @param data A shared_ptr of TimeFrequency data type (or equivalent) of data to dedisperse.
-         */
-        template<typename T
-                ,typename data::EnableIfIsTimeFrequency<T, bool> = true>
-        void operator()(std::shared_ptr<T> const& data);
+        void operator()(std::shared_ptr<DmTrialType> const& data);
 
 };
 

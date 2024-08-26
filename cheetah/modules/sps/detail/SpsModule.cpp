@@ -32,7 +32,6 @@ namespace sps {
 template<typename SpsTraits, template<typename> class... SpsAlgorithms>
 SpsModule<SpsTraits, SpsAlgorithms...>::SpsModule(Config const& config, DedispersionHandler const& dm_handler, SpHandler const& sp_handler)
     : _sp_handler(sp_handler)
-    , _ddtr(config, dm_handler, SpsAlgoFactory<SpsTraits>(config, _sp_handler), config.ddtr_config().rfiexcision_config())
 {
 }
 
@@ -40,7 +39,7 @@ template<typename SpsTraits, template<typename> class... SpsAlgorithms>
 template<typename DataT>
 inline void SpsModule<SpsTraits, SpsAlgorithms...>::operator()(DataT&& data)
 {
-    _ddtr(std::forward<DataT>(data));
+
 }
 
 } // namespace sps

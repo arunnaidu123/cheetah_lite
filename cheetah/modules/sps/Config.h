@@ -79,21 +79,10 @@ class Config : public SpsAlgoConfigs
         klotski::Config const& klotski_config() const;
         klotski::Config& klotski_config();
 
-        ddtr::Config const& ddtr_config() const;
-        ddtr::Config& ddtr_config();
-
-        /**
-         * @brief maximum number of samples to dedisperse
-         * @details algorithms should restrict themselves to dispersing no more than this number
-         *          of samples per pass. Pass through function for same method in the ddtr::Config
-         */
-        std::size_t dedispersion_samples() const;
-
     protected:
         void add_options(OptionsDescriptionEasyInit& add_options) override;
 
     private:
-        ddtr::Config& _ddtr_config;
         float _threshold;
 };
 
