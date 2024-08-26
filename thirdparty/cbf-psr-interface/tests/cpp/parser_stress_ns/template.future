@@ -1,0 +1,14 @@
+#include <cstdint>
+namespace parser_stress
+{
+    template<typename T>
+    struct stress_t 
+    { 
+        T thing; 
+    };
+
+    stress_t<uint8_t> eight;
+    stress_t<uint16_t> sixteen;
+    stress_t<uint32_t> thirtytwo;
+    stress_t<uint64_t> sixtyfour;
+};

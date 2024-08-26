@@ -1,0 +1,4 @@
+set(MODULE_SIGPROC_TEST_UTILS_SRC_CPU
+    src/SigProcTestFile.cpp
+    PARENT_SCOPE
+)

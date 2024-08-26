@@ -1,0 +1,2 @@
+= rcpt_mid module
+data reception from the beamformer

@@ -1,0 +1,4 @@
+set(MODULE_PSRDADA_TEST_UTILS_SRC_CPU
+    src/TestDadaDB.cpp
+    PARENT_SCOPE
+)

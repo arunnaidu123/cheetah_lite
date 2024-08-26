@@ -1,0 +1,22 @@
+The following depndency use git subtrees for remote dependency management.
+To update them you will need to use git subtree commands.
+
+cbf-psr-interface
+=================
+update to latest version:
+
+    git subtree pull --prefix thirdparty/cbf-psr-interface https://gitlab.com/ska-telescope/cbf-psr-interface.git master --squash
+
+to push any local changes back to the repo:
+
+    git subtree pull --prefix thirdparty/cbf-psr-interface https://gitlab.com/ska-telescope/cbf-psr-interface.git master --squash
+
+after pushing changes, you may not be able to pull again. To fix this you need to remove the subtree and re-add.
+
+git rm -r thirdparty/cbf-psr-interface
+git commit -m "remove cbf-psr-interface for reset"
+git subtree add --prefix thirdparty/cbf-psr-interface https://gitlab.com/ska-telescope/cbf-psr-interface.git master --squash
+
+boost
+=====
+this is not a full boost library but some required features that we can use when faced with older boost system libraries

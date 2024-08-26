@@ -1,0 +1,36 @@
+#ifndef SKA_CHEETAH_VERSION_H
+#define SKA_CHEETAH_VERSION_H
+
+
+#define CHEETAH_BUILD_TYPE "@CMAKE_BUILD_TYPE@"
+#define CHEETAH_VERSION "@PROJECT_VERSION@"
+#define PROJECT_NAME "@PROJECT_NAME@"
+#define CHEETAH_RCS_VERSION "@PROJECT_SOURCE_VERSION@"
+#define CHEETAH_BOOST_MAJOR_VERSION @BOOST_MAJOR_VERSION@
+#define CHEETAH_BOOST_MINOR_VERSION @BOOST_MINOR_VERSION@
+#define CHEETAH_BOOST_ASIO_DEBUG @BOOST_ASIO_DEBUG@
+#define CHEETAH_CUDA_MAJOR_VERSION @CUDA_VERSION_MAJOR@
+#define CHEETAH_CUDA_MINOR_VERSION @CUDA_VERSION_MINOR@
+#define CHEETAH_CUDA_VERSION @CUDA_VERSION_STRING@
+
+#if defined(__DATE__) && defined(__TIME__)
+#   define CHEETAH_VERSION_LONG "@PROJECT_VERSION@ (@CMAKE_BUILD_TYPE@), " __DATE__ " " __TIME__
+#   define CHEETAH_BUILD_INFO "(@CMAKE_BUILD_TYPE@) v" VERSION " (" __DATE__ " " __TIME__")"
+#else
+#   define CHEETAH_VERSION_LONG "@PROJECT_VERSION@ (@CMAKE_BUILD_TYPE@)"
+#   define CHEETAH_BUILD_INFO "(@CMAKE_BUILD_TYPE@) v" CHEETAH_VERSION
+#endif
+
+namespace ska {
+namespace cheetah {
+
+extern const char* version;
+extern const char* full_version;
+extern const char* boost_version;
+extern const char* panda_version;
+extern const char* cuda_version;
+
+} // namespace cheetah
+} // namespace ska
+
+#endif // SKA_CHEETAH_VERSION_H

@@ -1,0 +1,3 @@
+valid_sigproc.sigproc generated with the following command:
+
+fake -period 100 -width 15 -snrpeak 12 -dm 50 -nbits 8 -nchans 2 -tsamp 4 -fch1 1625 -foff 0.109375 -tobs 1
