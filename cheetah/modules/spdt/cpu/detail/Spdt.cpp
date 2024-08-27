@@ -71,7 +71,7 @@ class Spdt<SpdtTraits> : private utils::AlgorithmBase<Config, spdt::Config>
          * @brief call the dedispersion/spdt algorithm using the provided device
          */
         template<typename SpHandler>
-        SharedDmTrialsType operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType, BufferType&, SpHandler const&);
+        SharedDmTrialsType operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType, BufferType const&, SpHandler const&);
 
         /**
          * @brief performs search on the DM-trial object
@@ -88,7 +88,7 @@ template<class SpdtTraits>
 template<typename SpHandler>
 std::shared_ptr<typename SpdtTraits::DmTrialsType> Spdt<SpdtTraits>::operator()(panda::PoolResource<panda::Cpu>& cpu
                     , SharedDmTrialsType dm_trials_ptr
-                    , BufferType& agg_buf
+                    , BufferType const& agg_buf
                     , SpHandler const& sp
                     )
 {
@@ -192,7 +192,7 @@ Spdt<SpdtTraits>::Spdt(spdt::Config const& config)
 
 template<class SpdtTraits>
 template<typename SpHandler, typename BufferType>
-std::shared_ptr<typename SpdtTraits::DmTrialsType> Spdt<SpdtTraits>::operator()(panda::PoolResource<Architecture>& dev, SharedDmTrialsType dm_trials_ptr, BufferType& buf, SpHandler& sh)
+std::shared_ptr<typename SpdtTraits::DmTrialsType> Spdt<SpdtTraits>::operator()(panda::PoolResource<Architecture>& dev, SharedDmTrialsType dm_trials_ptr, BufferType const& buf, SpHandler& sh)
 {
     return static_cast<BaseT&>(*this)(dev, dm_trials_ptr, buf, sh);
 }

@@ -92,9 +92,9 @@ SpdtModule<SpdtTraits, SpdtAlgorithms...>::SpdtModule(Config const& config, SpHa
 }
 
 template<typename SpdtTraits, template<typename> class... SpdtAlgorithms>
-inline void SpdtModule<SpdtTraits, SpdtAlgorithms...>::operator()(shared_ptr<DmTrialsType> const& data)
+inline void SpdtModule<SpdtTraits, SpdtAlgorithms...>::operator()(std::shared_ptr<DmTrialsType> data, typename SpdtTraits::BufferType const& agg_buf)
 {
-    _task.submit(data);
+    _task.submit(data, agg_buf);
 }
 
 } // namespace spdt

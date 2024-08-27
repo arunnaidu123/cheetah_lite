@@ -47,9 +47,9 @@ Spdt<ConfigType, NumericalRep>::~Spdt()
 }
 
 template<class ConfigType, typename NumericalRep>
-void Spdt<ConfigType, NumericalRep>::operator()(shared_ptr<DmTrialsType> const& data)
+void Spdt<ConfigType, NumericalRep>::operator()(std::shared_ptr<DmTrialsType> const& data, typename SpdtTraits::BufferType const& agg_buf)
 {
-    static_cast<BaseT&>(*this)(data);
+    static_cast<BaseT&>(*this)(data, agg_buf);
 }
 
 } // namespace spdt

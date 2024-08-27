@@ -38,7 +38,6 @@ namespace ddtr {
  * @brief Contains common types used through ddtr
  * @details
  */
-
 template<typename ConfigType, typename NumericalT, template <typename> class AggregationBufferFactoryTemplate>
 struct CommonTypes
 {

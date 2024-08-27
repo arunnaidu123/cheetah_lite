@@ -63,7 +63,7 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
     public:
         typedef typename SpdtTraits::SpType SpType;
         typedef typename SpdtTraits::SpHandler SpHandler;
-        typedef typename SpdtTraits::DmTrialsType DmTrialType;
+        typedef typename SpdtTraits::DmTrialsType DmTrialsType;
 
     public:
         /**
@@ -79,7 +79,7 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
          *
          * @param data A shared_ptr of DmTrailsType data type.
          */
-        void operator()(std::shared_ptr<DmTrialType> const& data);
+        void operator()(std::shared_ptr<DmTrialsType> const& data, typename SpdtTraits::BufferType const& agg_buf);
 
 };
 
