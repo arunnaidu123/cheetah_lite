@@ -21,52 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef SKA_CHEETAH_PIPELINES_SEARCH_PIPELINE_SINGLEPULSE_H
-#define SKA_CHEETAH_PIPELINES_SEARCH_PIPELINE_SINGLEPULSE_H
+#ifndef SKA_CHEETAH_MODULES_SPDT_CPU_TEST_CONFIGTEST_H
+#define SKA_CHEETAH_MODULES_SPDT_CPU_TEST_CONFIGTEST_H
 
-#include "detail/SinglePulseImpl.h"
-#include <memory>
+#include <gtest/gtest.h>
 
 namespace ska {
 namespace cheetah {
-namespace pipelines {
-namespace search_pipeline {
-
-template<typename NumericalT>
-class CheetahConfig;
-
-template<typename NumericalT>
-class BeamConfig;
+namespace modules {
+namespace spdt {
+namespace cpu {
+namespace test {
 
 /**
- * @brief A Single Pulse Search Pipeline
- * @details Uses config parameters to construct a suitably optimised SinglePulse pipeline
+ * @brief
+ * @details
  */
 
-template<typename NumericalT>
-class SinglePulse : public detail::SinglePulseImpl<NumericalT>
+class ConfigTest : public ::testing::Test
 {
-        typedef Dedispersion<NumericalT> BaseT;
-        typedef typename BaseT::TimeFrequencyType TimeFrequencyType;
-        typedef typename BaseT::DmHandler DmHandler;
-        typedef typename BaseT::DmTrialType DmTrialType;
+    protected:
+        void SetUp() override;
+        void TearDown() override;
 
     public:
-        SinglePulse(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, DmHandler const& dm_handler = [](DmTrialType){});
-        SinglePulse(SinglePulse&&);
-        ~SinglePulse();
-
-        void operator()(TimeFrequencyType&) override;
+        ConfigTest();
+        ~ConfigTest();
 
     private:
-        std::unique_ptr<Dedispersion<NumericalT>> _spimpl;
 };
 
 
-} // namespace search_pipeline
-} // namespace pipelines
+} // namespace test
+} // namespace cpu
+} // namespace spdt
+} // namespace modules
 } // namespace cheetah
 } // namespace ska
-#include "detail/SinglePulse.cpp"
 
-#endif // SKA_CHEETAH_PIPELINES_SEARCH_PIPELINE_SINGLEPULSE_H
+#endif // SKA_CHEETAH_MODULES_SPDT_CPU_TEST_CONFIGTEST_H

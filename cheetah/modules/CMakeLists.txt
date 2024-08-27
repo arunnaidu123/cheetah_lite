@@ -1,6 +1,6 @@
 subpackage(ddtr)
 subpackage(rfim)
-subpackage(sps)
+subpackage(spdt)
 subpackage(spsift)
 subpackage(sps_clustering)
 

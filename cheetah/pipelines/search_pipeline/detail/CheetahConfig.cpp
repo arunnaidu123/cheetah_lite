@@ -46,7 +46,7 @@ CheetahConfig<NumericalRep>::CheetahConfig(std::string const& app_name)
     , _pool_manager(_system, _pool_manager_config)
     , _ddtr_config(_pool_manager)
     , _rfim_config(_pool_manager)
-    , _sps_config(_pool_manager, _ddtr_config)
+    , _spdt_config(_pool_manager, _ddtr_config)
 {
     // generic options
     _desc.add_options()
@@ -96,7 +96,7 @@ CheetahConfig<NumericalRep>::CheetahConfig(std::string const& app_name)
     add(_ddtr_config);
     add(_rfim_config);
     add(_scan_config);
-    add(_sps_config);
+    add(_spdt_config);
     add(_spsift_config);
     add(_sps_clustering_config);
     add(_empty_config);
@@ -271,7 +271,7 @@ channel_mask::ConfigurableChannelMaskConfig<NumericalRep>& CheetahConfig<Numeric
 {
     return _channel_mask_config;
 }
-
+/*
 template<typename NumericalRep>
 modules::ddtr::ConfigType const& CheetahConfig<NumericalRep>::ddtr_config() const
 {
@@ -283,7 +283,7 @@ modules::ddtr::ConfigType& CheetahConfig<NumericalRep>::ddtr_config()
 {
     return _ddtr_config;
 }
-
+*/
 
 template<typename NumericalRep>
 modules::rfim::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType> const& CheetahConfig<NumericalRep>::rfim_config() const
@@ -302,16 +302,29 @@ modules::sps_clustering::Config const& CheetahConfig<NumericalRep>::sps_clusteri
 {
     return _sps_clustering_config;
 }
+
 template<typename NumericalRep>
-modules::sps::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType> const& CheetahConfig<NumericalRep>::sps_config() const
+modules::ddtr::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType> const& CheetahConfig<NumericalRep>::ddtr_config() const
 {
-    return _sps_config;
+    return _ddtr_config;
 }
 
 template<typename NumericalRep>
-modules::sps::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType>& CheetahConfig<NumericalRep>::sps_config()
+modules::ddtr::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType>& CheetahConfig<NumericalRep>::ddtr_config()
 {
-    return _sps_config;
+    return _ddtr_config;
+}
+
+template<typename NumericalRep>
+modules::spdt::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType> const& CheetahConfig<NumericalRep>::spdt_config() const
+{
+    return _spdt_config;
+}
+
+template<typename NumericalRep>
+modules::spdt::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType>& CheetahConfig<NumericalRep>::spdt_config()
+{
+    return _spdt_config;
 }
 
 template<typename NumericalRep>

@@ -29,15 +29,16 @@ namespace search_pipeline {
 
 
 template<typename NumericalT>
-SinglePulseImpl<NumericalT>::SinglePulseImpl(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, DmHandler const& dm_handler)
-    : BaseT(config, beam_config, dm_handler)
-    , _sps_handler(*this)
+SinglePulseImpl<NumericalT>::SinglePulseImpl(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config)
+    : BaseT(config, beam_config)
+    , _spdt_handler(*this)
     , _spclusterer(config.sps_clustering_config())
     , _spsifter(config.spsift_config())
-    , _sps(config.sps_config(), dm_handler, [this](std::shared_ptr<SpType> data)
+    , _spdt(config.spdt_config(), [this](std::shared_ptr<SpType> data)
                                             {
-                                                _sps_handler(data);
+                                                _spdt_handler(data);
                                             })
+    , _ddtr(config.ddtr_config(), _spdt)
 {
 }
 
@@ -55,7 +56,7 @@ SinglePulseImpl<NumericalT>::SpsHandler::SpsHandler(SinglePulseImpl<NumericalT>&
 template<typename NumericalT>
 void SinglePulseImpl<NumericalT>::operator()(TimeFrequencyType& data)
 {
-    _sps(data);
+    _ddtr(data);
 }
 
 template<typename NumericalT>

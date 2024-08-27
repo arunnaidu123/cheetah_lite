@@ -30,7 +30,7 @@
 #include "cheetah/channel_mask/ConfigurableChannelMaskConfig.h"
 #include "cheetah/modules/ddtr/Config.h"
 #include "cheetah/modules/rfim/Config.h"
-#include "cheetah/modules/sps/Config.h"
+#include "cheetah/modules/spdt/Config.h"
 #include "cheetah/modules/spsift/Config.h"
 #include "cheetah/modules/sps_clustering/Config.h"
 
@@ -107,8 +107,8 @@ class CheetahConfig : public utils::Config
         /**
          * @brief return the fldo module specific configuration parameters
          */
-        modules::ddtr::ConfigType const& ddtr_config() const;
-        modules::ddtr::ConfigType& ddtr_config();
+        //modules::ddtr::ConfigType const& ddtr_config() const;
+        //modules::ddtr::ConfigType& ddtr_config();
 
         /**
          * @brief return the rfim module specific configuration parameters
@@ -116,10 +116,16 @@ class CheetahConfig : public utils::Config
         modules::rfim::ConfigType<PoolManagerType> const& rfim_config() const;
 
         /**
-         * @brief return the sps module specific configuration parameters
+         * @brief return the spdt module specific configuration parameters
          */
-        modules::sps::ConfigType<PoolManagerType> const& sps_config() const;
-        modules::sps::ConfigType<PoolManagerType>& sps_config();
+        modules::ddtr::ConfigType<PoolManagerType> const& ddtr_config() const;
+        modules::ddtr::ConfigType<PoolManagerType>& ddtr_config();
+
+        /**
+         * @brief return the spdt module specific configuration parameters
+         */
+        modules::spdt::ConfigType<PoolManagerType> const& spdt_config() const;
+        modules::spdt::ConfigType<PoolManagerType>& spdt_config();
 
 
         /*
@@ -191,9 +197,10 @@ class CheetahConfig : public utils::Config
         MultiBeamConfig<NumericalRep> _beam_config;
 
         channel_mask::ConfigurableChannelMaskConfig<NumericalRep> _channel_mask_config;
-        modules::ddtr::ConfigType _ddtr_config;
+        //modules::ddtr::ConfigType _ddtr_config;
         modules::rfim::ConfigType<PoolManagerType> _rfim_config;
-        modules::sps::ConfigType<PoolManagerType> _sps_config;
+        modules::ddtr::ConfigType<PoolManagerType> _ddtr_config;
+        modules::spdt::ConfigType<PoolManagerType> _spdt_config;
         modules::spsift::Config _spsift_config;
         modules::sps_clustering::Config _sps_clustering_config;
         EmptyConfig _empty_config;

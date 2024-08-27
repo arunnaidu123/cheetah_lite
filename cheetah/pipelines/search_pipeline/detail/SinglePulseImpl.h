@@ -25,8 +25,7 @@
 #define SKA_CHEETAH_PIPELINES_SEARCH_PIPELINE_SINGLEPULSEIMPL_H
 
 #include "cheetah/pipelines/search_pipeline/PipelineHandler.h"
-#include "cheetah/pipelines/search_pipeline/Dedispersion.h"
-#include "cheetah/modules/sps/Sps.h"
+#include "cheetah/modules/spdt/Spdt.h"
 #include "cheetah/modules/spsift/SpSift.h"
 #include "cheetah/modules/sps_clustering/SpsClustering.h"
 #include "panda/Thread.h"
@@ -47,17 +46,18 @@ class BeamConfig;
  */
 
 template<typename NumericalT>
-class SinglePulseImpl : public Dedispersion<NumericalT>
+class SinglePulseImpl : public PipelineHandler<NumericalT>
 {
     public:
         typedef Dedispersion<NumericalT> BaseT;
         typedef typename BaseT::TimeFrequencyType TimeFrequencyType;
-        typedef modules::sps::Sps<modules::sps::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Sps;
-        typedef typename Sps::DmHandler DmHandler;
-        typedef typename Sps::DmTrialType DmTrialType;
+        typedef modules::ddtr::Ddtr<modules::ddtr::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Ddtr;
+        typedef modules::spdt::Spdt<modules::ddtr::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Spdt;
+        typedef typename Spdt::DmHandler DmHandler;
+        typedef typename Spdt::DmTrialType DmTrialType;
 
     protected:
-        typedef typename Sps::SpType SpType;
+        typedef typename Spdt::SpType SpType;
 
     public:
         SinglePulseImpl(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, DmHandler const& dm_handler = [](std::shared_ptr<DmTrialType>){});
@@ -70,10 +70,10 @@ class SinglePulseImpl : public Dedispersion<NumericalT>
         void do_post_processing(std::shared_ptr<SpType> const& data);
 
     protected:
-        class SpsHandler {
+        class SpdtHandler {
             public:
-                SpsHandler(SinglePulseImpl&);
-                SpsHandler(SpsHandler const&) = delete;
+                SpdtHandler(SinglePulseImpl&);
+                SpdtHandler(SpdtHandler const&) = delete;
                 void operator()(std::shared_ptr<SpType> const&) const;
 
             private:
@@ -81,7 +81,7 @@ class SinglePulseImpl : public Dedispersion<NumericalT>
         };
 
     private:
-        SpsHandler _sps_handler;
+        SpdtHandler _spdt_handler;
 
     private:
         modules::sps_clustering::SpsClustering _spclusterer;
@@ -89,7 +89,8 @@ class SinglePulseImpl : public Dedispersion<NumericalT>
         panda::Thread _thread;
 
     protected:
-        Sps _sps;
+        Ddtr _ddtr;
+        Spdt _spdt;
 };
 
 

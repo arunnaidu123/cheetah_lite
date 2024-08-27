@@ -92,7 +92,8 @@ class Config : public DdtrAlgoConfigs
 
 };
 
-typedef panda::PoolSelector<typename Config::PoolManagerType, Config> ConfigType;
+template<typename PoolManagerType>
+using ConfigType = panda::PoolSelector<PoolManagerType, Config>;
 
 } // namespace ddtr
 } // namespace modules

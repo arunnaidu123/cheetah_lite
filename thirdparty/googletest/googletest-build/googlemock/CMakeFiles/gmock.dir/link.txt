@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/arun/oxford/cheetah_lite/build/lib/libgmock.a CMakeFiles/gmock.dir/src/gmock-all.cc.o
-/usr/bin/ranlib /home/arun/oxford/cheetah_lite/build/lib/libgmock.a
