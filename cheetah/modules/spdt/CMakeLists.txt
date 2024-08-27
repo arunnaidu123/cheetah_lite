@@ -1,7 +1,7 @@
 subpackage(cpu)
-subpackage(klotski_common)
-subpackage(klotski_bruteforce)
-subpackage(klotski)
+#subpackage(klotski_common)
+#subpackage(klotski_bruteforce)
+#subpackage(klotski)
 
 set(MODULE_SPS_LIB_SRC_CPU
     src/Config.cpp

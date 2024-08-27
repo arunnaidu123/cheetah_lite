@@ -50,7 +50,6 @@ struct CommonTypes
         typedef data::SpCcl<NumericalRep> SpType;
         typedef data::DmTrials<Cpu, float> DmTrialsType;
         typedef std::function<void(std::shared_ptr<SpType>)> SpHandler;
-        typedef SpdtAlgoFactory<CommonTypes> AlgoFactory;
 };
 
 

@@ -60,6 +60,7 @@ class Spdt<SpdtTraits> : private utils::AlgorithmBase<Config, spdt::Config>
     private:
         typedef typename SpdtTraits::BufferType BufferType;
         typedef typename SpdtTraits::DmTrialsType DmTrialsType;
+        typedef std::shared_ptr<typename SpdtTraits::DmTrialsType> SharedDmTrialsType;
 
     public:
         Spdt(spdt::Config const& config);
@@ -70,12 +71,7 @@ class Spdt<SpdtTraits> : private utils::AlgorithmBase<Config, spdt::Config>
          * @brief call the dedispersion/spdt algorithm using the provided device
          */
         template<typename SpHandler>
-        std::shared_ptr<typename SpdtTraits::DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>&, BufferType&, SpHandler const&);
-
-        /**
-         * @brief set the dedispersion plan
-         */
-        void plan(DedispersionPlan const& plan);
+        SharedDmTrialsType operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType, BufferType&, SpHandler const&);
 
         /**
          * @brief performs search on the DM-trial object
@@ -83,7 +79,6 @@ class Spdt<SpdtTraits> : private utils::AlgorithmBase<Config, spdt::Config>
         void perform_search(DmTrialsType const& data, std::vector<float>& sp_cands, double mean, double stdev);
 
     private:
-        ddtr::cpu::Ddtr<SpdtTraits> _ddtr;
         std::size_t _samples_per_iteration;
         std::size_t _number_of_widths;
         float _threshold;
@@ -92,12 +87,12 @@ class Spdt<SpdtTraits> : private utils::AlgorithmBase<Config, spdt::Config>
 template<class SpdtTraits>
 template<typename SpHandler>
 std::shared_ptr<typename SpdtTraits::DmTrialsType> Spdt<SpdtTraits>::operator()(panda::PoolResource<panda::Cpu>& cpu
+                    , SharedDmTrialsType dm_trials_ptr
                     , BufferType& agg_buf
                     , SpHandler const& sp
                     )
 {
 
-    std::shared_ptr<DmTrialsType> dm_trials_ptr = _ddtr(cpu, agg_buf);
     DmTrialsType& dmtrials = *(dm_trials_ptr);
     MsdEstimator<SpdtTraits> msd(dmtrials);
     std::vector<float> spdt_cands;
@@ -179,18 +174,12 @@ void Spdt<SpdtTraits>::perform_search(DmTrialsType const& data, std::vector<floa
 template<class SpdtTraits>
 Spdt<SpdtTraits>::Spdt(spdt::Config const& config)
     : BaseT(config.cpu_config(), config)
-    , _ddtr(config.ddtr_config())
     , _samples_per_iteration(config.cpu_config().samples_per_iteration())
     , _number_of_widths(config.cpu_config().number_of_widths())
     , _threshold(config.threshold())
 {
 }
 
-template<class SpdtTraits>
-void Spdt<SpdtTraits>::plan(DedispersionPlan const& plan)
-{
-    _ddtr.plan(plan);
-}
 
 } // namespace detail
 
@@ -203,9 +192,9 @@ Spdt<SpdtTraits>::Spdt(spdt::Config const& config)
 
 template<class SpdtTraits>
 template<typename SpHandler, typename BufferType>
-std::shared_ptr<typename SpdtTraits::DmTrialsType> Spdt<SpdtTraits>::operator()(panda::PoolResource<Architecture>& dev, BufferType& buf, SpHandler& sh)
+std::shared_ptr<typename SpdtTraits::DmTrialsType> Spdt<SpdtTraits>::operator()(panda::PoolResource<Architecture>& dev, SharedDmTrialsType dm_trials_ptr, BufferType& buf, SpHandler& sh)
 {
-    return static_cast<BaseT&>(*this)(dev, buf, sh);
+    return static_cast<BaseT&>(*this)(dev, dm_trials_ptr, buf, sh);
 }
 
 

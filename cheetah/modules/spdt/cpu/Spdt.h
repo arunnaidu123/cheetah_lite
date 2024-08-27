@@ -54,12 +54,12 @@ class Spdt
     public:
         typedef cheetah::Cpu Architecture;
         typedef cpu::Config Config;
-
+        typedef std::shared_ptr<typename SpdtTraits::DmTrialsType> SharedDmTrialsType;
     public:
         Spdt(spdt::Config const&) {};
 
         template<typename SpHandler, typename BufferType>
-        std::shared_ptr<typename SpdtTraits::DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>&, BufferType&, SpHandler&);
+        SharedDmTrialsType operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType , BufferType&, SpHandler&);
 };
 
 } // namespace detail
@@ -73,12 +73,13 @@ class Spdt : public detail::Spdt<SpdtTraits>
         typedef typename BaseT::Architecture Architecture;
         typedef typename BaseT::DedispersionPlan DedispersionPlan;
         typedef cpu::Config Config;
+        typedef std::shared_ptr<typename SpdtTraits::DmTrialsType> SharedDmTrialsType;
 
     public:
         Spdt(spdt::Config const& config);
 
         template<typename SpHandler, typename BufferType>
-        std::shared_ptr<typename SpdtTraits::DmTrialsType> operator()(panda::PoolResource<Architecture>& dev, BufferType& buf, SpHandler& sp_h);
+        SharedDmTrialsType operator()(panda::PoolResource<cheetah::Cpu>& dev, SharedDmTrialsType data, BufferType& buf, SpHandler& sp_h);
 
 };
 
