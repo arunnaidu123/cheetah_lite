@@ -31,8 +31,6 @@
 #include "cheetah/modules/ddtr/Config.h"
 #include "cheetah/modules/rfim/Config.h"
 #include "cheetah/modules/spdt/Config.h"
-#include "cheetah/modules/spsift/Config.h"
-#include "cheetah/modules/sps_clustering/Config.h"
 
 #include "panda/ConfigModule.h"
 #include "panda/PoolManagerConfig.h"
@@ -131,12 +129,12 @@ class CheetahConfig : public utils::Config
         /*
          * @brief return spsift module specific configuration parameters
          */
-        modules::spsift::Config const& spsift_config() const;
+        //modules::spsift::Config const& spsift_config() const;
 
         /*
          * @brief return sps_clustering module specific configuration parameters
          */
-        modules::sps_clustering::Config const& sps_clustering_config() const;
+        //modules::sps_clustering::Config const& sps_clustering_config() const;
 
 
         /**
@@ -201,8 +199,8 @@ class CheetahConfig : public utils::Config
         modules::ddtr::ConfigType<PoolManagerType> _ddtr_config;
         modules::rfim::ConfigType<PoolManagerType> _rfim_config;
         modules::spdt::ConfigType<PoolManagerType> _spdt_config;
-        modules::spsift::Config _spsift_config;
-        modules::sps_clustering::Config _sps_clustering_config;
+//        modules::spsift::Config _spsift_config;
+//        modules::sps_clustering::Config _sps_clustering_config;
         EmptyConfig _empty_config;
 };
 

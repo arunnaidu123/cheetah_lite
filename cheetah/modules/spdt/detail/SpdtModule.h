@@ -25,7 +25,6 @@
 #define SKA_CHEETAH_MODULES_SPDT_SPDTMODULE_H
 
 #include "cheetah/modules/spdt/cpu/Spdt.h"
-#include "cheetah/modules/spdt/klotski/Spdt.h"
 #include "cheetah/utils/TaskConfigurationSetter.h"
 #include "panda/ConfigurableTask.h"
 
@@ -48,13 +47,12 @@ class SpdtModule
         typedef panda::ConfigurableTask<typename SpdtTraits::Pool
                                       , SpdtHandler const&
                                       , std::shared_ptr<DmTrialsType>
-                                      , typename SpdtTraits::BufferType&&
                                       > TaskType;
 
     public:
         SpdtModule(Config const& config, SpdtHandler const& sp_handler);
 
-        void operator()(std::shared_ptr<DmTrialsType> data, typename SpdtTraits::BufferType const& agg_buf);
+        void operator()(std::shared_ptr<DmTrialsType> data);
 
     private:
         SpdtHandler _spdt_handler;

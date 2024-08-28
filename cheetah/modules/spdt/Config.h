@@ -27,9 +27,6 @@
 
 #include "cheetah/utils/Config.h"
 #include "cheetah/modules/spdt/cpu/Config.h"
-#include "cheetah/modules/spdt/klotski_common/Config.h"
-#include "cheetah/modules/spdt/klotski_bruteforce/Config.h"
-#include "cheetah/modules/spdt/klotski/Config.h"
 #include "cheetah/data/DedispersionMeasure.h"
 #include "panda/ProcessingEngine.h"
 #include "panda/ResourcePool.h"
@@ -44,9 +41,7 @@ namespace spdt {
 
 typedef panda::MultipleConfigModule<utils::Config
                                   , cpu::Config
-                                  , klotski_bruteforce::Config
-                                  , klotski::Config
-                                  > SpdtAlgoConfigs;
+                                   > SpdtAlgoConfigs;
 /**
  * @brief
  *   all non-templated options for the spdt module
@@ -71,11 +66,6 @@ class Config : public SpdtAlgoConfigs
          */
         cpu::Config const& cpu_config() const;
         cpu::Config& cpu_config();
-        klotski_bruteforce::Config const& klotski_bruteforce_config() const;
-        klotski_bruteforce::Config& klotski_bruteforce_config();
-        klotski::Config const& klotski_config() const;
-        klotski::Config& klotski_config();
-
     protected:
         void add_options(OptionsDescriptionEasyInit& add_options) override;
 

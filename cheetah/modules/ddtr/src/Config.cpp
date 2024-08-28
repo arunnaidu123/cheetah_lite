@@ -57,26 +57,6 @@ cpu::Config& Config::cpu_algo_config()
     return BaseT::config<cpu::Config>();
 }
 
-klotski::Config const& Config::klotski_algo_config() const
-{
-    return BaseT::config<klotski::Config>();
-}
-
-klotski::Config& Config::klotski_algo_config()
-{
-    return BaseT::config<klotski::Config>();
-}
-
-klotski_bruteforce::Config const& Config::klotski_bruteforce_algo_config() const
-{
-    return BaseT::config<klotski_bruteforce::Config>();
-}
-
-klotski_bruteforce::Config& Config::klotski_bruteforce_algo_config()
-{
-    return BaseT::config<klotski_bruteforce::Config>();
-}
-
 RfiExcisionConfig const& Config::rfiexcision_config() const
 {
     return _rfi_excision_config;

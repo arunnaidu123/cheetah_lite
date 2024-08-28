@@ -1,8 +1,6 @@
 subpackage(ddtr)
 subpackage(rfim)
 subpackage(spdt)
-subpackage(spsift)
-subpackage(sps_clustering)
 
 set(MODULE_MODULES_LIB_SRC_CUDA
     ${LIB_SRC_CUDA}

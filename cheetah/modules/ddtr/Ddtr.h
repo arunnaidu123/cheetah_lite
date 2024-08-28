@@ -29,8 +29,6 @@
 #include "cheetah/modules/ddtr/detail/TimeFrequencyBufferFactory.h"
 #include "cheetah/modules/ddtr/detail/DdtrModule.h"
 #include "cheetah/modules/ddtr/detail/CommonDedispersionPlan.h"
-#include "cheetah/modules/ddtr/klotski/Ddtr.h"
-#include "cheetah/modules/ddtr/klotski_bruteforce/Ddtr.h"
 #include "cheetah/modules/ddtr/Config.h"
 #include "cheetah/modules/ddtr/cpu/Ddtr.h"
 
@@ -51,10 +49,6 @@ template<typename FunctorType, typename... Args> class Method {};
 template<typename ConfigType, typename NumericalRep, template<typename> class AggregationBufferFactoryTemplate>
 using DdtrAlgos=DdtrModule<CommonTypes<ConfigType, NumericalRep, AggregationBufferFactoryTemplate>
                            , cpu::Ddtr
-#ifdef SKA_CHEETAH_ENABLE_NASM
-                           , klotski::Ddtr
-                           , klotski_bruteforce::Ddtr
-#endif // SKA_CHEETAH_ENABLE_NASM
                        >;
 
 /**

@@ -1,6 +1,5 @@
 subpackage(cpu)
-subpackage(klotski)
-subpackage(klotski_bruteforce)
+
 set(MODULE_DDTR_LIB_SRC_CPU
     src/Config.cpp
     src/DedispersionConfig.cpp

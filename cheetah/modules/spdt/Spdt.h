@@ -29,8 +29,7 @@
 #include "cheetah/modules/spdt/detail/SpdtModule.h"
 #include "cheetah/data/TimeFrequency.h"
 #include "cheetah/modules/spdt/cpu/Spdt.h"
-#include "cheetah/modules/spdt/klotski_bruteforce/Spdt.h"
-#include "cheetah/modules/spdt/klotski/Spdt.h"
+
 #include <memory>
 
 namespace ska {
@@ -44,9 +43,6 @@ namespace spdt {
 template<typename ConfigType, typename NumericalT>
 using SpdtAlgos=SpdtModule<CommonTypes<ConfigType, NumericalT>
                                , cpu::Spdt
-#ifdef SKA_CHEETAH_ENABLE_NASM
-//                               , klotski::Spdt
-#endif // SKA_CHEETAH_ENABLE_NASM
                                >;
 
 /**
@@ -82,7 +78,7 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
          *
          * @param data A shared_ptr of DmTrailsType data type.
          */
-        void operator()(std::shared_ptr<DmTrialsType> data, typename SpdtTraits::BufferType const& agg_buf);
+        void operator()(std::shared_ptr<DmTrialsType> data);
 
 };
 

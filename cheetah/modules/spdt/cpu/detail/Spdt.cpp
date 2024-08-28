@@ -73,7 +73,7 @@ class Spdt<SpdtTraits> : private utils::AlgorithmBase<Config, spdt::Config>
         //template<typename SpHandler>
         //SharedDmTrialsType operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType, BufferType const&, SpHandler const&);
 
-        std::shared_ptr<typename SpdtTraits::SpType> operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType, BufferType const&);
+        std::shared_ptr<typename SpdtTraits::SpType> operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType);
 
         /**
          * @brief performs search on the DM-trial object
@@ -89,8 +89,6 @@ class Spdt<SpdtTraits> : private utils::AlgorithmBase<Config, spdt::Config>
 template<class SpdtTraits>
 std::shared_ptr<typename SpdtTraits::SpType> Spdt<SpdtTraits>::operator()(panda::PoolResource<panda::Cpu>& cpu
                     , SharedDmTrialsType dm_trials_ptr
-                    , BufferType const& agg_buf
-                    //, SpHandler const& sp
                     )
 {
 
@@ -98,9 +96,8 @@ std::shared_ptr<typename SpdtTraits::SpType> Spdt<SpdtTraits>::operator()(panda:
     MsdEstimator<SpdtTraits> msd(dmtrials);
     std::vector<float> spdt_cands;
     perform_search(dmtrials, spdt_cands, msd.mean(), msd.stdev());
-    auto sp_candidate_list = std::make_shared<data::SpCcl<uint8_t>>(agg_buf.composition()
-                , data::DimensionIndex<data::Time>(agg_buf.offset_first_block()/agg_buf.composition()[0]->number_of_channels()));
-    sp_candidate_list->reserve(spdt_cands.size()/4);
+    auto sp_candidate_list = std::make_shared<data::SpCcl<uint8_t>>(dm_trials_ptr);
+    //sp_candidate_list->reserve(spdt_cands.size()/4);
 
     for (std::size_t idx=0; idx<spdt_cands.size(); idx+=4)
     {
@@ -192,9 +189,9 @@ Spdt<SpdtTraits>::Spdt(spdt::Config const& config)
 }
 
 template<class SpdtTraits>
-std::shared_ptr<typename SpdtTraits::SpType> Spdt<SpdtTraits>::operator()(panda::PoolResource<Architecture>& dev, SharedDmTrialsType dm_trials_ptr, typename SpdtTraits::BufferType const& buf)
+std::shared_ptr<typename SpdtTraits::SpType> Spdt<SpdtTraits>::operator()(panda::PoolResource<Architecture>& dev, SharedDmTrialsType dm_trials_ptr)
 {
-    return static_cast<BaseT&>(*this)(dev, dm_trials_ptr, buf);
+    return static_cast<BaseT&>(*this)(dev, dm_trials_ptr);
 }
 
 

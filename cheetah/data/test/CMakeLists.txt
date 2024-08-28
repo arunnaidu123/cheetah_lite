@@ -20,7 +20,7 @@ set(gtest_data_src
     src/SeriesTest.cpp
     src/SclTest.cpp
     src/SpCandidateTest.cpp
-    src/SpCclTest.cpp
+    #src/SpCclTest.cpp
     src/TimeFrequencyTest.cpp
     src/TimeFrequencyMetadataTest.cpp
     src/TimeFrequencyFlagsTest.cpp

@@ -25,8 +25,6 @@
 #define SKA_CHEETAH_MODULES_DDTR_CONFIG_H
 #include "cheetah/modules/ddtr/DedispersionTrialPlan.h"
 #include "cheetah/modules/ddtr/cpu/Config.h"
-#include "cheetah/modules/ddtr/klotski/Config.h"
-#include "cheetah/modules/ddtr/klotski_bruteforce/Config.h"
 #include "cheetah/modules/ddtr/RfiExcisionConfig.h"
 #include "panda/PoolSelector.h"
 #include "panda/MultipleConfigModule.h"
@@ -47,8 +45,6 @@ namespace ddtr {
  */
 typedef panda::MultipleConfigModule<DedispersionTrialPlan
                                   , cpu::Config
-                                  , klotski::Config
-                                  , klotski_bruteforce::Config
                                   > DdtrAlgoConfigs;
 
 class Config : public DdtrAlgoConfigs
@@ -69,18 +65,6 @@ class Config : public DdtrAlgoConfigs
          */
         cpu::Config const& cpu_algo_config() const;
         cpu::Config& cpu_algo_config();
-
-        /**
-         * @brief return the klotski algorithm configuration parameters
-         */
-        klotski::Config const& klotski_algo_config() const;
-        klotski::Config& klotski_algo_config();
-
-        /**
-         * @brief return the klotski_bruteforce algorithm configuration parameters
-         */
-        klotski_bruteforce::Config const& klotski_bruteforce_algo_config() const;
-        klotski_bruteforce::Config& klotski_bruteforce_algo_config();
 
         RfiExcisionConfig const& rfiexcision_config() const;
 

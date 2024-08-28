@@ -77,6 +77,7 @@ struct SinglePulseTests
         //Configure high density low DMs
         modules::ddtr::DedispersionConfig dd_config_low;
         config.ddtr_config().dedispersion_config(dd_config_low);
+        config.spdt_config().cpu_config().activate();
         dd_config_low.dm_start(modules::ddtr::DedispersionConfig::Dm(0.0 * data::parsecs_per_cube_cm));
         dd_config_low.dm_end(modules::ddtr::DedispersionConfig::Dm(100.0 * data::parsecs_per_cube_cm));
         dd_config_low.dm_step(modules::ddtr::DedispersionConfig::Dm(0.1 * data::parsecs_per_cube_cm));

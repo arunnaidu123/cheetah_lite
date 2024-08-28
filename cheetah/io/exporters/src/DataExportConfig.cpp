@@ -30,7 +30,6 @@
 #ifdef ENABLE_SPEAD
 #include "cheetah/io/exporters/SpCclSpeadStreamerConfig.h"
 #endif // ENABLE_SPEAD
-#include "cheetah/io/exporters/SpCclSigProcConfig.h"
 #include "cheetah/sigproc/WriterConfig.h"
 #include "panda/ChannelInfo.h"
 #include "panda/ChannelId.h"
@@ -63,7 +62,7 @@ DataExportConfig::DataExportConfig( std::string const& tag)
     _sink_configs.add_factory("ocld_files", []() { return new OcldFileStreamerConfig(); });
     _sink_configs.add_factory("scl_files", []() { return new SclFileStreamerConfig(); });
     _sink_configs.add_factory("scl_candidate_data", []() { return new SclCandidateDataStreamerConfig(); });
-    _sink_configs.add_factory("spccl_sigproc_files", []() { return new SpCclSigProcConfig(); });
+    //_sink_configs.add_factory("spccl_sigproc_files", []() { return new SpCclSigProcConfig(); });
 #ifdef ENABLE_SPEAD
     _sink_configs.add_factory("spccl_spead", []() { return new SpCclSpeadStreamerConfig(); });
 #endif // ENABLE_SPEAD

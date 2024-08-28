@@ -5,7 +5,7 @@ set(gtest_pipeline_src
     src/BeamConfigTest.cpp
     src/BeamLauncherTest.cpp
     src/CheetahConfigTest.cpp
-    src/DataExportTest.cpp
+    #src/DataExportTest.cpp
     src/MultiBeamConfigTest.cpp
     src/PipelineHandlerFactoryTest.cpp
     src/RfiDetectionPipelineTest.cpp

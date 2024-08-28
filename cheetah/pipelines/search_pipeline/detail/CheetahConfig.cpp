@@ -97,8 +97,8 @@ CheetahConfig<NumericalRep>::CheetahConfig(std::string const& app_name)
     add(_rfim_config);
     add(_scan_config);
     add(_spdt_config);
-    add(_spsift_config);
-    add(_sps_clustering_config);
+//    add(_spsift_config);
+//    add(_sps_clustering_config);
     add(_empty_config);
     _all_desc.add(_desc);
     _all_desc.add(command_line_options());
@@ -291,17 +291,17 @@ modules::rfim::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType>
     return _rfim_config;
 }
 
-template<typename NumericalRep>
-modules::spsift::Config const& CheetahConfig<NumericalRep>::spsift_config() const
-{
-    return _spsift_config;
-}
+//template<typename NumericalRep>
+//modules::spsift::Config const& CheetahConfig<NumericalRep>::spsift_config() const
+//{
+//    return _spsift_config;
+//}
 
-template<typename NumericalRep>
-modules::sps_clustering::Config const& CheetahConfig<NumericalRep>::sps_clustering_config() const
-{
-    return _sps_clustering_config;
-}
+//template<typename NumericalRep>
+//modules::sps_clustering::Config const& CheetahConfig<NumericalRep>::sps_clustering_config() const
+//{
+//    return _sps_clustering_config;
+//}
 
 template<typename NumericalRep>
 modules::ddtr::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType> const& CheetahConfig<NumericalRep>::ddtr_config() const

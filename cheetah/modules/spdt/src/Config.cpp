@@ -57,26 +57,6 @@ cpu::Config& Config::cpu_config()
     return BaseT::config<cpu::Config>();
 }
 
-klotski_bruteforce::Config const& Config::klotski_bruteforce_config() const
-{
-    return BaseT::config<klotski_bruteforce::Config>();
-}
-
-klotski_bruteforce::Config& Config::klotski_bruteforce_config()
-{
-    return BaseT::config<klotski_bruteforce::Config>();
-}
-
-klotski::Config const& Config::klotski_config() const
-{
-    return BaseT::config<klotski::Config>();
-}
-
-klotski::Config& Config::klotski_config()
-{
-    return BaseT::config<klotski::Config>();
-}
-
 } // namespace spdt
 } // namespace modules
 } // namespace cheetah
