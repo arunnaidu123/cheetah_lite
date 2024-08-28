@@ -59,7 +59,7 @@ class Spdt
         Spdt(spdt::Config const&) {};
 
         template<typename SpHandler, typename BufferType>
-        SharedDmTrialsType operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType , BufferType const&, SpHandler&);
+        std::shared_ptr<typename SpdtTraits::SpType> operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType , BufferType const&, SpHandler&);
 };
 
 } // namespace detail
@@ -78,8 +78,7 @@ class Spdt : public detail::Spdt<SpdtTraits>
     public:
         Spdt(spdt::Config const& config);
 
-        template<typename SpHandler, typename BufferType>
-        std::shared_ptr<typename SpdtTraits::DmTrialsType> operator()(panda::PoolResource<Architecture>& dev, SharedDmTrialsType dm_trials_ptr, BufferType const& buf, SpHandler& sh);
+        std::shared_ptr<typename SpdtTraits::SpType> operator()(panda::PoolResource<Architecture>& dev, SharedDmTrialsType dm_trials_ptr, typename SpdtTraits::BufferType const& buf);
 
 };
 

@@ -29,11 +29,11 @@ namespace pipelines {
 namespace search_pipeline {
 
 template<typename NumericalT>
-SinglePulse<NumericalT>::SinglePulse(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, DmHandler const& dm_handler)
-    : BaseT(config, beam_config, dm_handler)
+SinglePulse<NumericalT>::SinglePulse(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config)
+    : BaseT(config, beam_config)
 {
     SinglePulseFactory<NumericalT> factory(config);
-    _spimpl.reset(factory.create(beam_config, dm_handler));
+    //_spimpl.reset(factory.create(beam_config, dm_handler));
 }
 
 template<typename NumericalT>

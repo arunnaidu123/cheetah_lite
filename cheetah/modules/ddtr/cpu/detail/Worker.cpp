@@ -63,7 +63,7 @@ std::shared_ptr<typename Worker<DdtrTraits>::DmTrialsType> Worker<DdtrTraits>::o
         ++ddtr;
     }
 
-    call_back(dmtrials_ptr);
+    //call_back(dmtrials_ptr, buffer);
     return dmtrials_ptr;
 }
 

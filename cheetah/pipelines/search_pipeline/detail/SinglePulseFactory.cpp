@@ -47,7 +47,7 @@ SinglePulseFactory<NumericalT>::~SinglePulseFactory()
 
 template<typename NumericalT>
 template<template <typename> class RfimPolicyTempl, typename DmHandler>
-Dedispersion<NumericalT>* SinglePulseFactory<NumericalT>::create_policy(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const
+SinglePulseImpl<NumericalT>* SinglePulseFactory<NumericalT>::create_policy(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const
 {
     if(!_config.rfim_config().algo_defined()) {
         return new SinglePulseImpl<NumericalT>(_config, beam_config, std::forward<DmHandler>(dm_handler));
@@ -59,7 +59,7 @@ Dedispersion<NumericalT>* SinglePulseFactory<NumericalT>::create_policy(BeamConf
 
 template<typename NumericalT>
 template<typename DmHandler>
-Dedispersion<NumericalT>* SinglePulseFactory<NumericalT>::create(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const
+SinglePulseImpl<NumericalT>* SinglePulseFactory<NumericalT>::create(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const
 {
     if(!_config.rfim_config().algo_defined()) {
         return new SinglePulseImpl<NumericalT>(_config, beam_config, std::forward<DmHandler>(dm_handler));

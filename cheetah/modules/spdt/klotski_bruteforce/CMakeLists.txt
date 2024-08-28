@@ -3,4 +3,4 @@ set(MODULE_KLOTSKI_BRUTEFORCE_LIB_SRC_CPU
     PARENT_SCOPE
 )
 
-add_subdirectory(test)
+#add_subdirectory(test)

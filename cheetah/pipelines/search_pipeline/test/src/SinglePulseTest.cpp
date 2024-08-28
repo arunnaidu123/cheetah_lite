@@ -76,7 +76,7 @@ struct SinglePulseTests
 
         //Configure high density low DMs
         modules::ddtr::DedispersionConfig dd_config_low;
-        config.sps_config().ddtr_config().dedispersion_config(dd_config_low);
+        config.ddtr_config().dedispersion_config(dd_config_low);
         dd_config_low.dm_start(modules::ddtr::DedispersionConfig::Dm(0.0 * data::parsecs_per_cube_cm));
         dd_config_low.dm_end(modules::ddtr::DedispersionConfig::Dm(100.0 * data::parsecs_per_cube_cm));
         dd_config_low.dm_step(modules::ddtr::DedispersionConfig::Dm(0.1 * data::parsecs_per_cube_cm));
@@ -89,14 +89,14 @@ struct SinglePulseTests
         dd_config_high.dm_end(modules::ddtr::DedispersionConfig::Dm(300.0 * data::parsecs_per_cube_cm));
         dd_config_high.dm_step(modules::ddtr::DedispersionConfig::Dm(1.0 * data::parsecs_per_cube_cm));
 */
-        auto& cpu_config = config.sps_config().cpu_config();
-        cpu_config.activate();
+        auto& cpu_config = config.ddtr_config().cpu_algo_config();
+        cpu_config.active(true);
 
         //Set sps priority
-        config.sps_config().set_priority(0);
+        config.ddtr_config().set_priority(0);
 
         //Set the size of the dedispersion buffer
-        config.sps_config().ddtr_config().dedispersion_samples(1<<17);
+        config.ddtr_config().dedispersion_samples(1<<17);
 
         //Set up noise parameters for data to be passed through
         //the pipeline

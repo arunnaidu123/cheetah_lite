@@ -39,17 +39,30 @@ namespace spdt {
  * @brief Contains common types used through spdt
  * @details
  */
+/**
+ * @brief Contains common types used through sps
+ * @details
+ */
 
 template<typename ConfigType, typename NumericalT>
-struct CommonTypes
+struct CommonTypes : public ddtr::CommonTypes<ConfigType, NumericalT, ddtr::RfiExcisionFactory>
 {
+    private:
+        typedef ddtr::CommonTypes<ConfigType, NumericalT, ddtr::RfiExcisionFactory> BaseT;
+
     public:
         typedef ConfigType Config;
         typedef NumericalT NumericalRep;
         typedef NumericalT value_type;
+
+        typedef typename BaseT::TimeFrequencyType TimeFrequencyType;
+        typedef typename BaseT::BufferFillerType BufferFillerType;
+        typedef typename BufferFillerType::AggregationBufferType BufferType;
+        typedef typename BaseT::DmTrialsType DmTrialsType;
         typedef data::SpCcl<NumericalRep> SpType;
-        typedef data::DmTrials<Cpu, float> DmTrialsType;
-        typedef std::function<void(std::shared_ptr<SpType>)> SpHandler;
+
+        typedef std::function<void(std::shared_ptr<SpType>)> SpdtHandler;
+        typedef typename BaseT::DedispersionHandler DedispersionHandler;
 };
 
 

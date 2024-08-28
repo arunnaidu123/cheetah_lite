@@ -45,7 +45,7 @@ template<typename ConfigType, typename NumericalT>
 using SpdtAlgos=SpdtModule<CommonTypes<ConfigType, NumericalT>
                                , cpu::Spdt
 #ifdef SKA_CHEETAH_ENABLE_NASM
-                               , klotski::Spdt
+//                               , klotski::Spdt
 #endif // SKA_CHEETAH_ENABLE_NASM
                                >;
 
@@ -62,8 +62,11 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
 
     public:
         typedef typename SpdtTraits::SpType SpType;
-        typedef typename SpdtTraits::SpHandler SpHandler;
+        typedef typename SpdtTraits::SpdtHandler SpdtHandler;
         typedef typename SpdtTraits::DmTrialsType DmTrialsType;
+        typedef typename SpdtTraits::DmTrialsType DmTrialType;
+        typedef typename SpdtTraits::DedispersionHandler DmHandler;
+        typedef typename SpdtTraits::BufferType BufferType;
 
     public:
         /**
@@ -71,7 +74,7 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
          * @details passes the arguments to BaseT
          * @param sp_handler A functor to be called with the spdt results. Its signature should be '''void(std::shared_ptr<data::SpCcl<NumericalT>>)'''.
          */
-        Spdt(ConfigType const& config, SpHandler const& sp_handler);
+        Spdt(ConfigType const& config, SpdtHandler const& sp_handler);
         ~Spdt();
 
         /**
@@ -79,7 +82,7 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
          *
          * @param data A shared_ptr of DmTrailsType data type.
          */
-        void operator()(std::shared_ptr<DmTrialsType> const& data, typename SpdtTraits::BufferType const& agg_buf);
+        void operator()(std::shared_ptr<DmTrialsType> data, typename SpdtTraits::BufferType const& agg_buf);
 
 };
 

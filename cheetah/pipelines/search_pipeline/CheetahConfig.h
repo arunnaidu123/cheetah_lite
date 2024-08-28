@@ -198,8 +198,8 @@ class CheetahConfig : public utils::Config
 
         channel_mask::ConfigurableChannelMaskConfig<NumericalRep> _channel_mask_config;
         //modules::ddtr::ConfigType _ddtr_config;
-        modules::rfim::ConfigType<PoolManagerType> _rfim_config;
         modules::ddtr::ConfigType<PoolManagerType> _ddtr_config;
+        modules::rfim::ConfigType<PoolManagerType> _rfim_config;
         modules::spdt::ConfigType<PoolManagerType> _spdt_config;
         modules::spsift::Config _spsift_config;
         modules::sps_clustering::Config _sps_clustering_config;

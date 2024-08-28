@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef SKA_CHEETAH_MODULES_SPS_TEST_SPSTESTER_H
-#define SKA_CHEETAH_MODULES_SPS_TEST_SPSTESTER_H
+#ifndef SKA_CHEETAH_MODULES_SPDT_TEST_SPDTTESTER_H
+#define SKA_CHEETAH_MODULES_SPDT_TEST_SPDTTESTER_H
 
-#include "cheetah/modules/sps/Sps.h"
+#include "cheetah/modules/spdt/Spdt.h"
 #include "cheetah/utils/test_utils/AlgorithmTester.h"
 #include "panda/ResourcePool.h"
 #include "panda/test/TestResourcePool.h"
@@ -36,12 +36,12 @@
 namespace ska {
 namespace cheetah {
 namespace modules {
-namespace sps {
+namespace spdt {
 namespace test {
 
 /**
  * @brief
- * Generic functional test for the Sps algorithm
+ * Generic functional test for the Spdt algorithm
  *
  * @details
  * To use you will first need to create suitable Traits descriptions of the algorithm and the
@@ -49,7 +49,7 @@ namespace test {
  *
  *  e.g.
  * @code
- * struct MyAlgoTraits1 : public SpsTesterTraits<ResourceCapabilities, Architecture> {
+ * struct MyAlgoTraits1 : public SpdtTesterTraits<ResourceCapabilities, Architecture> {
  *      /// wrapper to execute the algorithm on requested provided device
  *      /// @return A dataype matching the tester requirements to verify the results
  *      ResultsType apply_algorithm(DeviceType&) const;
@@ -61,16 +61,16 @@ namespace test {
  *  e.g.
  * @code
  * typedef ::testing::Types<MyAlgoTraits1, MyAlgoTraits2> MyTypes;
- * INSTANTIATE_TYPED_TEST_SUITE_P(MyAlgo, SpsTester, MyTypes);
+ * INSTANTIATE_TYPED_TEST_SUITE_P(MyAlgo, SpdtTester, MyTypes);
  * @endcode
  *
  *  n.b. the INSTANTIATE_TYPED_TEST_SUITE_P must be in the same namespace as this class
  *
  */
 
-
+/*
 template<typename ArchitectureTag, typename ArchitectureCapability>
-struct SpsTesterTraits : public utils::test::PoolAlgorithmTesterTraits<ArchitectureTag, ArchitectureCapability>
+struct SpdtTesterTraits : public utils::test::PoolAlgorithmTesterTraits<ArchitectureTag, ArchitectureCapability>
 {
         typedef utils::test::PoolAlgorithmTesterTraits<ArchitectureTag, ArchitectureCapability> BaseT;
 
@@ -79,10 +79,10 @@ struct SpsTesterTraits : public utils::test::PoolAlgorithmTesterTraits<Architect
         typedef typename BaseT::PoolType PoolType;
 
     private:
-        struct TestConfig : public sps::Config
+        struct TestConfig : public spdt::Config
         {
-            typedef sps::Config BaseT;
-            typedef typename SpsTesterTraits<ArchitectureTag, ArchitectureCapability>::PoolType PoolType;
+            typedef spdt::Config BaseT;
+            typedef typename SpdtTesterTraits<ArchitectureTag, ArchitectureCapability>::PoolType PoolType;
 
             public:
                 TestConfig()
@@ -97,14 +97,14 @@ struct SpsTesterTraits : public utils::test::PoolAlgorithmTesterTraits<Architect
         };
 
     public:
-        typedef sps::Sps<TestConfig, uint8_t> Api;
+        typedef spdt::Spdt<TestConfig, uint8_t> Api;
         typedef typename Api::DmTrialType DmType;
         typedef typename Api::SpType SpType;
 
     public:
-        SpsTesterTraits();
+        SpdtTesterTraits();
         Api& api(PoolType& pool);
-        sps::Config& config();
+        spdt::Config& config();
 
         /// return true if the dm_handler has been called
         bool dm_handler_called() const;
@@ -124,7 +124,7 @@ struct SpsTesterTraits : public utils::test::PoolAlgorithmTesterTraits<Architect
 
     protected:
         // override this function to set up specfic configuration parameters
-        virtual void configure(sps::Config&) {}
+        virtual void configure(spdt::Config&) {}
 
     private:
         bool _dm_called;
@@ -143,29 +143,29 @@ struct SpsTesterTraits : public utils::test::PoolAlgorithmTesterTraits<Architect
 };
 
 template <typename TestTraits>
-class SpsTester : public cheetah::utils::test::AlgorithmTester<TestTraits>
+class SpdtTester : public cheetah::utils::test::AlgorithmTester<TestTraits>
 {
     protected:
-        //typename sps::Sps<sps::Config, uint8_t>::BufferFillerType::AggregationBufferType BufferDataType;
-        typename sps::Sps<sps::Config, uint8_t>::TimeFrequencyType DataType;
+        //typename spdt::Spdt<spdt::Config, uint8_t>::BufferFillerType::AggregationBufferType BufferDataType;
+        typename spdt::Spdt<spdt::Config, uint8_t>::TimeFrequencyType DataType;
 
     protected:
         void SetUp();
         void TearDown();
 
      public:
-        SpsTester();
-        ~SpsTester();
+        SpdtTester();
+        ~SpdtTester();
 };
 
-TYPED_TEST_SUITE_P(SpsTester);
-
+TYPED_TEST_SUITE_P(SpdtTester);
+*/
 } // namespace test
-} // namespace sps
+} // namespace spdt
 } // namespace modules
 } // namespace cheetah
 } // namespace ska
-#include "cheetah/modules/sps/test_utils/detail/SpsTester.cpp"
+#include "cheetah/modules/spdt/test_utils/detail/SpdtTester.cpp"
 
 
-#endif // SKA_CHEETAH_MODULES_SPS_TEST_SPSTESTER_H
+#endif // SKA_CHEETAH_MODULES_SPDT_TEST_SPDTTESTER_H

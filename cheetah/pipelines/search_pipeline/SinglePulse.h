@@ -44,22 +44,22 @@ class BeamConfig;
  */
 
 template<typename NumericalT>
-class SinglePulse : public detail::SinglePulseImpl<NumericalT>
+class SinglePulse : public SinglePulseImpl<NumericalT>
 {
-        typedef Dedispersion<NumericalT> BaseT;
+        typedef SinglePulseImpl<NumericalT> BaseT;
         typedef typename BaseT::TimeFrequencyType TimeFrequencyType;
-        typedef typename BaseT::DmHandler DmHandler;
         typedef typename BaseT::DmTrialType DmTrialType;
+        typedef typename BaseT::BufferType BufferType;
 
     public:
-        SinglePulse(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, DmHandler const& dm_handler = [](DmTrialType){});
+        SinglePulse(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config);
         SinglePulse(SinglePulse&&);
         ~SinglePulse();
 
         void operator()(TimeFrequencyType&) override;
 
     private:
-        std::unique_ptr<Dedispersion<NumericalT>> _spimpl;
+        std::unique_ptr<SinglePulseImpl<NumericalT>> _spimpl;
 };
 
 

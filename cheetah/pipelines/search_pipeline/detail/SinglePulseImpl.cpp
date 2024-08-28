@@ -32,13 +32,17 @@ template<typename NumericalT>
 SinglePulseImpl<NumericalT>::SinglePulseImpl(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config)
     : BaseT(config, beam_config)
     , _spdt_handler(*this)
+    , _ddtr_handler(*this)
     , _spclusterer(config.sps_clustering_config())
     , _spsifter(config.spsift_config())
     , _spdt(config.spdt_config(), [this](std::shared_ptr<SpType> data)
                                             {
                                                 _spdt_handler(data);
                                             })
-    , _ddtr(config.ddtr_config(), _spdt)
+    , _ddtr(config.ddtr_config(), [this](std::shared_ptr<DmTrialType> data)
+                                            {
+                                                //_ddtr_handler(data, agg_buf);
+                                            })
 {
 }
 
@@ -48,7 +52,13 @@ SinglePulseImpl<NumericalT>::~SinglePulseImpl()
 }
 
 template<typename NumericalT>
-SinglePulseImpl<NumericalT>::SpsHandler::SpsHandler(SinglePulseImpl<NumericalT>& p)
+SinglePulseImpl<NumericalT>::SpdtHandler::SpdtHandler(SinglePulseImpl<NumericalT>& p)
+    : _pipeline(p)
+{
+}
+
+template<typename NumericalT>
+SinglePulseImpl<NumericalT>::DdtrHandler::DdtrHandler(SinglePulseImpl<NumericalT>& p)
     : _pipeline(p)
 {
 }
@@ -60,13 +70,19 @@ void SinglePulseImpl<NumericalT>::operator()(TimeFrequencyType& data)
 }
 
 template<typename NumericalT>
-void SinglePulseImpl<NumericalT>::SpsHandler::operator()(std::shared_ptr<SpType> const& data) const
+void SinglePulseImpl<NumericalT>::SpdtHandler::operator()(std::shared_ptr<SpType> const& data) const
 {
     _pipeline._thread.exec([this, data]()
                            {
                                 _pipeline.do_post_processing(data);
                            }
                            );
+}
+
+template<typename NumericalT>
+void SinglePulseImpl<NumericalT>::DdtrHandler::operator()(std::shared_ptr<DmTrialType> data, BufferType const& agg_buf)
+{
+    _pipeline._spdt(data, agg_buf);
 }
 
 template<typename NumericalT>

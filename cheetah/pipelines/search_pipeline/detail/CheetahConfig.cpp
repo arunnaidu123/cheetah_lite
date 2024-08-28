@@ -46,7 +46,7 @@ CheetahConfig<NumericalRep>::CheetahConfig(std::string const& app_name)
     , _pool_manager(_system, _pool_manager_config)
     , _ddtr_config(_pool_manager)
     , _rfim_config(_pool_manager)
-    , _spdt_config(_pool_manager, _ddtr_config)
+    , _spdt_config(_pool_manager)
 {
     // generic options
     _desc.add_options()

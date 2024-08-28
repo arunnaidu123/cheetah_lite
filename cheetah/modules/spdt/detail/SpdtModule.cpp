@@ -83,18 +83,18 @@ class SpdtAlgoFactory
 };
 
 template<typename SpdtTraits, template<typename> class... SpdtAlgorithms>
-SpdtModule<SpdtTraits, SpdtAlgorithms...>::SpdtModule(Config const& config, SpHandler const& sp_handler)
-    : _sp_handler(sp_handler)
-    , _task(config.pool(), _sp_handler)
+SpdtModule<SpdtTraits, SpdtAlgorithms...>::SpdtModule(Config const& config, SpdtHandler const& spdt_handler)
+    : _spdt_handler(spdt_handler)
+    , _task(config.pool(), _spdt_handler)
 {
-    SpdtAlgoFactory<SpdtTraits> algo_factory;
+    SpdtAlgoFactory<SpdtTraits> algo_factory(config);
     utils::TaskConfigurationSetter<SpdtAlgorithms<SpdtTraits>...>::configure(_task, algo_factory);
 }
 
 template<typename SpdtTraits, template<typename> class... SpdtAlgorithms>
 inline void SpdtModule<SpdtTraits, SpdtAlgorithms...>::operator()(std::shared_ptr<DmTrialsType> data, typename SpdtTraits::BufferType const& agg_buf)
 {
-    _task.submit(data, agg_buf);
+    //_task.submit(data, std::move(agg_buf));
 }
 
 } // namespace spdt

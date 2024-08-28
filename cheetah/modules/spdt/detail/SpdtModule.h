@@ -41,23 +41,23 @@ namespace spdt {
 template<typename SpdtTraits, template<typename> class... SpdtAlgorithms>
 class SpdtModule
 {
-        typedef typename SpdtTraits::SpHandler SpHandler;
+        typedef typename SpdtTraits::SpdtHandler SpdtHandler;
         typedef typename SpdtTraits::Config Config;
         typedef typename SpdtTraits::DmTrialsType DmTrialsType;
 
         typedef panda::ConfigurableTask<typename SpdtTraits::Pool
-                                      , SpHandler const&
+                                      , SpdtHandler const&
                                       , std::shared_ptr<DmTrialsType>
                                       , typename SpdtTraits::BufferType&&
                                       > TaskType;
 
     public:
-        SpdtModule(Config const& config, SpHandler const& sp_handler);
+        SpdtModule(Config const& config, SpdtHandler const& sp_handler);
 
         void operator()(std::shared_ptr<DmTrialsType> data, typename SpdtTraits::BufferType const& agg_buf);
 
     private:
-        SpHandler _sp_handler;
+        SpdtHandler _spdt_handler;
         TaskType _task;
 };
 

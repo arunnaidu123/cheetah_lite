@@ -51,11 +51,11 @@ class SinglePulseFactory
         ~SinglePulseFactory();
 
         template<typename DmHandler>
-        Dedispersion<NumericalT>* create(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const;
+        SinglePulseImpl<NumericalT>* create(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const;
 
     protected:
         template<template<typename> class RfimPolicyTempl, typename DmHandler>
-        Dedispersion<NumericalT>* create_policy(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const;
+        SinglePulseImpl<NumericalT>* create_policy(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const;
 
     private:
         CheetahConfig<NumericalT> const& _config;
