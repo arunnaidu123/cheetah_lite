@@ -68,7 +68,7 @@ namespace test {
  *
  */
 
-/*
+
 template<typename ArchitectureTag, typename ArchitectureCapability>
 struct SpdtTesterTraits : public utils::test::PoolAlgorithmTesterTraits<ArchitectureTag, ArchitectureCapability>
 {
@@ -159,7 +159,7 @@ class SpdtTester : public cheetah::utils::test::AlgorithmTester<TestTraits>
 };
 
 TYPED_TEST_SUITE_P(SpdtTester);
-*/
+
 } // namespace test
 } // namespace spdt
 } // namespace modules

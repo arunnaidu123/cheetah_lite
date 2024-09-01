@@ -26,7 +26,7 @@
 
 #include "cheetah/data/TimeFrequency.h"
 #include "cheetah/data/DmTrials.h"
-#include "panda/AggregationBufferFiller.h"
+#include "AggregationBufferFiller.h"
 #include <functional>
 
 namespace ska {
@@ -38,7 +38,7 @@ namespace ddtr {
  * @brief Contains common types used through ddtr
  * @details
  */
-template<typename ConfigType, typename NumericalT, template <typename> class AggregationBufferFactoryTemplate>
+template<typename ConfigType, typename NumericalT>
 struct CommonTypes
 {
     typedef ConfigType Config;
@@ -46,7 +46,7 @@ struct CommonTypes
     typedef NumericalT NumericalRep;
     typedef NumericalRep value_type;
     typedef data::TimeFrequency<Cpu, NumericalRep> TimeFrequencyType;
-    typedef ska::panda::AggregationBufferFiller<TimeFrequencyType, AggregationBufferFactoryTemplate<TimeFrequencyType>> BufferFillerType;
+    typedef AggregationBufferFiller<NumericalRep> BufferFillerType;
     typedef typename BufferFillerType::AggregationBufferType BufferType;
     typedef data::DmTrials<Cpu, float> DmTrialsType;
     typedef std::function<void(std::shared_ptr<DmTrialsType>)> DedispersionHandler;

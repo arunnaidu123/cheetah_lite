@@ -26,6 +26,7 @@
 
 #include "cheetah/modules/ddtr/cpu/DedispersionStrategy.h"
 #include "cheetah/data/TimeFrequency.h"
+#include "cheetah/modules/ddtr/detail/AggregationBuffer.h"
 #include "cheetah/modules/ddtr/Config.h"
 #include "cheetah/modules/ddtr/cpu/Config.h"
 
@@ -70,7 +71,8 @@ class DedispersionPlan
          * @brief reset the plan to be compatible with the TimeFrequency metadata
          * @details note that the number_of_spectra of this TimeFrequencyType object is ignored
          */
-        data::DimensionSize<data::Time> reset(TimeFrequencyType const&);
+        template <typename DataType>
+        data::DimensionSize<data::Time> reset(DataType const&);
 
         /**
          * @brief reset the plan to be compatible with the value

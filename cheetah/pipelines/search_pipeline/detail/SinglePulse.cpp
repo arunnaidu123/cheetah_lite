@@ -33,7 +33,7 @@ SinglePulse<NumericalT>::SinglePulse(CheetahConfig<NumericalT> const& config, Be
     : BaseT(config, beam_config)
 {
     SinglePulseFactory<NumericalT> factory(config);
-    //_spimpl.reset(factory.create(beam_config, dm_handler));
+    _spimpl.reset(factory.create(beam_config));
 }
 
 template<typename NumericalT>

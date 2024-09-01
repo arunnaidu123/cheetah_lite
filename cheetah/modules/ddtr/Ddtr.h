@@ -31,6 +31,8 @@
 #include "cheetah/modules/ddtr/detail/CommonDedispersionPlan.h"
 #include "cheetah/modules/ddtr/Config.h"
 #include "cheetah/modules/ddtr/cpu/Ddtr.h"
+#include "cheetah/modules/ddtr/klotski/Ddtr.h"
+#include "cheetah/modules/ddtr/klotski_bruteforce/Ddtr.h"
 
 #include <memory>
 
@@ -46,20 +48,24 @@ template<typename FunctorType, typename... Args> class Method {};
  * @details Note that the ddtr::Config class should also needs to support the algorithms
  *          specific configuration object as given by the my_algo::Ddtr::Config typedef.
  */
-template<typename ConfigType, typename NumericalRep, template<typename> class AggregationBufferFactoryTemplate>
-using DdtrAlgos=DdtrModule<CommonTypes<ConfigType, NumericalRep, AggregationBufferFactoryTemplate>
+template<typename ConfigType, typename NumericalRep>
+using DdtrAlgos=DdtrModule<CommonTypes<ConfigType, NumericalRep>
                            , cpu::Ddtr
+#ifdef SKA_CHEETAH_ENABLE_NASM
+                           , klotski::Ddtr
+                           , klotski_bruteforce::Ddtr
+#endif // SKA_CHEETAH_ENABLE_NASM
                        >;
 
 /**
  * @brief DDTR module top level API.
  * @details Exposes all available ddtr algorithms to the user for selection via runtime configuration options
  */
-template<typename ConfigType, typename NumericalRep, template<typename> class AggregationBufferFactoryTemplate=TimeFrequencyBufferFactory>
-class Ddtr : public DdtrAlgos<ConfigType, NumericalRep, AggregationBufferFactoryTemplate>
+template<typename ConfigType, typename NumericalRep>
+class Ddtr : public DdtrAlgos<ConfigType, NumericalRep>
 {
-        typedef DdtrAlgos<ConfigType, NumericalRep, AggregationBufferFactoryTemplate> BaseT;
-        typedef CommonTypes<ConfigType, NumericalRep, AggregationBufferFactoryTemplate> DdtrTraits;
+        typedef DdtrAlgos<ConfigType, NumericalRep> BaseT;
+        typedef CommonTypes<ConfigType, NumericalRep> DdtrTraits;
 
     public:
         typedef typename DdtrTraits::DedispersionHandler DedispersionHandler;

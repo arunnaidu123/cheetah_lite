@@ -45,10 +45,10 @@ namespace spdt {
  */
 
 template<typename ConfigType, typename NumericalT>
-struct CommonTypes : public ddtr::CommonTypes<ConfigType, NumericalT, ddtr::RfiExcisionFactory>
+struct CommonTypes : public ddtr::CommonTypes<ConfigType, NumericalT>
 {
     private:
-        typedef ddtr::CommonTypes<ConfigType, NumericalT, ddtr::RfiExcisionFactory> BaseT;
+        typedef ddtr::CommonTypes<ConfigType, NumericalT> BaseT;
 
     public:
         typedef ConfigType Config;

@@ -141,19 +141,19 @@ DdtrModule<DdtrTraits, DdtrAlgorithms...>::DdtrModule(ConfigType const& config, 
                                                      , AggBufferArgs&&... agg_buffer_args
                                                      )
     : _task(config.pool(), std::forward<Handler>(handler), _plan_setter)
-    , _buffer([this](typename DdtrTraits::BufferType&& buffer)
+    , _buffer([this](std::shared_ptr<typename DdtrTraits::BufferType> buffer)
               {
-                  if(buffer.composition().empty())
-                  {
-                      PANDA_LOG_WARN << "received an empty buffer";
-                      return;
-                  }
+                  //if(buffer.composition().empty())
+                  //{
+                  //    PANDA_LOG_WARN << "received an empty buffer";
+                  //    return;
+                  //}
                   // fix up broken buffer metadata - TODO fix this in buffer creation
-                  auto const& tf_obj = *(buffer.composition().front());
-                  buffer.buffer().metadata(tf_obj.metadata());
-                  data::DimensionIndex<data::Time> offset_samples(buffer.offset_first_block()/(tf_obj.number_of_channels() * sizeof(typename DdtrTraits::value_type)));
-                  buffer.buffer().start_time(tf_obj.start_time(offset_samples));
-                  _task.submit(std::move(buffer));
+                  //auto const& tf_obj = *(buffer.composition().front());
+                  //buffer.buffer().metadata(tf_obj.metadata());
+                  //data::DimensionIndex<data::Time> offset_samples(buffer.offset_first_block()/(tf_obj.number_of_channels() * sizeof(typename DdtrTraits::value_type)));
+                  //buffer.buffer().start_time(tf_obj.start_time(offset_samples));
+                  _task.submit(buffer);
               }
               , ExtendedDedispersionPlan<>(config, _task)
               , config.dedispersion_samples()

@@ -64,7 +64,7 @@ class Ddtr
          * @return DmTime sequence i.e. timeseries for each DM trial value
          */
         std::shared_ptr<DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>& cpu
-                                               , BufferType const& data
+                                               , std::shared_ptr<BufferType> data
                                                );
 
         /**
@@ -76,7 +76,7 @@ class Ddtr
          */
         template <typename CallBackT>
         std::shared_ptr<DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>& cpu
-                                               , BufferType const& data
+                                               , std::shared_ptr<BufferType> data
                                                , CallBackT const& call_back);
 
 

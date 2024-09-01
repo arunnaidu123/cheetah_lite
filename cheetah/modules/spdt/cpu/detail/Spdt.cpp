@@ -70,9 +70,6 @@ class Spdt<SpdtTraits> : private utils::AlgorithmBase<Config, spdt::Config>
         /**
          * @brief call the dedispersion/spdt algorithm using the provided device
          */
-        //template<typename SpHandler>
-        //SharedDmTrialsType operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType, BufferType const&, SpHandler const&);
-
         std::shared_ptr<typename SpdtTraits::SpType> operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType);
 
         /**
@@ -91,13 +88,11 @@ std::shared_ptr<typename SpdtTraits::SpType> Spdt<SpdtTraits>::operator()(panda:
                     , SharedDmTrialsType dm_trials_ptr
                     )
 {
-
     DmTrialsType& dmtrials = *(dm_trials_ptr);
     MsdEstimator<SpdtTraits> msd(dmtrials);
     std::vector<float> spdt_cands;
     perform_search(dmtrials, spdt_cands, msd.mean(), msd.stdev());
     auto sp_candidate_list = std::make_shared<data::SpCcl<uint8_t>>(dm_trials_ptr);
-    //sp_candidate_list->reserve(spdt_cands.size()/4);
 
     for (std::size_t idx=0; idx<spdt_cands.size(); idx+=4)
     {
@@ -109,8 +104,6 @@ std::shared_ptr<typename SpdtTraits::SpType> Spdt<SpdtTraits>::operator()(panda:
                         , spdt_cands[idx] // sigma
                         );
     }
-
-    //sp(sp_candidate_list);
     return sp_candidate_list;
 }
 

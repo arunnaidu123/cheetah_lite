@@ -35,9 +35,9 @@ SinglePulseImpl<NumericalT>::SinglePulseImpl(CheetahConfig<NumericalT> const& co
     , _ddtr_handler(*this)
 //    , _spclusterer(config.sps_clustering_config())
 //    , _spsifter(config.spsift_config())
-    , _spdt(config.spdt_config(), [this](std::shared_ptr<SpType> data)
+    , _spdt(config.spdt_config(), [this](std::shared_ptr<SpType> sp_data)
                                             {
-                                                _spdt_handler(data);
+                                                _spdt_handler(sp_data);
                                             })
     , _ddtr(config.ddtr_config(), [this](std::shared_ptr<DmTrialType> data)
                                             {
@@ -74,7 +74,7 @@ void SinglePulseImpl<NumericalT>::SpdtHandler::operator()(std::shared_ptr<SpType
 {
     _pipeline._thread.exec([this, data]()
                            {
-                                //_pipeline.do_post_processing(data);
+                                _pipeline.do_post_processing(data);
                            }
                            );
 }
@@ -88,6 +88,7 @@ void SinglePulseImpl<NumericalT>::DdtrHandler::operator()(std::shared_ptr<DmTria
 template<typename NumericalT>
 void SinglePulseImpl<NumericalT>::do_post_processing(std::shared_ptr<SpType> const& data)
 {
+    std::cout<<"number of candidates "<<data->size()<<"\n";
     //this->_spsifter(*data);
     //std::shared_ptr<SpType> new_data = this->_spclusterer(data);
     //this->out().send(ska::panda::ChannelId("sps_events"), new_data);

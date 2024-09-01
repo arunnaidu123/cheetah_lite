@@ -40,30 +40,28 @@ Worker<DdtrTraits>::Worker()
 
 template<typename DdtrTraits>
 template<typename CallBackT>
-std::shared_ptr<typename Worker<DdtrTraits>::DmTrialsType> Worker<DdtrTraits>::operator()( BufferType const& buffer
+std::shared_ptr<typename Worker<DdtrTraits>::DmTrialsType> Worker<DdtrTraits>::operator()( std::shared_ptr<BufferType> data
                                                                                          , std::shared_ptr<DedispersionPlan<DdtrTraits>> plan
                                                                                          , CallBackT const& call_back)
 {
-    auto const& data = buffer.buffer();
-    FrequencyTimeType data_copy(data);
-    std::size_t nchans = data.number_of_channels();
-    plan->reset(data);
-    auto dm_trial_metadata = plan->dm_trials_metadata(data.metadata(), data.template dimension<data::Time>());
-    std::shared_ptr<DmTrialsType> dmtrials_ptr = DmTrialsType::make_shared(dm_trial_metadata, data.start_time());
-    if (data.data_size() < plan->buffer_overlap() * nchans)
+    //auto const& data = buffer.buffer();
+    //FrequencyTimeType data_copy(data);
+    //std::size_t nchans = data.number_of_channels();
+    plan->reset(*data);
+    auto dm_trial_metadata = plan->dm_trials_metadata(data->metadata(), pss::astrotypes::DimensionSize<pss::astrotypes::units::Time>(data->number_of_spectra()-plan->buffer_overlap()));
+    std::shared_ptr<DmTrialsType> dmtrials_ptr = DmTrialsType::make_shared(dm_trial_metadata, data->start_time());
+    if (data->data_size() < plan->buffer_overlap())
     {
         PANDA_LOG_WARN << "AggregationBuffer is too small to be processed ("
-                       << data.data_size() << " < " << plan->buffer_overlap()*nchans << ")\n"<<"Skipping Current Buffer";
+                       << data->capacity() << " < " << plan->buffer_overlap() << ")\n"<<"Skipping Current Buffer";
         return dmtrials_ptr;
     }
-    auto ddtr = DdtrProcessor<DdtrTraits>(plan, data_copy, dmtrials_ptr);
+    auto ddtr = DdtrProcessor<DdtrTraits>(plan, *data, dmtrials_ptr);
 
     while(!ddtr.finished())
     {
         ++ddtr;
     }
-
-    //call_back(dmtrials_ptr, buffer);
     return dmtrials_ptr;
 }
 

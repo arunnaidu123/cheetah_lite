@@ -78,7 +78,6 @@ template<template<typename> class DdtrAlgoT, typename NumericalT>
 struct DdtrTesterTraits :
     DdtrTesterTraitsBase<DdtrAlgoT<ddtr::CommonTypes<ddtr::Config
                                                    , NumericalT
-                                                   , ddtr::TimeFrequencyBufferFactory
                                                    >
                                  >
                         >
@@ -86,7 +85,6 @@ struct DdtrTesterTraits :
     public:
         typedef DdtrTesterTraitsBase<DdtrAlgoT<ddtr::CommonTypes<ddtr::Config
                                                    , NumericalT
-                                                   , ddtr::TimeFrequencyBufferFactory
                                                    >
                                  >
                         > BaseT;

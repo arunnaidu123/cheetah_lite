@@ -94,6 +94,7 @@ SpdtModule<SpdtTraits, SpdtAlgorithms...>::SpdtModule(Config const& config, Spdt
 template<typename SpdtTraits, template<typename> class... SpdtAlgorithms>
 inline void SpdtModule<SpdtTraits, SpdtAlgorithms...>::operator()(std::shared_ptr<DmTrialsType> data)
 {
+    std::cout<<"submitting spdt task \n";
     _task.submit(data);
 }
 

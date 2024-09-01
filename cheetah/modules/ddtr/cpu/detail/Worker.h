@@ -51,7 +51,7 @@ class Worker
         Worker();
         // perform ddtr. Note this requires DedispersionPlan to be stable inside this fn call
         template<typename CallBackT>
-        std::shared_ptr<DmTrialsType> operator()(BufferType const& data
+        std::shared_ptr<DmTrialsType> operator()(std::shared_ptr<BufferType> data
                                                 , std::shared_ptr<DedispersionPlan<DdtrTraits>> plan
                                                 , CallBackT const& callback);
 

@@ -95,7 +95,7 @@ class DdtrModule
         typedef panda::ConfigurableTask<typename DdtrTraits::Pool
                                       , typename DdtrTraits::DedispersionHandler
                                       , panda::Method<SetDedispersionHelper, DedispersionPlanType const&>
-                                      , typename DdtrTraits::BufferType&&> TaskType;
+                                      , std::shared_ptr<typename DdtrTraits::BufferType>&> TaskType;
 
         typedef typename DdtrTraits::Config ConfigType;
         typedef Buffering<DdtrTraits, CommonDedispersionPlanBase<DdtrTraits>> BufferType;

@@ -55,14 +55,16 @@ class DedispersionStrategy
         typedef std::vector<FrequencyType> FrequencyListType;
 
     public:
-        DedispersionStrategy(TimeFrequencyType const& chunk,  const ddtr::Config& config, int const& memory);
+        template<typename DataType>
+        DedispersionStrategy(DataType const& chunk,  const ddtr::Config& config, int const& memory);
         ~DedispersionStrategy();
 
         /**
          * @brief reset the plan to be compatible with the TimeFrequency metadata
          * @details note that the number_of_spectra of this TimeFrequencyType object is ignored
          */
-        data::DimensionSize<data::Time> make_strategy(TimeFrequencyType const& chunk,  const ddtr::Config& config);
+        template<typename DataType>
+        data::DimensionSize<data::Time> make_strategy(DataType const& chunk,  const ddtr::Config& config);
 
         /**
          * @brief return the number of spectra currently configured

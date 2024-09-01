@@ -63,6 +63,7 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
         typedef typename SpdtTraits::DmTrialsType DmTrialType;
         typedef typename SpdtTraits::DedispersionHandler DmHandler;
         typedef typename SpdtTraits::BufferType BufferType;
+        typedef typename SpdtTraits::TimeFrequencyType TimeFrequencyType;
 
     public:
         /**

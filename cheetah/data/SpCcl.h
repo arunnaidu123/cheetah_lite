@@ -49,15 +49,15 @@ namespace data {
 
 template<typename NumericalRep>
 class SpCcl
-    : public ska::panda::DataChunk<SpCcl<NumericalRep>>
+    //: public ska::panda::DataChunk<SpCcl<NumericalRep>>
 {
     public:
         typedef SpCandidate<Cpu, float> SpCandidateType;
         typedef SpCandidateType::Dm Dm;
         typedef data::DmTrials<cheetah::Cpu, float> DmTrialsType;
-    private:
-        typedef std::vector<SpCandidateType> InnerType;
-        typedef VectorLike<InnerType> BaseT;
+    //private:
+    //    typedef std::vector<SpCandidateType> InnerType;
+    //    typedef VectorLike<InnerType> BaseT;
 
     public:
         SpCcl();
@@ -123,6 +123,8 @@ class SpCcl
          * @brief the start time of the Candidate
          */
         utils::ModifiedJulianClock::time_point start_time(SpCandidateType const&) const;
+
+        std::size_t size() const;
 
     protected:
         void dm_max_min(Dm);

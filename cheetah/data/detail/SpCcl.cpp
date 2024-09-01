@@ -42,9 +42,11 @@ SpCcl<NumericalRep>::SpCcl()
 
 template<typename NumericalRep>
 SpCcl<NumericalRep>::SpCcl(std::shared_ptr<DmTrialsType> const& data)
-    : _dm_range(std::make_pair((*data->begin()).dm(),(*data->end()).dm()))
+    : _dm_range(Dm(std::numeric_limits<typename Dm::value_type>::max() * parsecs_per_cube_cm),
+                Dm(std::numeric_limits<typename Dm::value_type>::min() * parsecs_per_cube_cm))
     , _start_time(data->start_time())
     , _offset_time(0.0*data::milliseconds)
+    , _data(0)
 {
 }
 
@@ -128,6 +130,12 @@ template<typename NumericalRep>
 boost::units::quantity<data::MilliSeconds,double> SpCcl<NumericalRep>::offset_time() const
 {
     return _offset_time;
+}
+
+template<typename NumericalRep>
+std::size_t SpCcl<NumericalRep>::size() const
+{
+    return _data.size();
 }
 
 } // namespace data

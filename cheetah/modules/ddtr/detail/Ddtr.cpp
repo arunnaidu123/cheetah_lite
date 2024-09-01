@@ -29,29 +29,29 @@ namespace modules {
 namespace ddtr {
 
 
-template<typename ConfigType, typename NumericalRep, template <typename> class AggregationBufferFillerTemplate>
-Ddtr<ConfigType, NumericalRep, AggregationBufferFillerTemplate>::Ddtr(ConfigType const& config, DedispersionHandler handler)
+template<typename ConfigType, typename NumericalRep>
+Ddtr<ConfigType, NumericalRep>::Ddtr(ConfigType const& config, DedispersionHandler handler)
     : BaseT(config, handler)
 {
 }
 
-template<typename ConfigType, typename NumericalRep, template <typename> class AggregationBufferFillerTemplate>
-Ddtr<ConfigType, NumericalRep, AggregationBufferFillerTemplate>::~Ddtr()
+template<typename ConfigType, typename NumericalRep>
+Ddtr<ConfigType, NumericalRep>::~Ddtr()
 {
     //_pool.wait();
 }
 
-template<typename ConfigType, typename NumericalRep, template <typename> class AggregationBufferFillerTemplate>
+template<typename ConfigType, typename NumericalRep>
 template<typename TimeFreqDataT
        , typename data::EnableIfIsTimeFrequency<TimeFreqDataT, bool>>
-void Ddtr<ConfigType, NumericalRep, AggregationBufferFillerTemplate>::operator()(TimeFreqDataT const& tf_data)
+void Ddtr<ConfigType, NumericalRep>::operator()(TimeFreqDataT const& tf_data)
 {
     this->_buffer(tf_data);
 }
 
-template<typename ConfigType, typename NumericalRep, template <typename> class AggregationBufferFillerTemplate>
+template<typename ConfigType, typename NumericalRep>
 template<typename T>
-void Ddtr<ConfigType, NumericalRep, AggregationBufferFillerTemplate>::operator()(std::shared_ptr<T> const& data)
+void Ddtr<ConfigType, NumericalRep>::operator()(std::shared_ptr<T> const& data)
 {
     (*this)(*data);
 }
