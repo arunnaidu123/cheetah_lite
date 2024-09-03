@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2022 The SKA organisation
+ * Copyright (c) 2016-2023 The SKA organisation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,50 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#ifndef SKA_CHEETAH_MODULES_SPDT_KLOTSKI_TEST_CONFIGTEST_H
+#define SKA_CHEETAH_MODULES_SPDT_KLOTSKI_TEST_CONFIGTEST_H
 
-
-#include "cheetah/modules/ddtr/klotski/DdtrProcessor.h"
-#include "cheetah/modules/ddtr/klotski/Ddtr.h"
+#include <gtest/gtest.h>
 
 namespace ska {
 namespace cheetah {
 namespace modules {
-namespace ddtr {
+namespace spdt {
 namespace klotski {
+namespace test {
 
-template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(ddtr::Config const& config)
-    : _plan(std::make_shared<DedispersionPlan>(config, 0))
+/**
+ * @brief
+ * @details
+ */
+
+class ConfigTest : public ::testing::Test
 {
-}
+    protected:
+        void SetUp() override;
+        void TearDown() override;
 
-template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(Ddtr&& other)
-    : _plan(std::move(other._plan))
-{
-}
+    public:
+        ConfigTest();
+        ~ConfigTest();
 
-template<typename DdtrTraits>
-template<typename CallBackT>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>&, std::shared_ptr<BufferType> data, CallBackT const& call_back)
-{
-    return _worker(data, _plan, call_back);
-}
+    private:
+};
 
-template<typename DdtrTraits>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>& cpu, std::shared_ptr<BufferType> data)
-{
-    return (*this)(cpu, data, [](DmTrialsType const&, std::vector<unsigned int> const&){});
-}
 
-template<typename DdtrTraits>
-void Ddtr<DdtrTraits>::plan(DedispersionPlan const& plan)
-{
-    _plan = std::make_shared<DedispersionPlan>(plan);
-}
-
+} // namespace test
 } // namespace klotski
-} // namespace ddtr
+} // namespace spdt
 } // namespace modules
 } // namespace cheetah
 } // namespace ska
+
+#endif // SKA_CHEETAH_MODULES_SPDT_KLOTSKI_TEST_CONFIGTEST_H

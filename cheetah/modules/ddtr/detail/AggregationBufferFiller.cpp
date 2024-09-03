@@ -43,10 +43,10 @@ AggregationBufferFiller<NumericalRep>::AggregationBufferFiller(FullBufferHandler
 template<typename NumericalRep>
 AggregationBufferFiller<NumericalRep>::~AggregationBufferFiller()
 {
-    if(_current->data_size() != _overlap)
-    {
-        _fn(_current);  // push any new held data to the handler
-    }
+    //if(_current->data_size() != _overlap)
+    //{
+    //    _fn(_current);  // push any new held data to the handler
+    //}
 }
 
 template<typename NumericalRep>

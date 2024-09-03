@@ -298,6 +298,10 @@ void DedispersionStrategy<NumericalRep>::make_strategy(size_t const cpu_memory)
                 for(unsigned int channel=0; channel<channels_per_klotski; ++channel)
                 {
                     _dmshifts_per_channel[range][band][klotski][channel] = _dm_step[range].value()*_dm_constant.value()*(1.0/((fch1_klotski-_foff.value()*channel)*(fch1_klotski-_foff.value()*channel))-1.0/(fch1_klotski*fch1_klotski))/_tsamp[range].value();
+                    if((_ndms[range]*_dmshifts_per_channel[range][band][klotski][channel])>32.0)
+                    {
+                        throw panda::Error("reduce the number of channels per klotski");
+                    }
                 }
             }
             start_channel_of_band += _channels_per_band[band];

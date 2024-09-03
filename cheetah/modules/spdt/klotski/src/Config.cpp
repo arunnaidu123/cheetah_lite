@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2022 The SKA organisation
+ * Copyright (c) 2023 The SKA organisation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,50 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#include "cheetah/modules/spdt/klotski/Config.h"
 
-
-#include "cheetah/modules/ddtr/klotski/DdtrProcessor.h"
-#include "cheetah/modules/ddtr/klotski/Ddtr.h"
 
 namespace ska {
 namespace cheetah {
 namespace modules {
-namespace ddtr {
+namespace spdt {
 namespace klotski {
 
-template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(ddtr::Config const& config)
-    : _plan(std::make_shared<DedispersionPlan>(config, 0))
+
+Config::Config()
+    : klotski_common::Config("klotski")
+    , _active(false)
 {
 }
 
-template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(Ddtr&& other)
-    : _plan(std::move(other._plan))
+Config::~Config()
 {
 }
 
-template<typename DdtrTraits>
-template<typename CallBackT>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>&, std::shared_ptr<BufferType> data, CallBackT const& call_back)
+void Config::add_options(OptionsDescriptionEasyInit& add_options)
 {
-    return _worker(data, _plan, call_back);
+    add_options
+    ("active", boost::program_options::value<bool>(&_active)->default_value(_active) , "Enable klotski spdt mode");
+    klotski_common::Config::add_options(add_options);
 }
 
-template<typename DdtrTraits>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>& cpu, std::shared_ptr<BufferType> data)
+bool Config::active() const
 {
-    return (*this)(cpu, data, [](DmTrialsType const&, std::vector<unsigned int> const&){});
+    return _active;
 }
 
-template<typename DdtrTraits>
-void Ddtr<DdtrTraits>::plan(DedispersionPlan const& plan)
+void Config::active(bool value)
 {
-    _plan = std::make_shared<DedispersionPlan>(plan);
+    _active = value;
 }
 
 } // namespace klotski
-} // namespace ddtr
+} // namespace spdt
 } // namespace modules
 } // namespace cheetah
 } // namespace ska

@@ -54,7 +54,7 @@ TEST_F(ConfigTest, test_activate)
 {
     Config config;
     ASSERT_FALSE(config.active());
-    config.activate();
+    config.active(true);
     ASSERT_TRUE(config.active());
 }
 

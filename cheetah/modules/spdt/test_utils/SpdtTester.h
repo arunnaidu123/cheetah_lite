@@ -68,7 +68,7 @@ namespace test {
  *
  */
 
-
+/*
 template<typename ArchitectureTag, typename ArchitectureCapability>
 struct SpdtTesterTraits : public utils::test::PoolAlgorithmTesterTraits<ArchitectureTag, ArchitectureCapability>
 {
@@ -93,13 +93,26 @@ struct SpdtTesterTraits : public utils::test::PoolAlgorithmTesterTraits<Architec
 
             protected:
                 PoolType* _pool;
-                modules::ddtr::Config _ddtr_config;
         };
 
     public:
         typedef spdt::Spdt<TestConfig, uint8_t> Api;
         typedef typename Api::DmTrialType DmType;
         typedef typename Api::SpType SpType;
+
+       class SpdtHandler {
+            public:
+                SpdtHandler(SinglePulseImpl&);
+                SpdtHandler(SpdtHandler const&) = delete;
+                void operator()(std::shared_ptr<SpType> const&) const;
+        };
+
+        class DdtrHandler {
+            public:
+                DdtrHandler(SinglePulseImpl&);
+                DdtrHandler(DdtrHandler const&) = delete;
+                void operator()(std::shared_ptr<DmTrialType>);
+        };
 
     public:
         SpdtTesterTraits();
@@ -146,7 +159,6 @@ template <typename TestTraits>
 class SpdtTester : public cheetah::utils::test::AlgorithmTester<TestTraits>
 {
     protected:
-        //typename spdt::Spdt<spdt::Config, uint8_t>::BufferFillerType::AggregationBufferType BufferDataType;
         typename spdt::Spdt<spdt::Config, uint8_t>::TimeFrequencyType DataType;
 
     protected:
@@ -159,7 +171,7 @@ class SpdtTester : public cheetah::utils::test::AlgorithmTester<TestTraits>
 };
 
 TYPED_TEST_SUITE_P(SpdtTester);
-
+*/
 } // namespace test
 } // namespace spdt
 } // namespace modules

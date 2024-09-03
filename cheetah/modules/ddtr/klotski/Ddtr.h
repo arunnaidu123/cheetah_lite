@@ -111,7 +111,6 @@ class Ddtr
     private:
         std::shared_ptr<DedispersionPlan> _plan;
         DdtrWorker<DdtrTraits> _worker;
-        std::mutex _mutex;
 };
 
 } // namespace klotski

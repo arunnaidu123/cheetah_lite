@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2022 The SKA organisation
+ * Copyright (c) 2023 The SKA organisation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,49 +22,55 @@
  * SOFTWARE.
  */
 
+#ifndef SKA_CHEETAH_MODULES_SPDT_KLOTSKICOMMON_MSDESTIMATOR_H
+#define SKA_CHEETAH_MODULES_SPDT_KLOTSKICOMMON_MSDESTIMATOR_H
 
-#include "cheetah/modules/ddtr/klotski/DdtrProcessor.h"
+#include "cheetah/modules/spdt/klotski/Config.h"
 #include "cheetah/modules/ddtr/klotski/Ddtr.h"
+#include "cheetah/modules/ddtr/klotski/detail/DedispersionStrategy.h"
+#include "cheetah/utils/Architectures.h"
 
 namespace ska {
 namespace cheetah {
 namespace modules {
-namespace ddtr {
-namespace klotski {
+namespace spdt {
+namespace klotski_common {
 
-template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(ddtr::Config const& config)
-    : _plan(std::make_shared<DedispersionPlan>(config, 0))
+/**
+ * @brief MSD (mean, standard deviation)
+ * @details MsdEstimator estimates the mean and standard deviation of the data in the DMTrails object
+ */
+template <typename SpdtTraits>
+class MsdEstimator
 {
-}
 
-template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(Ddtr&& other)
-    : _plan(std::move(other._plan))
-{
-}
+    public:
+        typedef typename SpdtTraits::DmTrialsType DmTrialsType;
+    public:
+        MsdEstimator(DmTrialsType const& data, unsigned int dm_index);
+        ~MsdEstimator();
 
-template<typename DdtrTraits>
-template<typename CallBackT>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>&, std::shared_ptr<BufferType> data, CallBackT const& call_back)
-{
-    return _worker(data, _plan, call_back);
-}
+    public:
+        /**
+        * @brief return the mean of the data
+        */
+        double const& mean() const;
 
-template<typename DdtrTraits>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>& cpu, std::shared_ptr<BufferType> data)
-{
-    return (*this)(cpu, data, [](DmTrialsType const&, std::vector<unsigned int> const&){});
-}
+        /**
+        * @brief return the standard deviation of the data
+        */
+        double const& stdev() const;
 
-template<typename DdtrTraits>
-void Ddtr<DdtrTraits>::plan(DedispersionPlan const& plan)
-{
-    _plan = std::make_shared<DedispersionPlan>(plan);
-}
+    private:
+        double _mean;
+        double _stdev;
+};
 
-} // namespace klotski
-} // namespace ddtr
+} // namespace klotski_common
+} // namespace spdt
 } // namespace modules
 } // namespace cheetah
 } // namespace ska
+
+#include "cheetah/modules/spdt/klotski_common/detail/MsdEstimator.cpp"
+#endif // SKA_CHEETAH_MODULES_SPDT_KLOTSKICOMMON_MSDESTIMATOR_H

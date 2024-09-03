@@ -31,26 +31,26 @@ namespace ska {
 namespace cheetah {
 namespace modules {
 namespace spdt {
-namespace cpu {
+namespace klotski {
 namespace test {
 
 typedef spdt::CommonTypes<spdt::Config, uint8_t> SpdtTraits;
 
-struct CpuSpdtTraits : public spdt::test::SpdtTesterTraits<spdt::cpu::Spdt<SpdtTraits>::Architecture
-                                                                ,spdt::cpu::Spdt<SpdtTraits>::Architecture>
+struct KlotskiSpdtTraits : public spdt::test::SpdtTesterTraits<spdt::klotski::Spdt<SpdtTraits>::Architecture
+                                                                ,spdt::klotski::Spdt<SpdtTraits>::Architecture>
 {
-    typedef spdt::cpu::Spdt<SpdtTraits> SpdtType;
+    typedef spdt::klotski::Spdt<SpdtTraits> SpdtType;
     typedef spdt::test::SpdtTesterTraits<typename SpdtType::Architecture, typename SpdtType::Architecture> BaseT;
     typedef typename BaseT::Arch Arch;
     void configure(spdt::Config& config) override {
         BaseT::configure(config);
-        auto& cpu_config = config.cpu_config();
-        cpu_config.activate();
+        auto& klotski_config = config.klotski_config();
+        klotski_config.activate(true);
     }
 };
 
 } // namespace test
-} // namespace cpu
+} // namespace klotski
 } // namespace spdt
 } // namespace modules
 } // namespace cheetah
@@ -62,8 +62,8 @@ namespace modules {
 namespace spdt {
 namespace test {
 
-typedef ::testing::Types<spdt::cpu::test::CpuSpdtTraits> CpuSpdtTraitsTypes;
-INSTANTIATE_TYPED_TEST_SUITE_P(Cpu, SpdtTester, CpuSpdtTraitsTypes);
+typedef ::testing::Types<spdt::klotski::test::KlotskiSpdtTraits> KlotskiSpdtTraitsTypes;
+INSTANTIATE_TYPED_TEST_SUITE_P(Klotski, SpdtTester, KlotskiSpdtTraitsTypes);
 
 } // namespace test
 } // namespace spdt

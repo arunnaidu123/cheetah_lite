@@ -100,6 +100,7 @@ DdtrProcessor<DdtrTraits>& DdtrProcessor<DdtrTraits>::operator++()
                            , _ft_data.begin()+shift+delay, current_trial.begin(), [&](float x, NumericalRep y){return ((float)x+y);});
         }
         std::transform(current_trial.begin(), current_trial.end(), current_trial.begin(), [&](float x){return x/_ft_data.number_of_channels();});
+        //std::cout<<"max_value "<<(int)(*std::max_element(current_trial.begin(), current_trial.end()))<<"\n";
     }
     _current_dm_idx += _plan->algo_config().number_of_dms()[_current_dm_range];
     ++_current_dm_range;

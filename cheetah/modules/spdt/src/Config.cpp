@@ -57,6 +57,16 @@ cpu::Config& Config::cpu_config()
     return BaseT::config<cpu::Config>();
 }
 
+klotski::Config const& Config::klotski_config() const
+{
+    return BaseT::config<klotski::Config>();
+}
+
+klotski::Config& Config::klotski_config()
+{
+    return BaseT::config<klotski::Config>();
+}
+
 } // namespace spdt
 } // namespace modules
 } // namespace cheetah

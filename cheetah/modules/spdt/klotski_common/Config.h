@@ -21,72 +21,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef SKA_CHEETAH_MODULES_SPDT_CPU_CONFIG_H
-#define SKA_CHEETAH_MODULES_SPDT_CPU_CONFIG_H
+#ifndef SKA_CHEETAH_MODULES_SPDT_KLOTSKI_COMMON_CONFIG_H
+#define SKA_CHEETAH_MODULES_SPDT_KLOTSKI_COMMON_CONFIG_H
 
 
 #include "cheetah/utils/Config.h"
+#include <panda/CommaSeparatedOptions.h>
 
 namespace ska {
 namespace cheetah {
 namespace modules {
 namespace spdt {
-namespace cpu {
+namespace klotski_common {
 
 /**
  * @brief
- *   Configuration for the Spdt cpu
+ *   Configuration for the Spdt klotski_common
  */
 
 class Config : public utils::Config
 {
     public:
-        Config();
+        Config(std::string module_name);
         ~Config();
 
-        float candidate_rate() const;
-        void candidate_rate(float cands_per_second);
+        /**
+         * @brief array containing widths to be searched
+         * @details widths should in samples
+         */
+        std::vector<unsigned> const& widths() const;
+        void widths(std::vector<unsigned> const& widths);
 
         /**
-         * @brief returns true if algorithm is selected
+         * @brief maximum width limit
+         * @details This should be a multiple of 1024. This width need not be in the widths array but it is used to
+         * estimate the overlap.
          */
-        bool active() const;
+        unsigned int const& max_width_limit() const;
+        void max_width_limit(unsigned int& value);
 
         /**
-         * @brief activate the algorithm
+         * @brief batch size of the width search. The DM are batched in number of _number_of_dms_per_iteration.
+         * @details The safe number is 8. TODO: check if we can go to 16 with newer harware.
          */
-        void active(bool val);
-
-        /**
-         * @brief number of samples per iteration
-         * @details The cpu spdt algorithm searches the time series in blocks of size defined by samples_per_iteration.
-         * Each iteration will output only one candidate with max SNR in the block.
-         */
-        std::size_t samples_per_iteration() const;
-        void samples_per_iteration(std::size_t const& value);
-
-        /**
-         * @brief total number of widths to be used for box-car matched filter
-         * @details The cpu spdt algorithm uses the widths in the power of 2s.
-         * For example setting number_of_widths = 4 results in width search with box-car sizes of  1, 2, 4, 8 samples.
-         */
-        std::size_t number_of_widths() const;
-        void number_of_widths(std::size_t const& value);
+        unsigned int const& number_of_dms_per_iteration() const;
+        void number_of_dms_per_iteration(unsigned int& value);
 
     protected:
         void add_options(OptionsDescriptionEasyInit& add_options) override;
 
     private:
-        bool     _active;
-        std::size_t _samples_per_iteration;
-        std::size_t _number_of_widths;
+        panda::CommaSeparatedOptions<unsigned> _widths;
+        unsigned int _number_of_dms_per_iteration;
+        unsigned int _max_width_limit;
 };
 
 
-} // namespace cpu
+} // namespace klotski_common
 } // namespace spdt
 } // namespace modules
 } // namespace cheetah
 } // namespace ska
 
-#endif // SKA_CHEETAH_MODULES_SPDT_CPU_CONFIG_H
+#endif // SKA_CHEETAH_MODULES_SPDT_KLOTSKI_COMMON_CONFIG_H

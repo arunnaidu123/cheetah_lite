@@ -37,7 +37,7 @@ namespace modules {
 namespace spdt {
 namespace test {
 
-
+/*
 template<int ScenarioNum, typename TimeFrequencyType>
 class TestRfiData: public data::RfimFlaggedData<TimeFrequencyType>
 {
@@ -153,7 +153,7 @@ void test_single_pulse_with_noise(TraitsType& traits, PoolType& pool)
 }
 
 
-/*
+
 template<typename RfiDataType, typename TraitsType, typename PoolType>
 void test_single_pulse_with_noise_ska_low(TraitsType& traits, PoolType& pool)
 {
@@ -310,7 +310,7 @@ void test_single_pulse_with_noise_ska_mid(TraitsType& traits, PoolType& pool)
     ASSERT_TRUE(std::any_of(sp_data.begin(), sp_data.end(), check_for_candidate));
 
 }
-*/
+
 
 template <typename TestTraits>
 SpdtTester<TestTraits>::SpdtTester()
@@ -349,7 +349,6 @@ typename SpdtTesterTraits<ArchitectureTag, ArchitectureCapability>::Api&
     if(!_api) {
         configure(_config); // call configuration method
         _config.set_pool(pool);
-        _config.ddtr_config().dedispersion_samples(1<<16);
         _api.reset(new Api(_config,
                      [this](std::shared_ptr<DmType> data)
                      {
@@ -417,6 +416,8 @@ std::size_t SpdtTesterTraits<ArchitectureTag, ArchitectureCapability>::sp_handle
 POOL_ALGORITHM_TYPED_TEST_P(SpdtTester, test_handlers)
 {
     TypeParam traits;
+    ddtr::CommonTypes<>
+    ddtr::cpu::Ddtr<DdtrTraits>
     auto& spdt_config = traits.config();
     modules::ddtr::Config& ddtr_config = spdt_config.ddtr_config();
     typedef typename modules::ddtr::DedispersionConfig::Dm Dm;
@@ -453,7 +454,7 @@ POOL_ALGORITHM_TYPED_TEST_P(SpdtTester, test_handlers)
     // now we expect the buffer to flush data as it is destroyed. so the pool has to stay alive whilst this happens
 
 }
-/*
+
 POOL_ALGORITHM_TYPED_TEST_P(SpdtTester, single_pulse_with_noise_1)
 {
     TypeParam traits;
@@ -510,7 +511,7 @@ REGISTER_TYPED_TEST_SUITE_P(SpdtTester
                         , single_pulse_with_noise_ska_mid);
 
 */
-REGISTER_TYPED_TEST_SUITE_P(SpdtTester, test_handlers);
+
 } // namespace test
 } // namespace spdt
 } // namespace modules

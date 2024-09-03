@@ -41,6 +41,7 @@ MsdEstimator<SpdtTraits>::MsdEstimator(DmTrialsType const& data)
 	double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
 	_stdev = std::sqrt(sq_sum / data[0].size());
     _mean = mean;
+	std::cout<<"mean: "<<mean<<" std: "<<_stdev<<"\n";
 }
 
 template<typename SpdtTraits>

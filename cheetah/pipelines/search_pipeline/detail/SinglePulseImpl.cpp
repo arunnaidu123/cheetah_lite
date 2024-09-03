@@ -82,13 +82,14 @@ void SinglePulseImpl<NumericalT>::SpdtHandler::operator()(std::shared_ptr<SpType
 template<typename NumericalT>
 void SinglePulseImpl<NumericalT>::DdtrHandler::operator()(std::shared_ptr<DmTrialType> data)
 {
+    PANDA_LOG<<"callig spdt ";
     _pipeline._spdt(data);
 }
 
 template<typename NumericalT>
 void SinglePulseImpl<NumericalT>::do_post_processing(std::shared_ptr<SpType> const& data)
 {
-    std::cout<<"number of candidates "<<data->size()<<"\n";
+    PANDA_LOG<<"number of candidates "<<data->size();
     //this->_spsifter(*data);
     //std::shared_ptr<SpType> new_data = this->_spclusterer(data);
     //this->out().send(ska::panda::ChannelId("sps_events"), new_data);

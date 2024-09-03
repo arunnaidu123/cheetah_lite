@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2022 The SKA organisation
+ * Copyright (c) 2023 The SKA organisation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,49 +22,46 @@
  * SOFTWARE.
  */
 
-
-#include "cheetah/modules/ddtr/klotski/DdtrProcessor.h"
-#include "cheetah/modules/ddtr/klotski/Ddtr.h"
-
+#include <numeric>
 namespace ska {
 namespace cheetah {
 namespace modules {
-namespace ddtr {
-namespace klotski {
+namespace spdt {
+namespace klotski_common {
 
-template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(ddtr::Config const& config)
-    : _plan(std::make_shared<DedispersionPlan>(config, 0))
+template<typename SpdtTraits>
+MsdEstimator<SpdtTraits>::MsdEstimator(DmTrialsType const& data, unsigned int dm_index)
+{
+	double sum = std::accumulate(data[dm_index].begin(), data[dm_index].end(), 0.0);
+	double mean = sum / data[dm_index].size();
+
+	std::vector<double> diff(data[dm_index].size());
+	std::transform(data[dm_index].begin(), data[dm_index].end(), diff.begin(), [mean](double x) { return x - mean; });
+
+	double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+	_stdev = std::sqrt(sq_sum / data[dm_index].size());
+    _mean = mean;
+}
+
+template<typename SpdtTraits>
+MsdEstimator<SpdtTraits>::~MsdEstimator()
 {
 }
 
-template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(Ddtr&& other)
-    : _plan(std::move(other._plan))
+template<typename SpdtTraits>
+double const& MsdEstimator<SpdtTraits>::mean() const
 {
+	return _mean;
 }
 
-template<typename DdtrTraits>
-template<typename CallBackT>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>&, std::shared_ptr<BufferType> data, CallBackT const& call_back)
+template<typename SpdtTraits>
+double const& MsdEstimator<SpdtTraits>::stdev() const
 {
-    return _worker(data, _plan, call_back);
+	return _stdev;
 }
 
-template<typename DdtrTraits>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>& cpu, std::shared_ptr<BufferType> data)
-{
-    return (*this)(cpu, data, [](DmTrialsType const&, std::vector<unsigned int> const&){});
-}
-
-template<typename DdtrTraits>
-void Ddtr<DdtrTraits>::plan(DedispersionPlan const& plan)
-{
-    _plan = std::make_shared<DedispersionPlan>(plan);
-}
-
-} // namespace klotski
-} // namespace ddtr
+} // namespace klotski_common
+} // namespace spdt
 } // namespace modules
 } // namespace cheetah
 } // namespace ska

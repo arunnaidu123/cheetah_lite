@@ -29,6 +29,7 @@
 #include "cheetah/modules/spdt/detail/SpdtModule.h"
 #include "cheetah/data/TimeFrequency.h"
 #include "cheetah/modules/spdt/cpu/Spdt.h"
+#include "cheetah/modules/spdt/klotski/Spdt.h"
 
 #include <memory>
 
@@ -43,6 +44,9 @@ namespace spdt {
 template<typename ConfigType, typename NumericalT>
 using SpdtAlgos=SpdtModule<CommonTypes<ConfigType, NumericalT>
                                , cpu::Spdt
+#ifdef SKA_CHEETAH_ENABLE_NASM
+                               , klotski::Spdt
+#endif //SKA_CHEETAH_ENABLE_NASM
                                >;
 
 /**

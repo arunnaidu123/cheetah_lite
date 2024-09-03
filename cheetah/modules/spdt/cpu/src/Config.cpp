@@ -56,9 +56,9 @@ bool Config::active() const
     return _active;
 }
 
-void Config::activate()
+void Config::active(bool val)
 {
-    _active = true;
+    _active = val;
 }
 
 std::size_t Config::samples_per_iteration() const

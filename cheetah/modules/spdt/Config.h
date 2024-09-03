@@ -27,6 +27,7 @@
 
 #include "cheetah/utils/Config.h"
 #include "cheetah/modules/spdt/cpu/Config.h"
+#include "cheetah/modules/spdt/klotski/Config.h"
 #include "cheetah/data/DedispersionMeasure.h"
 #include "panda/ProcessingEngine.h"
 #include "panda/ResourcePool.h"
@@ -41,6 +42,7 @@ namespace spdt {
 
 typedef panda::MultipleConfigModule<utils::Config
                                   , cpu::Config
+                                  , klotski::Config
                                    > SpdtAlgoConfigs;
 /**
  * @brief
@@ -66,6 +68,13 @@ class Config : public SpdtAlgoConfigs
          */
         cpu::Config const& cpu_config() const;
         cpu::Config& cpu_config();
+
+        /**
+         * @brief return the astroaccelerate algorithms configuration specifics
+         */
+        klotski::Config const& klotski_config() const;
+        klotski::Config& klotski_config();
+
     protected:
         void add_options(OptionsDescriptionEasyInit& add_options) override;
 

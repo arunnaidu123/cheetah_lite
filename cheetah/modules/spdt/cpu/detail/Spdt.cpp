@@ -52,9 +52,6 @@ class Spdt<SpdtTraits> : private utils::AlgorithmBase<Config, spdt::Config>
     public:
         // mark the architecture this algo is designed for
         typedef cheetah::Cpu Architecture;
-        typedef ddtr::cpu::DedispersionPlan<SpdtTraits> DedispersionPlan;
-
-    public:
         typedef data::TimeFrequency<Cpu, uint8_t> TimeFrequencyType;
 
     private:
@@ -114,14 +111,14 @@ void Spdt<SpdtTraits>::perform_search(DmTrialsType const& data, std::vector<floa
     for(std::size_t dm_indx=0; dm_indx<data.size(); dm_indx++)
     {
         std::copy(data[dm_indx].begin(), data[dm_indx].end(), temp.begin());
-        float downsampling_factor = data[dm_indx].sampling_interval()/data.metadata().fundamental_sampling_interval();
+        float downsampling_factor = data.metadata()[dm_indx].downsampling_factor();
         float current_mean = mean;
-        float current_stdev = stdev/std::sqrt(downsampling_factor);
         unsigned samples_per_iteration = _samples_per_iteration/downsampling_factor;
         unsigned number_of_iterations = data[dm_indx].size()/samples_per_iteration;
 
         for(unsigned width=0; width<_number_of_widths; width++)
         {
+            float current_stdev = (stdev/std::sqrt(std::pow(2,width)))/std::sqrt(downsampling_factor);
             for(unsigned iter=0; iter<number_of_iterations; iter+=samples_per_iteration)
             {
                 float t_snr = -1.0;
@@ -139,6 +136,7 @@ void Spdt<SpdtTraits>::perform_search(DmTrialsType const& data, std::vector<floa
                         t_sample = iter*_samples_per_iteration+i*std::pow(2,width);
                         t_dm = (float)dm_indx;
                         t_width = width;
+                        //std::cout<<t_snr<<" "<<t_sample<<" "<<t_dm<<" "<<t_width<<" "<<temp[sample]<<" "<<current_mean<<" "<<current_stdev<<" "<<downsampling_factor<<"\n";
                     }
                 }
 
@@ -156,7 +154,7 @@ void Spdt<SpdtTraits>::perform_search(DmTrialsType const& data, std::vector<floa
                 temp[sample] = (temp[2*sample] + temp[2*sample+1])/2.0;
             }
             samples_per_iteration /= 2;
-            current_stdev = (stdev/std::sqrt(std::pow(2,width+1)))/std::sqrt(downsampling_factor);
+
         }
     }
 }

@@ -21,17 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef SKA_CHEETAH_MODULES_SPS_CPU_SPS_H
-#define SKA_CHEETAH_MODULES_SPS_CPU_SPS_H
+#ifndef SKA_CHEETAH_MODULES_SPDT_KLOTSKI_SPDT_H
+#define SKA_CHEETAH_MODULES_SPDT_KLOTSKI_SPDT_H
 
-#include "cheetah/modules/ddtr/cpu/Ddtr.h"
-#include "cheetah/modules/spdt/cpu/Config.h"
+#ifdef SKA_CHEETAH_ENABLE_NASM
+
+#include "cheetah/modules/ddtr/klotski/Ddtr.h"
+#include "cheetah/modules/spdt/klotski/Config.h"
 #include "cheetah/modules/spdt/detail/CommonTypes.h"
 #include "cheetah/modules/spdt/Config.h"
 #include "cheetah/data/DmTrialsMetadata.h"
 #include "cheetah/utils/Architectures.h"
 #include "cheetah/utils/AlgorithmBase.h"
-#include "cheetah/modules/ddtr/cpu/DedispersionPlan.h"
+#include "cheetah/modules/ddtr/klotski/DedispersionPlan.h"
 #include "cheetah/modules/ddtr/DedispersionTrialPlan.h"
 #include <memory>
 
@@ -39,10 +41,10 @@ namespace ska {
 namespace cheetah {
 namespace modules {
 namespace spdt {
-namespace cpu {
+namespace klotski {
 
 /**
- * @brief Single pulse search on cpu
+ * @brief Single pulse search on AVX
  * @details This not a asynchronous version
  */
 
@@ -53,12 +55,13 @@ class Spdt
 {
     public:
         typedef cheetah::Cpu Architecture;
-        typedef cpu::Config Config;
-        typedef std::shared_ptr<typename SpdtTraits::DmTrialsType> SharedDmTrialsType;
+        typedef klotski::Config Config;
+        typedef typename SpdtTraits::DmTrialsType DmTrialsType;
+
     public:
         Spdt(spdt::Config const&) {};
 
-        std::shared_ptr<typename SpdtTraits::SpType> operator()(panda::PoolResource<cheetah::Cpu>&, SharedDmTrialsType);
+        std::shared_ptr<typename SpdtTraits::DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>&, std::shared_ptr<DmTrialsType>);
 };
 
 } // namespace detail
@@ -70,22 +73,24 @@ class Spdt : public detail::Spdt<SpdtTraits>
 
     public:
         typedef typename BaseT::Architecture Architecture;
-        typedef cpu::Config Config;
-        typedef std::shared_ptr<typename SpdtTraits::DmTrialsType> SharedDmTrialsType;
+        typedef typename BaseT::DedispersionPlan DedispersionPlan;
+        typedef klotski::Config Config;
+        typedef typename SpdtTraits::DmTrialsType DmTrialsType;
 
     public:
         Spdt(spdt::Config const& config);
 
-        std::shared_ptr<typename SpdtTraits::SpType> operator()(panda::PoolResource<Architecture>& dev, SharedDmTrialsType dm_trials_ptr);
+        std::shared_ptr<typename SpdtTraits::SpType> operator()(panda::PoolResource<Architecture>& dev, std::shared_ptr<DmTrialsType>);
 
 };
 
-} // namespace cpu
+} // namespace klotski
 } // namespace spdt
 } // namespace modules
 } // namespace cheetah
 } // namespace ska
 
-#include "cheetah/modules/spdt/cpu/detail/Spdt.cpp"
+#include "cheetah/modules/spdt/klotski/detail/Spdt.cpp"
 
-#endif // SKA_CHEETAH_MODULES_SPS_CPU_SPS_H
+#endif // SKA_CHEETAH_ENABLE_NASM
+#endif // SKA_CHEETAH_MODULES_SPDT_KLOTSKI_SPDT_H
