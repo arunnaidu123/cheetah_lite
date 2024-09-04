@@ -168,6 +168,8 @@ class DmTrials
          */
         DmTrialsMetadata const& metadata() const;
 
+        void swap(DmTrials& b);
+
     private:
         std::shared_ptr<DmTrialsMetadata> _metadata;
         SeriesType _data;

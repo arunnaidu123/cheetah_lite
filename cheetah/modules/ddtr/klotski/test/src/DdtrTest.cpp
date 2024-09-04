@@ -40,6 +40,7 @@ struct klotskiTraits
     void configure(ddtr::Config& config) override {
         BaseT::configure(config);
         config.klotski_algo_config().active(true);
+        config.klotski_algo_config().max_channels_per_klotski(2);
         config.klotski_algo_config().precise(precision);
     }
 

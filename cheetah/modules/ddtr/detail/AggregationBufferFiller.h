@@ -28,7 +28,7 @@
 #include "AggregationBuffer.h"
 #include <functional>
 #include <type_traits>
-
+#include <chrono>
 namespace ska {
 namespace cheetah {
 namespace modules {
@@ -129,10 +129,27 @@ class AggregationBufferFiller
 
         void metadata(typename data::TimeFrequencyMetadata const& metadata);
 
+        void add_nsec1(struct timespec& temp, long nsec) {
+            temp.tv_nsec += nsec;
+            if (temp.tv_nsec >= 1000000000) {
+                long sec = temp.tv_nsec / 1000000000;
+
+                temp.tv_sec += sec;
+                temp.tv_nsec -= sec * 1000000000;
+            } else if (temp.tv_nsec < 0) {
+                long sec = temp.tv_nsec / 1000000000;
+                sec -= 1;
+                temp.tv_nsec -= sec * 1000000000;
+                temp.tv_sec += sec;
+            }
+        }
+
     private:
         FullBufferHandlerT _fn;
         std::size_t _overlap;
         std::shared_ptr<AggregationBufferType> _current;
+        struct timespec _t0;
+        //std::shared_ptr<AggregationBufferType> _tmp;
 };
 
 } // namespace ddtr

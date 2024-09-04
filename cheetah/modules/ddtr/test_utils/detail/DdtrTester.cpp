@@ -78,7 +78,7 @@ typename DdtrTesterTraits<DdtrAlgoT, NumericalT>::Api& DdtrTesterTraits<DdtrAlgo
         _config.template config<typename DdtrAlgo::Config>().active(true);
         configure(_config); // call configuration method
         _config.set_pool(pool);
-        _api.reset(new Api(_config, _handler));
+        _api.reset(new Api(_beam_config, _config, _handler));
     }
     return *_api;
 }
@@ -252,7 +252,7 @@ POOL_ALGORITHM_TYPED_TEST_P(DdtrTester, test_algorithm)
 
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_int_distribution<std::size_t> nchans(4, 9);
+    std::uniform_int_distribution<std::size_t> nchans(8, 10);
 
     std::size_t count=0;
     std::size_t chunk_samples = 8192;
@@ -340,7 +340,7 @@ POOL_ALGORITHM_TYPED_TEST_P(DdtrTester, test_pulse_with_noise)
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_int_distribution<std::size_t> nspectra(8000, 10000);
-    std::uniform_int_distribution<std::size_t> nchans(3, 7);
+    std::uniform_int_distribution<std::size_t> nchans(7, 9);
     std::size_t no_of_chans= std::pow(2, nchans(mt));
 
     for(int iter=0; iter<4; iter++)

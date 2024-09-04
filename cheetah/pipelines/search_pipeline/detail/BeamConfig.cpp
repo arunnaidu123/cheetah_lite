@@ -117,6 +117,12 @@ void BeamConfig<NumericalT>::active(bool active)
     _active = active;
 }
 
+template<typename NumericalT>
+std::vector<unsigned> const& BeamConfig<NumericalT>::affinities() const
+{
+    return _thread_config.affinities();
+}
+
 } // namespace search_pipeline
 } // namespace pipelines
 } // namespace cheetah

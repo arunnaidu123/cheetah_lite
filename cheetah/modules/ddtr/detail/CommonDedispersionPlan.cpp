@@ -44,8 +44,8 @@ data::DimensionSize<data::Time> CommonDedispersionPlanBase<TraitsT>::dedispersio
 }
 
 template<typename TraitsT, typename... AlgosT>
-CommonDedispersionPlan<TraitsT, AlgosT...>::CommonDedispersionPlan(ConfigType const& config)
-    : _plans(typename PlanType<AlgosT>::type(config
+CommonDedispersionPlan<TraitsT, AlgosT...>::CommonDedispersionPlan(BeamConfigType const& beam_config, ConfigType const& config)
+    : _plans(typename PlanType<AlgosT>::type(beam_config, config
                                            , panda::PoolLimits::template minimum_memory<typename AlgosT::Architecture>(config.pool())/sizeof(typename TraitsT::value_type))...)
 {
 }

@@ -33,7 +33,7 @@ namespace ddtr {
 namespace cpu {
 
 template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(ddtr::Config const&)
+Ddtr<DdtrTraits>::Ddtr(BeamConfigType const&, ddtr::Config const&)
 {
 }
 

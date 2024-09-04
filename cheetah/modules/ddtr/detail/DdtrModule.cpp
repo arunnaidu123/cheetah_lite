@@ -36,7 +36,7 @@ struct CreateHelper
     template<typename DdtrAlgoFactory>
     static inline T create(DdtrAlgoFactory& algo_factory)
     {
-        return T(algo_factory._config);
+        return T(algo_factory._beam_config, algo_factory._config);
     }
 };
 
@@ -46,7 +46,7 @@ struct CreateHelper<cpu::Ddtr<DdtrTraits>, DdtrTraits>
     template<typename DdtrAlgoFactory>
     static inline cpu::Ddtr<DdtrTraits> create(DdtrAlgoFactory& algo_factory)
     {
-        return cpu::Ddtr<DdtrTraits>(algo_factory._config);
+        return cpu::Ddtr<DdtrTraits>(algo_factory._beam_config, algo_factory._config);
     }
 };
 
@@ -57,10 +57,12 @@ class DdtrAlgoFactory
         template<typename, typename>
         friend struct detail::CreateHelper;
         typedef typename DdtrTraits::Config ConfigType;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
 
     public:
-        DdtrAlgoFactory(ConfigType const& config)
+        DdtrAlgoFactory(BeamConfigType const& beam_config, ConfigType const& config)
             : _config(config)
+            , _beam_config(beam_config)
         {}
 
         void none_selected() const {
@@ -74,6 +76,8 @@ class DdtrAlgoFactory
 
     private:
         ConfigType const& _config;
+        BeamConfigType const& _beam_config;
+
 };
 
 } // namespace detail
@@ -85,12 +89,14 @@ struct DdtrModule<DdtrTraits, DdtrAlgorithms...>::FactoryWrap
     private:
         template<typename, typename>
         friend struct detail::CreateHelper;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
         typedef typename DdtrTraits::Config ConfigType;
         typedef typename BufferType::Plan PlanType;
 
     public:
-        FactoryWrap(ConfigType const& config, FactoryT const& factory, BufferType& buffer, TaskType& task)
-            : _config(config)
+        FactoryWrap(BeamConfigType const& beam_config, ConfigType const& config, FactoryT const& factory, BufferType& buffer, TaskType& task)
+            : _beam_config(beam_config)
+            , _config(config)
             , _factory(factory)
             , _buffer(buffer)
             , _task(task)
@@ -114,10 +120,11 @@ struct DdtrModule<DdtrTraits, DdtrAlgorithms...>::FactoryWrap
         template<typename... Algos>
         void exec()
         {
-            _buffer.plan(std::unique_ptr<PlanType>(new ExtendedDedispersionPlan<Algos...>(_config, _task)));
+            _buffer.plan(std::unique_ptr<PlanType>(new ExtendedDedispersionPlan<Algos...>(_beam_config, _config, _task)));
         }
 
     private:
+        BeamConfigType const& _beam_config;
         ConfigType const& _config;
         FactoryT const& _factory;
         BufferType& _buffer;
@@ -129,38 +136,30 @@ template<typename DdtrTraits, template<typename> class... DdtrAlgorithms>
 template<typename Handler
         ,typename std::enable_if<!HasAlgoFactoryTypedef<DdtrTraits>::value && !std::is_same<void, Handler>::value, bool>::type
         >
-DdtrModule<DdtrTraits, DdtrAlgorithms...>::DdtrModule(ConfigType const& config, Handler&& handler)
-    : DdtrModule(config, std::forward<Handler>(handler), AlgoFactoryType(config))
+DdtrModule<DdtrTraits, DdtrAlgorithms...>::DdtrModule(BeamConfigType const& beam_config, ConfigType const& config, Handler&& handler)
+    : DdtrModule(beam_config, config, std::forward<Handler>(handler), AlgoFactoryType(beam_config, config))
 {
+    std::cout<<"DDTRT modules Affinity: "<<beam_config.affinities().size()<<"\n";
 }
 
 template<typename DdtrTraits, template<typename> class... DdtrAlgorithms>
 template<typename Handler, typename... AggBufferArgs>
-DdtrModule<DdtrTraits, DdtrAlgorithms...>::DdtrModule(ConfigType const& config, Handler&& handler
+DdtrModule<DdtrTraits, DdtrAlgorithms...>::DdtrModule(BeamConfigType const& beam_config
+                                                     , ConfigType const& config, Handler&& handler
                                                      , AlgoFactoryType const& factory
                                                      , AggBufferArgs&&... agg_buffer_args
                                                      )
     : _task(config.pool(), std::forward<Handler>(handler), _plan_setter)
     , _buffer([this](std::shared_ptr<typename DdtrTraits::BufferType> buffer)
               {
-                  //if(buffer.composition().empty())
-                  //{
-                  //    PANDA_LOG_WARN << "received an empty buffer";
-                  //    return;
-                  //}
-                  // fix up broken buffer metadata - TODO fix this in buffer creation
-                  //auto const& tf_obj = *(buffer.composition().front());
-                  //buffer.buffer().metadata(tf_obj.metadata());
-                  //data::DimensionIndex<data::Time> offset_samples(buffer.offset_first_block()/(tf_obj.number_of_channels() * sizeof(typename DdtrTraits::value_type)));
-                  //buffer.buffer().start_time(tf_obj.start_time(offset_samples));
                   _task.submit(buffer);
               }
-              , ExtendedDedispersionPlan<>(config, _task)
+              , ExtendedDedispersionPlan<>(beam_config, config, _task)
               , config.dedispersion_samples()
               , std::forward<AggBufferArgs>(agg_buffer_args)...
               )
 {
-    FactoryWrap<AlgoFactoryType> wrap_factory(config, factory, _buffer, _task);
+    FactoryWrap<AlgoFactoryType> wrap_factory(beam_config, config, factory, _buffer, _task);
     utils::TaskConfigurationSetter<DdtrAlgorithms<DdtrTraits>...>::configure(_task, wrap_factory);
 }
 

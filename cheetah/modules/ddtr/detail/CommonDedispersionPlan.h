@@ -63,10 +63,11 @@ class CommonDedispersionPlan : public CommonDedispersionPlanBase<TraitsT>
 
     public:
         typedef typename TraitsT::Config ConfigType;
+        typedef typename TraitsT::BeamConfigType BeamConfigType;
         typedef typename TraitsT::TimeFrequencyType TimeFrequencyType;
 
     public:
-        CommonDedispersionPlan(ConfigType const& config);
+        CommonDedispersionPlan(BeamConfigType const& beam_config, ConfigType const& config);
         virtual ~CommonDedispersionPlan();
 
         data::DimensionSize<data::Time> buffer_overlap() const override;
@@ -97,6 +98,7 @@ class CommonDedispersionPlanFilter : public CommonDedispersionPlanType
 {
     public:
         typedef CommonDedispersionPlanType BaseT;
+        typedef typename BaseT::BeamConfigType BeamConfigType;
         typedef typename BaseT::ConfigType ConfigType;
         typedef typename BaseT::TimeFrequencyType TimeFrequencyType;
         typedef std::tuple<typename AlgosT::Architecture ...> Architectures;
@@ -128,8 +130,8 @@ class CommonDedispersionPlanFilter : public CommonDedispersionPlanType
         };
 
     public:
-        CommonDedispersionPlanFilter(ConfigType const& config)
-            : BaseT(config)
+        CommonDedispersionPlanFilter(BeamConfigType const& beam_config, ConfigType const& config)
+            : BaseT(beam_config, config)
         {
             FilterHelper helper(_filtered_plans);
             panda::for_each(this->_plans, helper);

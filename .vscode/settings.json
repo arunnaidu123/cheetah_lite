@@ -1,11 +1,6 @@
 {
-    "C_Cpp.dimInactiveRegions": false,
     "files.associations": {
-        "array": "cpp",
-        "bitset": "cpp",
-        "string_view": "cpp",
-        "initializer_list": "cpp",
-        "utility": "cpp",
-        "valarray": "cpp"
-    }
+        "type_traits": "cpp"
+    },
+    "C_Cpp.dimInactiveRegions": false
 }

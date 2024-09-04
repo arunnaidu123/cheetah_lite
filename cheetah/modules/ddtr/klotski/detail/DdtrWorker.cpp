@@ -57,7 +57,12 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
     }
     auto ddtr_start = std::chrono::high_resolution_clock::now();
     panda::copy(agg_buf->begin(), agg_buf->end(), plan->dedispersion_strategy()->temp_work_area()->begin());
-    std::shared_ptr<DmTrialsType> dmtrials_ptr = DmTrialsType::make_shared(plan->dm_trial_metadata(), agg_buf->start_time());
+    //std::shared_ptr<DmTrialsType> dmtrials_ptr = DmTrialsType::make_shared(plan->dm_trial_metadata(), agg_buf->start_time());
+
+    auto dmtrials_ptr = plan->dm_trials();
+    auto spdt_dmtrials_ptr = plan->spdt_dm_trials();
+    dmtrials_ptr->start_time(agg_buf->start_time());
+    spdt_dmtrials_ptr->start_time(agg_buf->start_time());
 
     DdtrProcessor<DdtrTraits> ddtr(plan, dmtrials_ptr);
 
@@ -71,7 +76,8 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
     DmTrialsType& dmtrials = *(dmtrials_ptr);
     call_back(dmtrials, plan->dedispersion_strategy()->ndms());
 
-    return dmtrials_ptr;
+    dmtrials_ptr->swap(*spdt_dmtrials_ptr);
+    return spdt_dmtrials_ptr;
 }
 
 } // namespace klotski

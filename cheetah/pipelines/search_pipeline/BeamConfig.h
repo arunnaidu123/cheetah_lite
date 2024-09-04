@@ -105,6 +105,8 @@ class BeamConfig : public utils::Config
          */
         bool active() const;
 
+        std::vector<unsigned> const& affinities() const;
+
     protected:
         void add_options(OptionsDescriptionEasyInit& add_options) override;
 

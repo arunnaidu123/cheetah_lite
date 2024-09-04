@@ -37,7 +37,9 @@ AggregationBufferFiller<NumericalRep>::AggregationBufferFiller(FullBufferHandler
     : _fn(listener)
     , _overlap(0)
     , _current(std::make_shared<AggregationBuffer<NumericalRep>>(std::forward<Args>(args)...))
+    //, _tmp(std::make_shared<AggregationBuffer<NumericalRep>>(std::forward<Args>(args)...))
 {
+    clock_gettime(CLOCK_MONOTONIC, &_t0);
 }
 
 template<typename NumericalRep>
@@ -48,6 +50,7 @@ AggregationBufferFiller<NumericalRep>::~AggregationBufferFiller()
     //    _fn(_current);  // push any new held data to the handler
     //}
 }
+
 
 template<typename NumericalRep>
 bool AggregationBufferFiller<NumericalRep>::flush()
@@ -61,7 +64,9 @@ bool AggregationBufferFiller<NumericalRep>::flush()
 
     // call our full buffer functor
     if(tmp->data_size()) {
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &_t0, NULL);
         _fn(tmp);
+        add_nsec1(_t0, 11730944000);
         return true;
     }
     return false;

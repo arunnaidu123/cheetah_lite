@@ -30,8 +30,9 @@ namespace ddtr {
 namespace klotski {
 
 template <typename DdtrTraits>
-DedispersionPlan<DdtrTraits>::DedispersionPlan(ConfigType const& config, std::size_t memory)
-    : _config(config)
+DedispersionPlan<DdtrTraits>::DedispersionPlan(BeamConfigType const& beam_config, ConfigType const& config, std::size_t memory)
+    : _beam_config(beam_config)
+    , _config(config)
     , _memory(memory)
     , _max_delay(0)
     , _dedispersion_samples(0)
@@ -42,6 +43,16 @@ DedispersionPlan<DdtrTraits>::DedispersionPlan(ConfigType const& config, std::si
 template <typename DdtrTraits>
 data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::reset(TimeFrequencyType const& data)
 {
+
+    if(_beam_config.affinities().size())
+    {
+        cpu_set_t cpuset;
+        CPU_ZERO(&cpuset);
+        CPU_SET(_beam_config.affinities()[0], &cpuset);
+        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
+    }
+
     _strategy = std::make_shared<DedispersionStrategy<NumericalT>>(data, _config, _memory);
 
     _max_delay = _strategy->maxshift();
@@ -72,6 +83,7 @@ data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::reset(TimeFrequenc
     _dm_trial_metadata = this->generate_dmtrials_metadata(data.sample_interval(), _dedispersion_samples);
 
     _dm_trials_ptr = DmTrialsType::make_shared(_dm_trial_metadata, data.start_time());
+    _spdt_dm_trials_ptr = DmTrialsType::make_shared(_dm_trial_metadata, data.start_time());
 
     return data::DimensionSize<data::Time>(_number_of_spectra);
 }
@@ -132,6 +144,17 @@ std::shared_ptr<typename DdtrTraits::DmTrialsType> const& DedispersionPlan<DdtrT
     return _dm_trials_ptr;
 }
 
+template <typename DdtrTraits>
+std::shared_ptr<typename DdtrTraits::DmTrialsType> const& DedispersionPlan<DdtrTraits>::spdt_dm_trials()
+{
+    return _spdt_dm_trials_ptr;
+}
+
+template <typename DdtrTraits>
+std::vector<unsigned> const& DedispersionPlan<DdtrTraits>::affinities()
+{
+    return _beam_config.affinities();
+}
 } // namespace klotski
 } // namespace ddtr
 } // namespace modules

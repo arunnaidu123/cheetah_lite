@@ -30,9 +30,10 @@ namespace ddtr {
 
 
 template<typename ConfigType, typename NumericalRep>
-Ddtr<ConfigType, NumericalRep>::Ddtr(ConfigType const& config, DedispersionHandler handler)
-    : BaseT(config, handler)
+Ddtr<ConfigType, NumericalRep>::Ddtr(BeamConfigType const& beam_config, ConfigType const& config, DedispersionHandler handler)
+    : BaseT(beam_config, config, handler)
 {
+    std::cout<<"Affinity: "<<beam_config.affinities().size()<<"\n";
 }
 
 template<typename ConfigType, typename NumericalRep>

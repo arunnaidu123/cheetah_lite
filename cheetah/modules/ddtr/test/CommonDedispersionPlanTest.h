@@ -64,6 +64,8 @@ class CommonDedispersionPlanTest : public ::testing::Test
 
         struct AlgoBConfig {};
 
+        struct BeamConfig {};
+
         struct AlgoA{
             typedef ArchA Architecture;
             typedef DedispersionPlanA DedispersionPlan;
@@ -82,6 +84,7 @@ class CommonDedispersionPlanTest : public ::testing::Test
             typedef uint8_t NumericalRep;
             typedef data::TimeFrequency<Cpu, NumericalRep> TimeFrequencyType;
             typedef typename AlgoA::Config Config;
+            typedef BeamConfig BeamConfigType;
         };
 
     private:

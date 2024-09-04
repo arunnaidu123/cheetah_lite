@@ -70,9 +70,10 @@ class Ddtr : public DdtrAlgos<ConfigType, NumericalRep>
     public:
         typedef typename DdtrTraits::DedispersionHandler DedispersionHandler;
         typedef typename DdtrTraits::DmTrialsType DmTrialsType;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
 
     public:
-        Ddtr(ConfigType const& config, DedispersionHandler);
+        Ddtr(BeamConfigType const& beam_config, ConfigType const& config, DedispersionHandler);
         ~Ddtr();
 
         /**

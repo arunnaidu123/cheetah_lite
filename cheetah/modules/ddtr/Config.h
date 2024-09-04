@@ -28,6 +28,7 @@
 #include "cheetah/modules/ddtr/klotski/Config.h"
 #include "cheetah/modules/ddtr/klotski_bruteforce/Config.h"
 #include "cheetah/modules/ddtr/RfiExcisionConfig.h"
+#include "cheetah/pipelines/search_pipeline/BeamConfig.h"
 #include "panda/PoolSelector.h"
 #include "panda/MultipleConfigModule.h"
 #include <cstdlib>

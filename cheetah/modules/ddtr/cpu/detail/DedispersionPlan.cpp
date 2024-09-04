@@ -30,7 +30,7 @@ namespace ddtr {
 namespace cpu {
 
 template <typename DdtrTraits>
-DedispersionPlan<DdtrTraits>::DedispersionPlan(ConfigType const& config, std::size_t memory)
+DedispersionPlan<DdtrTraits>::DedispersionPlan(BeamConfigType const& , ConfigType const& config, std::size_t memory)
     : _algo_config(config)
     , _memory(memory)
 {

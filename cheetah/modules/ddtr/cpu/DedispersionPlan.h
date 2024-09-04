@@ -59,12 +59,13 @@ class DedispersionPlan
         typedef typename TimeFrequencyType::TimeType TimeType;
         typedef std::vector<FrequencyType> FrequencyListType;
         typedef ddtr::Config ConfigType;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
 
     public:
         /**
          * @param memory The maximum memory available on the device (in number of DdtrTraits::value_type values)
          */
-        DedispersionPlan(ConfigType const& config, std::size_t memory);
+        DedispersionPlan(BeamConfigType const&, ConfigType const& config, std::size_t memory);
         ~DedispersionPlan();
 
         /**

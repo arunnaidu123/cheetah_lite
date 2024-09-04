@@ -33,8 +33,8 @@ namespace ddtr {
 namespace klotski_bruteforce {
 
 template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(ddtr::Config const& config)
-    : _plan(std::make_shared<DedispersionPlan>(config, 0))
+Ddtr<DdtrTraits>::Ddtr(BeamConfigType const& beam_config, ddtr::Config const& config)
+    : _plan(std::make_shared<DedispersionPlan>(beam_config, config, 0))
 {
 }
 

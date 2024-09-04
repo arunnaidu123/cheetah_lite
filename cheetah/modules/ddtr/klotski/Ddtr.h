@@ -62,6 +62,7 @@ class Ddtr
 
         /** TimeFrequencyType */
         typedef typename DdtrTraits::TimeFrequencyType TimeFrequencyType;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
 
     private:
         typedef typename DdtrTraits::DedispersionHandler DedispersionHandler;
@@ -75,9 +76,10 @@ class Ddtr
         typedef std::vector<FrequencyType> FrequencyListType;
 
     public:
-        Ddtr(ddtr::Config const& config);
+        Ddtr(BeamConfigType const& beam_config, ddtr::Config const& config);
         Ddtr(Ddtr const&) = delete;
         Ddtr(Ddtr&&);
+        ~Ddtr();
 
         /**
          * @brief dedispersion of time frequency data on CPU

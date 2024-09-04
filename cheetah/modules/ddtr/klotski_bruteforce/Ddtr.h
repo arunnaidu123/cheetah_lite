@@ -69,13 +69,14 @@ class Ddtr
         typedef ddtr::Config::Dm Dm;
         typedef typename DdtrTraits::BufferFillerType BufferFillerType;
         typedef typename DdtrTraits::BufferType BufferType;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
         typedef std::vector<ddtr::Config::Dm> DmListType;
         typedef typename TimeFrequencyType::FrequencyType FrequencyType;
         typedef typename TimeFrequencyType::TimeType TimeType;
         typedef std::vector<FrequencyType> FrequencyListType;
 
     public:
-        Ddtr(ddtr::Config const& config);
+        Ddtr(BeamConfigType const& beam_config, ddtr::Config const& config);
         Ddtr(Ddtr const&) = delete;
         Ddtr(Ddtr&&);
 

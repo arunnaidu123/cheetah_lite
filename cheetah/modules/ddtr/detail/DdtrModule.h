@@ -65,6 +65,8 @@ struct DdtrTraitsGen<DdtrTraits
 template<typename DdtrTraits, template<typename> class... DdtrAlgorithms>
 class DdtrModule
 {
+    public:
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
     private: // typedefs
         typedef CommonDedispersionPlan<DdtrTraits, DdtrAlgorithms<DdtrTraits>...> DedispersionPlanType;
         typedef detail::DdtrTraitsGen<DdtrTraits> DdtrTraitsFactory;
@@ -95,18 +97,22 @@ class DdtrModule
         typedef panda::ConfigurableTask<typename DdtrTraits::Pool
                                       , typename DdtrTraits::DedispersionHandler
                                       , panda::Method<SetDedispersionHelper, DedispersionPlanType const&>
-                                      , std::shared_ptr<typename DdtrTraits::BufferType>&> TaskType;
+                                      , std::shared_ptr<typename DdtrTraits::BufferType>&
+                                      > TaskType;
 
         typedef typename DdtrTraits::Config ConfigType;
+        //typedef typename DdtrTraits::BeamConfigType BeamConfigType;
         typedef Buffering<DdtrTraits, CommonDedispersionPlanBase<DdtrTraits>> BufferType;
 
     public:
         template<typename DedispersionHandler
                 ,typename std::enable_if<!HasAlgoFactoryTypedef<DdtrTraits>::value && !std::is_same<void, DedispersionHandler>::value, bool>::type = true>
-        DdtrModule(ConfigType const& config, DedispersionHandler&& handler);
+        DdtrModule(BeamConfigType const& beam_config, ConfigType const& config, DedispersionHandler&& handler);
 
         template<typename DedispersionHandler, typename... AggBufferArgs>
-        DdtrModule(ConfigType const& config, DedispersionHandler&& handler
+        DdtrModule(BeamConfigType const& beam_config
+                 , ConfigType const& config
+                 , DedispersionHandler&& handler
                  , AlgoFactoryType const& algo_factory
                  , AggBufferArgs&&... agg_buffer_args
                  );
@@ -127,8 +133,8 @@ class DdtrModule
         {
             typedef CommonDedispersionPlanFilter<DedispersionPlanType, Algo, Algos...> BaseT;
             typedef typename BaseT::TimeFrequencyType TimeFrequencyType;
-            ExtendedDedispersionPlan(ConfigType const& config, TaskType& task)
-                : BaseT(config)
+            ExtendedDedispersionPlan(BeamConfigType const& beam_config, ConfigType const& config, TaskType& task)
+                : BaseT(beam_config, config)
                 , _task(task)
             {
             }

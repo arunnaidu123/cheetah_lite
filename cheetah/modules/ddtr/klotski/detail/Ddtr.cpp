@@ -33,14 +33,19 @@ namespace ddtr {
 namespace klotski {
 
 template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(ddtr::Config const& config)
-    : _plan(std::make_shared<DedispersionPlan>(config, 0))
+Ddtr<DdtrTraits>::Ddtr(BeamConfigType const& beam_config, ddtr::Config const& config)
+    : _plan(std::make_shared<DedispersionPlan>(beam_config, config, 0))
 {
 }
 
 template<typename DdtrTraits>
 Ddtr<DdtrTraits>::Ddtr(Ddtr&& other)
     : _plan(std::move(other._plan))
+{
+}
+
+template<typename DdtrTraits>
+Ddtr<DdtrTraits>::~Ddtr()
 {
 }
 

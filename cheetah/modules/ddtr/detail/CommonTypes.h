@@ -26,6 +26,7 @@
 
 #include "cheetah/data/TimeFrequency.h"
 #include "cheetah/data/DmTrials.h"
+#include "cheetah/pipelines/search_pipeline/BeamConfig.h"
 #include "AggregationBufferFiller.h"
 #include <functional>
 
@@ -50,6 +51,7 @@ struct CommonTypes
     typedef typename BufferFillerType::AggregationBufferType BufferType;
     typedef data::DmTrials<Cpu, float> DmTrialsType;
     typedef std::function<void(std::shared_ptr<DmTrialsType>)> DedispersionHandler;
+    typedef typename pipelines::search_pipeline::BeamConfig<NumericalRep> BeamConfigType;
 };
 
 

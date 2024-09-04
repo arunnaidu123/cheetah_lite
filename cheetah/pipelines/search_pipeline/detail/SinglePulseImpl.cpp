@@ -39,7 +39,7 @@ SinglePulseImpl<NumericalT>::SinglePulseImpl(CheetahConfig<NumericalT> const& co
                                             {
                                                 _spdt_handler(sp_data);
                                             })
-    , _ddtr(config.ddtr_config(), [this](std::shared_ptr<DmTrialType> data)
+    , _ddtr(beam_config, config.ddtr_config(), [this](std::shared_ptr<DmTrialType> data)
                                             {
                                                 _ddtr_handler(data);
                                             })
