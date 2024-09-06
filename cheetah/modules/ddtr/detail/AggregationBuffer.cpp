@@ -219,6 +219,7 @@ std::size_t AggregationBuffer<NumericalRep>::number_of_channels() const
 template<typename NumericalRep>
 void AggregationBuffer<NumericalRep>::insert(FrequencyTimeType const& object )
 {
+    //std::cout<<(unsigned)(*std::max_element(object.begin(), object.end()))<<"\n";
     if(_current_time==0)
     {
         this->metadata(object.metadata());

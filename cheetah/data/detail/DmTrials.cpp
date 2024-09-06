@@ -145,8 +145,8 @@ template <typename Arch, typename T, typename Alloc>
 void DmTrials<Arch,T,Alloc>::swap(DmTrials& b)
 {
     std::swap(_metadata, b._metadata);
-    std::swap(_data, b._data);
-    std::swap(_trials, b._trials);
+    _data.swap(b._data);
+    _trials.swap(b._trials);
     std::swap(_start_time, b._start_time);
     std::swap(_duration, b._duration);
 }

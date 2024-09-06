@@ -56,6 +56,7 @@ template<typename NumericalRep>
 bool AggregationBufferFiller<NumericalRep>::flush()
 {
     // prepare a new buffer
+    unsigned long dedisp_samples_ns = (_current->number_of_spectra()-_overlap)*64000;
     auto tmp(std::make_shared<AggregationBufferType>(_current->number_of_spectra(), _current->number_of_channels()));
     _current->swap(*tmp);
 
@@ -66,7 +67,7 @@ bool AggregationBufferFiller<NumericalRep>::flush()
     if(tmp->data_size()) {
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &_t0, NULL);
         _fn(tmp);
-        add_nsec1(_t0, 11730944000);
+        add_nsec1(_t0, dedisp_samples_ns);
         return true;
     }
     return false;

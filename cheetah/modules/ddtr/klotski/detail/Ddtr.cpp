@@ -53,6 +53,7 @@ template<typename DdtrTraits>
 template<typename CallBackT>
 std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>&, std::shared_ptr<BufferType> data, CallBackT const& call_back)
 {
+    std::lock_guard<std::mutex> lk(_mutex);
     return _worker(data, _plan, call_back);
 }
 
