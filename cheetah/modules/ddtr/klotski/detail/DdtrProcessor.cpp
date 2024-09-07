@@ -161,39 +161,62 @@ void DdtrProcessor<DdtrTraits>::integrate_reference( DmTrialsType& data_out
 
 }
 
+template<typename DdtrTraits>
+void DdtrProcessor<DdtrTraits>::call_serial_dedispersion(std::shared_ptr<DedispersionPlanType> plan, unsigned start_channel, unsigned band)
+{
+    serial_dedispersion( std::ref((*plan->dedispersion_strategy()->subanded_dm_trials())[band])
+                             , std::ref(*plan->dedispersion_strategy()->temp_work_area())
+                             , plan->dedispersion_strategy()->dsamps_per_klotski()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->nsamps()/std::pow(2,plan->current_dm_range())
+                             , plan->dedispersion_strategy()->ndms()[plan->current_dm_range()]
+                             , plan->dedispersion_strategy()->max_channels_per_klotski()
+                             , plan->dedispersion_strategy()->channels_per_band()[band]
+                             , plan->dedispersion_strategy()->dmshifts_per_klotski()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->total_base()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->total_index()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->total_shift()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->counts_array()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->start_dm_shifts()[plan->current_dm_range()]
+                             , start_channel
+                             );
+}
+
+
 
 template<typename DdtrTraits>
 void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<DedispersionPlanType> plan)
 {
-    std::vector<std::thread> ddtr_threads;
-    unsigned int start_channel = 0;
     auto& data_temp = *plan->dedispersion_strategy()->subanded_dm_trials();
     for(unsigned int value=0; value<data_temp.size(); ++value) std::fill(data_temp[value].begin(), data_temp[value].end(), 0);
+    _plan->current_dm_range(_current_dm_range);
+
+    if(plan->dedispersion_strategy()->ddtr_threads().number_of_jobs()==0)
+    {
+        unsigned start_channel = 0;
+        for(unsigned int band=0; band<plan->dedispersion_strategy()->number_of_bands(); ++band)
+        {
+            plan->dedispersion_strategy()->ddtr_threads().add_job(plan->affinities()[band+1]+2*band
+                                                            , call_serial_dedispersion
+                                                            , plan
+                                                            , start_channel
+                                                            , band
+                                                            );
+            start_channel += plan->dedispersion_strategy()->channels_per_band()[band];
+
+            std::cout<<"affinity: "<<plan->affinities()[band+1]<<"\n";
+        }
+
+    }
 
     for(unsigned int band=0; band<plan->dedispersion_strategy()->number_of_bands(); ++band)
     {
-
-        ddtr_threads.push_back(std::thread(serial_dedispersion, std::ref((*plan->dedispersion_strategy()->subanded_dm_trials())[band])
-                             , std::ref(*plan->dedispersion_strategy()->temp_work_area())
-                             , plan->dedispersion_strategy()->dsamps_per_klotski()[_current_dm_range][band]
-                             , plan->dedispersion_strategy()->nsamps()/std::pow(2,_current_dm_range)
-                             , plan->dedispersion_strategy()->ndms()[_current_dm_range]
-                             , plan->dedispersion_strategy()->max_channels_per_klotski()
-                             , plan->dedispersion_strategy()->channels_per_band()[band]
-                             , plan->dedispersion_strategy()->dmshifts_per_klotski()[_current_dm_range][band]
-                             , plan->dedispersion_strategy()->total_base()[_current_dm_range][band]
-                             , plan->dedispersion_strategy()->total_index()[_current_dm_range][band]
-                             , plan->dedispersion_strategy()->total_shift()[_current_dm_range][band]
-                             , plan->dedispersion_strategy()->counts_array()[_current_dm_range][band]
-                             , plan->dedispersion_strategy()->start_dm_shifts()[_current_dm_range]
-                             , start_channel
-                             ));
-
-        start_channel += plan->dedispersion_strategy()->channels_per_band()[band];
+        plan->dedispersion_strategy()->ddtr_threads().ready(band);
     }
 
-
-    for(unsigned i=0; i<ddtr_threads.size(); ++i) ddtr_threads[i].join();
+    for(unsigned int band=0; band<plan->dedispersion_strategy()->number_of_bands(); ++band)
+    {
+        plan->dedispersion_strategy()->ddtr_threads().finish(band);
+    }
 
     DmTrialsType& dmtrials = *(_dm_trials_ptr);
 

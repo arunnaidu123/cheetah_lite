@@ -37,6 +37,7 @@ DedispersionPlan<DdtrTraits>::DedispersionPlan(BeamConfigType const& beam_config
     , _max_delay(0)
     , _dedispersion_samples(0)
     , _number_of_spectra(0)
+    , _current_dm_range(0)
 {
 }
 
@@ -85,7 +86,42 @@ data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::reset(TimeFrequenc
     _dm_trials_ptr = DmTrialsType::make_shared(_dm_trial_metadata, data.start_time());
     _spdt_dm_trials_ptr = DmTrialsType::make_shared(_dm_trial_metadata, data.start_time());
 
+
     return data::DimensionSize<data::Time>(_number_of_spectra);
+}
+
+template <typename DdtrTraits>
+void DedispersionPlan<DdtrTraits>::initialize_threads()
+{
+    //if(_ddtr_threads.number_of_jobs()==0)
+    {
+        //unsigned start_channel = 0;
+        //_ddtr_threads->resize(this->dedispersion_strategy()->number_of_bands());
+
+        /*
+        for(unsigned int band=0; band<this->dedispersion_strategy()->number_of_bands(); ++band)
+        {
+            _ddtr_threads->emplace_back(utils::SingleThread(this->affinities()[band+1], serial_dedispersion
+                             ,  std::ref((*this->dedispersion_strategy()->subanded_dm_trials())[band])
+                             , std::ref(*this->dedispersion_strategy()->temp_work_area())
+                             , this->dedispersion_strategy()->dsamps_per_klotski()[this->current_dm_range()][band]
+                             , this->dedispersion_strategy()->nsamps()/std::pow(2,this->current_dm_range())
+                             , this->dedispersion_strategy()->ndms()[this->current_dm_range()]
+                             , this->dedispersion_strategy()->max_channels_per_klotski()
+                             , this->dedispersion_strategy()->channels_per_band()[band]
+                             , this->dedispersion_strategy()->dmshifts_per_klotski()[this->current_dm_range()][band]
+                             , this->dedispersion_strategy()->total_base()[this->current_dm_range()][band]
+                             , this->dedispersion_strategy()->total_index()[this->current_dm_range()][band]
+                             , this->dedispersion_strategy()->total_shift()[this->current_dm_range()][band]
+                             , this->dedispersion_strategy()->counts_array()[this->current_dm_range()][band]
+                             , this->dedispersion_strategy()->start_dm_shifts()[this->current_dm_range()]
+                             , start_channel
+                             ));
+
+            start_channel += this->dedispersion_strategy()->channels_per_band()[band];
+        }
+        */
+    }
 }
 
 template <typename DdtrTraits>
@@ -106,6 +142,26 @@ std::shared_ptr<data::DmTrialsMetadata> DedispersionPlan<DdtrTraits>::generate_d
         }
     }
     return meta_data;
+}
+
+template<typename DdtrTraits>
+void DedispersionPlan<DdtrTraits>::call_serial_dedispersion(std::shared_ptr<DedispersionPlan<DdtrTraits>> plan, unsigned start_channel, unsigned band)
+{
+    serial_dedispersion( std::ref((*plan->dedispersion_strategy()->subanded_dm_trials())[band])
+                             , std::ref(*plan->dedispersion_strategy()->temp_work_area())
+                             , plan->dedispersion_strategy()->dsamps_per_klotski()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->nsamps()/std::pow(2,plan->current_dm_range())
+                             , plan->dedispersion_strategy()->ndms()[plan->current_dm_range()]
+                             , plan->dedispersion_strategy()->max_channels_per_klotski()
+                             , plan->dedispersion_strategy()->channels_per_band()[band]
+                             , plan->dedispersion_strategy()->dmshifts_per_klotski()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->total_base()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->total_index()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->total_shift()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->counts_array()[plan->current_dm_range()][band]
+                             , plan->dedispersion_strategy()->start_dm_shifts()[plan->current_dm_range()]
+                             , start_channel
+                             );
 }
 
 template <typename DdtrTraits>
@@ -155,6 +211,8 @@ std::vector<unsigned> const& DedispersionPlan<DdtrTraits>::affinities()
 {
     return _beam_config.affinities();
 }
+
+
 } // namespace klotski
 } // namespace ddtr
 } // namespace modules

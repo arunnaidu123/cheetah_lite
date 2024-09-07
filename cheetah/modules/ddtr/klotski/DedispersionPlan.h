@@ -28,6 +28,7 @@
 #include "cheetah/modules/ddtr/klotski/detail/DedispersionStrategy.h"
 #include "cheetah/modules/ddtr/Config.h"
 #include "cheetah/data/TimeFrequency.h"
+#include "cheetah/utils/MultiThread.h"
 
 namespace ska {
 namespace cheetah {
@@ -102,6 +103,21 @@ class DedispersionPlan
 
         std::vector<unsigned> const& affinities();
 
+        unsigned current_dm_range() { return _current_dm_range;}
+
+        void current_dm_range(unsigned val)
+        {
+            _current_dm_range = val;
+        }
+
+        static void call_serial_dedispersion(std::shared_ptr<DedispersionPlan> plan, unsigned start_channel, unsigned band);
+
+        void initialize_threads();
+
+        //utils::MultiThread& ddtr_threads()
+        //{
+        //    return _ddtr_threads;
+        //}
     private:
         BeamConfigType const& _beam_config;
         ConfigType const& _config;
@@ -114,6 +130,8 @@ class DedispersionPlan
         std::size_t _number_of_spectra;
         std::shared_ptr<DmTrialsType> _dm_trials_ptr;
         std::shared_ptr<DmTrialsType> _spdt_dm_trials_ptr;
+        unsigned _current_dm_range;
+        //utils::MultiThread _ddtr_threads;
 };
 
 } // namespace klotski

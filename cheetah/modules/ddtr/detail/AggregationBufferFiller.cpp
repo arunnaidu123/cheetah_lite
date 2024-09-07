@@ -37,7 +37,6 @@ AggregationBufferFiller<NumericalRep>::AggregationBufferFiller(FullBufferHandler
     : _fn(listener)
     , _overlap(0)
     , _current(std::make_shared<AggregationBuffer<NumericalRep>>(std::forward<Args>(args)...))
-    //, _tmp(std::make_shared<AggregationBuffer<NumericalRep>>(std::forward<Args>(args)...))
 {
     clock_gettime(CLOCK_MONOTONIC, &_t0);
 }
@@ -45,10 +44,6 @@ AggregationBufferFiller<NumericalRep>::AggregationBufferFiller(FullBufferHandler
 template<typename NumericalRep>
 AggregationBufferFiller<NumericalRep>::~AggregationBufferFiller()
 {
-    //if(_current->data_size() != _overlap)
-    //{
-    //    _fn(_current);  // push any new held data to the handler
-    //}
 }
 
 
@@ -56,7 +51,7 @@ template<typename NumericalRep>
 bool AggregationBufferFiller<NumericalRep>::flush()
 {
     // prepare a new buffer
-    unsigned long dedisp_samples_ns = (_current->number_of_spectra()-_overlap)*64000;
+    unsigned long dedisp_samples_ns = (_current->number_of_spectra()-_overlap)*_current->sample_interval().value()*1e9;
     auto tmp(std::make_shared<AggregationBufferType>(_current->number_of_spectra(), _current->number_of_channels()));
     _current->swap(*tmp);
 
@@ -67,7 +62,7 @@ bool AggregationBufferFiller<NumericalRep>::flush()
     if(tmp->data_size()) {
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &_t0, NULL);
         _fn(tmp);
-        add_nsec1(_t0, dedisp_samples_ns);
+        add_nsec(_t0, dedisp_samples_ns);
         return true;
     }
     return false;

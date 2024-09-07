@@ -129,7 +129,7 @@ class AggregationBufferFiller
 
         void metadata(typename data::TimeFrequencyMetadata const& metadata);
 
-        void add_nsec1(struct timespec& temp, long nsec) {
+        void add_nsec(struct timespec& temp, long nsec) {
             temp.tv_nsec += nsec;
             if (temp.tv_nsec >= 1000000000) {
                 long sec = temp.tv_nsec / 1000000000;
@@ -149,7 +149,6 @@ class AggregationBufferFiller
         std::size_t _overlap;
         std::shared_ptr<AggregationBufferType> _current;
         struct timespec _t0;
-        //std::shared_ptr<AggregationBufferType> _tmp;
 };
 
 } // namespace ddtr

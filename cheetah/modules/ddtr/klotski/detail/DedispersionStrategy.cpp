@@ -168,7 +168,6 @@ DedispersionStrategy<NumericalRep>::DedispersionStrategy(const data::TimeFrequen
     _dmshifts_per_klotski.resize(_number_of_dm_ranges);
     _dsamps_per_klotski.resize(_number_of_dm_ranges);
     _dmshifts_per_klotski_excess.resize(_number_of_dm_ranges);
-
     make_strategy(cpu_memory);
 
 }
@@ -184,7 +183,6 @@ DedispersionStrategy<NumericalRep>::~DedispersionStrategy()
 template<typename NumericalRep>
 void DedispersionStrategy<NumericalRep>::resize(size_t const number_of_samples, size_t const cpu_memory)
 {
-
     if(number_of_samples == (std::size_t)_nsamps)
     {
         return;
