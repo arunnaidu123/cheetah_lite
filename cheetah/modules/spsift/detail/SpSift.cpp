@@ -21,51 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "cheetah/modules/ddtr/Ddtr.h"
+#include "cheetah/modules/spsift/SpSift.h"
+#include <algorithm>
+#include <chrono>
 
 namespace ska {
 namespace cheetah {
 namespace modules {
-namespace ddtr {
+namespace spsift {
 
-
-template<typename ConfigType, typename NumericalRep>
-Ddtr<ConfigType, NumericalRep>::Ddtr(BeamConfigType const& beam_config, ConfigType const& config, DedispersionHandler handler)
-    : BaseT(beam_config, config, handler)
+template<typename NumRep>
+void SpSift::operator()(data::SpCcl<NumRep>& candidate_list) const
 {
-    //std::cout<<"Affinity: "<<beam_config.affinities().size()<<"\n";
-    if(beam_config.affinities().size())
+    PANDA_LOG << "Total number of candidates: " << candidate_list.size();
+    /*
+    //auto start = std::chrono::high_resolution_clock::now();
+    if(!_config.active()) return;
+    /// TODO: The trimming of the candidate list needs to be done *AFTER* the thresholding !
+    /// i.e. first remove the candidates that are certainly spurious, and only then limit the
+    /// size of the list if necessary.
+    /// Currently we can can lose good candidates for no reason.
+    if (_config.maximum_candidates() > 0 && candidate_list.size() > _config.maximum_candidates())
     {
-        cpu_set_t cpuset;
-        CPU_ZERO(&cpuset);
-        CPU_SET(beam_config.affinities()[0], &cpuset);
-        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
+	    candidate_list.resize(_config.maximum_candidates());
     }
+    candidate_list.remove_if(
+                [this](typename data::SpCcl<NumRep>::SpCandidateType const& candidate)
+                {
+                    return (candidate.dm() < _config.dm_threshold()
+                    || candidate.width() > _config.pulse_width_threshold()
+                    || candidate.sigma() < _config.sigma_threshold());
+                });
+    */
 }
 
-template<typename ConfigType, typename NumericalRep>
-Ddtr<ConfigType, NumericalRep>::~Ddtr()
-{
-    //_pool.wait();
-}
-
-template<typename ConfigType, typename NumericalRep>
-template<typename TimeFreqDataT
-       , typename data::EnableIfIsTimeFrequency<TimeFreqDataT, bool>>
-void Ddtr<ConfigType, NumericalRep>::operator()(TimeFreqDataT const& tf_data)
-{
-    this->_buffer(tf_data);
-}
-
-template<typename ConfigType, typename NumericalRep>
-template<typename T>
-void Ddtr<ConfigType, NumericalRep>::operator()(std::shared_ptr<T> const& data)
-{
-    (*this)(*data);
-}
-
-} // namespace ddtr
+} // namespace spsift
 } // namespace modules
 } // namespace cheetah
 } // namespace ska

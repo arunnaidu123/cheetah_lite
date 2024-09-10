@@ -21,51 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "cheetah/modules/ddtr/Ddtr.h"
+#include "cheetah/modules/spsift/SpSift.h"
+
 
 namespace ska {
 namespace cheetah {
 namespace modules {
-namespace ddtr {
+namespace spsift {
 
 
-template<typename ConfigType, typename NumericalRep>
-Ddtr<ConfigType, NumericalRep>::Ddtr(BeamConfigType const& beam_config, ConfigType const& config, DedispersionHandler handler)
-    : BaseT(beam_config, config, handler)
+SpSift::SpSift(Config const& config)
+    :_config(config)
 {
-    //std::cout<<"Affinity: "<<beam_config.affinities().size()<<"\n";
-    if(beam_config.affinities().size())
-    {
-        cpu_set_t cpuset;
-        CPU_ZERO(&cpuset);
-        CPU_SET(beam_config.affinities()[0], &cpuset);
-        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
-    }
 }
 
-template<typename ConfigType, typename NumericalRep>
-Ddtr<ConfigType, NumericalRep>::~Ddtr()
+SpSift::~SpSift()
 {
-    //_pool.wait();
 }
 
-template<typename ConfigType, typename NumericalRep>
-template<typename TimeFreqDataT
-       , typename data::EnableIfIsTimeFrequency<TimeFreqDataT, bool>>
-void Ddtr<ConfigType, NumericalRep>::operator()(TimeFreqDataT const& tf_data)
+Config const& SpSift::config() const
 {
-    this->_buffer(tf_data);
+    return _config;
 }
 
-template<typename ConfigType, typename NumericalRep>
-template<typename T>
-void Ddtr<ConfigType, NumericalRep>::operator()(std::shared_ptr<T> const& data)
-{
-    (*this)(*data);
-}
 
-} // namespace ddtr
+} // namespace spsift
 } // namespace modules
 } // namespace cheetah
 } // namespace ska

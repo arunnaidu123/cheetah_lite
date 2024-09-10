@@ -21,53 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "cheetah/modules/spdt/Config.h"
-#include "cheetah/modules/ddtr/DedispersionConfig.h"
+#ifndef SKA_CHEETAH_MODULES_SPS_CLUSTERING_FOF_H
+#define SKA_CHEETAH_MODULES_SPS_CLUSTERING_FOF_H
 
+#include "cheetah/modules/sps_clustering/Config.h"
+#include "cheetah/data/SpCcl.h"
+#include <boost/geometry/geometry.hpp>
+#include <vector>
 
 namespace ska {
 namespace cheetah {
 namespace modules {
-namespace spdt {
+namespace sps_clustering {
 
-Config::Config()
-    : BaseT("spdt")
-    , _threshold(100.0)
+/**
+ * @brief Friend Of Friends Clustering Algorithm for SpCandidates
+ * @details
+ */
+
+
+class Fof
 {
-}
+    static constexpr std::size_t ClusteringParams = 3;
+    typedef boost::geometry::model::point<double, ClusteringParams, boost::geometry::cs::cartesian> PointType;
 
-void Config::add_options(OptionsDescriptionEasyInit& add_options)
-{
-    add_options
-    ("threshold", boost::program_options::value<float>(&_threshold), "single pulse detection threshold in sigmas");
-}
+    public:
+    Fof(Config const& config);
+    ~Fof();
 
-float Config::threshold() const
-{
-    return _threshold;
-}
+    void linking_length(double const& l);
 
-cpu::Config const& Config::cpu_config() const
-{
-    return BaseT::config<cpu::Config>();
-}
+    double linking_length() const;
 
-cpu::Config& Config::cpu_config()
-{
-    return BaseT::config<cpu::Config>();
-}
+    /**
+     * @brief Group the candidates using the fof algorithm
+     * @return a vector containing the groups of candidates.
+     *         each group is represented as a vector of indices
+     *         for the candidatate in the input data.
+     */
+    template<typename NumRepType>
+    std::vector<std::vector<size_t>> operator()(data::SpCcl<NumRepType> const& cands);
 
-klotski::Config const& Config::klotski_config() const
-{
-    return BaseT::config<klotski::Config>();
-}
+    private:
+    Config const& _config;
+    double _linking_length;
+    double _linking_length_2;
+};
 
-klotski::Config& Config::klotski_config()
-{
-    return BaseT::config<klotski::Config>();
-}
 
-} // namespace spdt
+} // namespace sps_clustering
 } // namespace modules
 } // namespace cheetah
 } // namespace ska
+#include "cheetah/modules/sps_clustering/detail/Fof.cpp"
+#endif // SKA_CHEETAH_MODULES_SPS_CLUSTERING_FOF_H

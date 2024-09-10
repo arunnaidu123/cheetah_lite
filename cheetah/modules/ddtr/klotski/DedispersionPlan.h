@@ -114,10 +114,11 @@ class DedispersionPlan
 
         void initialize_threads();
 
-        //utils::MultiThread& ddtr_threads()
-        //{
-        //    return _ddtr_threads;
-        //}
+        std::string const& beam_id()
+        {
+            return _beam_config.id();
+        }
+
     private:
         BeamConfigType const& _beam_config;
         ConfigType const& _config;

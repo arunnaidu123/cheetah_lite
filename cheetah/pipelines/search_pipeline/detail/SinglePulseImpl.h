@@ -27,8 +27,8 @@
 #include "cheetah/pipelines/search_pipeline/PipelineHandler.h"
 #include "cheetah/modules/ddtr/Ddtr.h"
 #include "cheetah/modules/spdt/Spdt.h"
-//#include "cheetah/modules/spsift/SpSift.h"
-//#include "cheetah/modules/sps_clustering/SpsClustering.h"
+#include "cheetah/modules/spsift/SpSift.h"
+#include "cheetah/modules/sps_clustering/SpsClustering.h"
 #include "panda/Thread.h"
 
 namespace ska {
@@ -98,8 +98,8 @@ class SinglePulseImpl : public PipelineHandler<NumericalT>
         DdtrHandler _ddtr_handler;
 
     private:
-//        modules::sps_clustering::SpsClustering _spclusterer;
-//        modules::spsift::SpSift _spsifter;
+        modules::sps_clustering::SpsClustering _spclusterer;
+        modules::spsift::SpSift _spsifter;
         panda::Thread _thread;
 
     protected:

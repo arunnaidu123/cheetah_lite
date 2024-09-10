@@ -66,7 +66,6 @@ extern "C" void nasm_filter_spdt( std::size_t* stack_variables
 template<class SpdtTraits, typename ImplConfigType, typename AlgoConfigType>
 std::shared_ptr<typename SpdtTraits::SpType> KlotskiCommon<SpdtTraits, ImplConfigType, AlgoConfigType>::operator()(panda::PoolResource<panda::Cpu>& cpu, std::shared_ptr<typename SpdtTraits::DmTrialsType> data)
 {
-    PANDA_LOG<<"called spdt";
     std::vector<float> spdt_cands;
     auto& dmtrials = *data;
 

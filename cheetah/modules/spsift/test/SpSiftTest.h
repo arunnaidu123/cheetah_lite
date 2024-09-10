@@ -21,51 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "cheetah/modules/ddtr/Ddtr.h"
+#ifndef SKA_CHEETAH_MODULES_SPSIFT_TEST_SPSIFTTEST_H
+#define SKA_CHEETAH_MODULES_SPSIFT_TEST_SPSIFTTEST_H
+
+#include <gtest/gtest.h>
+#include "cheetah/modules/spsift/SpSift.h"
 
 namespace ska {
 namespace cheetah {
 namespace modules {
-namespace ddtr {
+namespace spsift {
+namespace test {
 
+/**
+ * @brief
+ * @details
+ */
 
-template<typename ConfigType, typename NumericalRep>
-Ddtr<ConfigType, NumericalRep>::Ddtr(BeamConfigType const& beam_config, ConfigType const& config, DedispersionHandler handler)
-    : BaseT(beam_config, config, handler)
+class SpSiftTest : public ::testing::Test
 {
-    //std::cout<<"Affinity: "<<beam_config.affinities().size()<<"\n";
-    if(beam_config.affinities().size())
-    {
-        cpu_set_t cpuset;
-        CPU_ZERO(&cpuset);
-        CPU_SET(beam_config.affinities()[0], &cpuset);
-        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
-    }
-}
+    protected:
+        void SetUp() override;
+        void TearDown() override;
 
-template<typename ConfigType, typename NumericalRep>
-Ddtr<ConfigType, NumericalRep>::~Ddtr()
-{
-    //_pool.wait();
-}
+    public:
+        SpSiftTest();
 
-template<typename ConfigType, typename NumericalRep>
-template<typename TimeFreqDataT
-       , typename data::EnableIfIsTimeFrequency<TimeFreqDataT, bool>>
-void Ddtr<ConfigType, NumericalRep>::operator()(TimeFreqDataT const& tf_data)
-{
-    this->_buffer(tf_data);
-}
+        ~SpSiftTest();
 
-template<typename ConfigType, typename NumericalRep>
-template<typename T>
-void Ddtr<ConfigType, NumericalRep>::operator()(std::shared_ptr<T> const& data)
-{
-    (*this)(*data);
-}
+    private:
+};
 
-} // namespace ddtr
+
+} // namespace test
+} // namespace spsift
 } // namespace modules
 } // namespace cheetah
 } // namespace ska
+
+#endif // SKA_CHEETAH_MODULES_SPSIFT_TEST_SPSIFTTEST_H

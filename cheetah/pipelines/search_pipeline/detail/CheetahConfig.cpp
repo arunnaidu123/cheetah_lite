@@ -291,17 +291,17 @@ modules::rfim::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType>
     return _rfim_config;
 }
 
-//template<typename NumericalRep>
-//modules::spsift::Config const& CheetahConfig<NumericalRep>::spsift_config() const
-//{
-//    return _spsift_config;
-//}
+template<typename NumericalRep>
+modules::spsift::Config const& CheetahConfig<NumericalRep>::spsift_config() const
+{
+    return _spsift_config;
+}
 
-//template<typename NumericalRep>
-//modules::sps_clustering::Config const& CheetahConfig<NumericalRep>::sps_clustering_config() const
-//{
-//    return _sps_clustering_config;
-//}
+template<typename NumericalRep>
+modules::sps_clustering::Config const& CheetahConfig<NumericalRep>::sps_clustering_config() const
+{
+    return _sps_clustering_config;
+}
 
 template<typename NumericalRep>
 modules::ddtr::ConfigType<typename CheetahConfig<NumericalRep>::PoolManagerType> const& CheetahConfig<NumericalRep>::ddtr_config() const

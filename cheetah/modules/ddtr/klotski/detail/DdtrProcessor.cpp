@@ -195,7 +195,7 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
         unsigned start_channel = 0;
         for(unsigned int band=0; band<plan->dedispersion_strategy()->number_of_bands(); ++band)
         {
-            plan->dedispersion_strategy()->ddtr_threads().add_job(plan->affinities()[band+1]+2*band
+            plan->dedispersion_strategy()->ddtr_threads().add_job(plan->affinities()[band+2]
                                                             , call_serial_dedispersion
                                                             , plan
                                                             , start_channel
