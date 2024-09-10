@@ -78,7 +78,7 @@ class MultiThread
         unsigned _njobs;
         bool _terminate;
         std::vector<bool> _ready;
-        std::mutex _m;
+        std::vector<std::mutex> _mutex;
         std::mutex _mt;
         std::condition_variable _cv;
         std::vector<std::thread> _threads;

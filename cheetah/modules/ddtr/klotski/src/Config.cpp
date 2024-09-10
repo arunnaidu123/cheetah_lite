@@ -35,7 +35,7 @@ namespace klotski {
 Config::Config()
     : utils::Config("klotski")
     , _active(false)
-    , _cache_size(2*1024*1024)
+    , _cache_size(4*1024*1024)
     , _max_channels_per_klotski(32)
     , _max_channels_per_band(1024)
     , _precise(false)

@@ -7,6 +7,7 @@ namespace cheetah {
 namespace utils {
 
 MultiThread::MultiThread()
+: _mutex(10)
 {
     _terminate = false;
     _njobs =0;
@@ -19,29 +20,44 @@ MultiThread::~MultiThread()
 
 void MultiThread::reset(unsigned id)
 {
-    std::lock_guard lk(_m);
+    std::lock_guard lk(_mutex[id]);
     _ready[id] = false;
-    _cv.notify_all();
+    //_cv.notify_all();
 }
 
 
 void MultiThread::ready(unsigned id)
 {
-    std::lock_guard lk(_m);
+    std::lock_guard lk(_mutex[id]);
     _ready[id] = true;
-    _cv.notify_all();
+    //_cv.notify_all();
 }
 
 void MultiThread::wait(unsigned id)
 {
-    std::unique_lock lk(_m);
-    _cv.wait(lk, [id, this]{ return _ready[id]; });
+    bool flag = false;
+    while(!flag)
+    {
+        {
+            std::unique_lock lk(_mutex[id]);
+            flag = _ready[id];
+        }
+    }
+    //std::unique_lock lk(_mutex[id]);
+    //_cv.wait(lk, [id, this]{ return _ready[id]; });
+    //if(_ready[id]==false)
 }
 
 void MultiThread::finish(unsigned id)
 {
-    std::unique_lock lk(_m);
-    _cv.wait(lk, [id, this]{ return !_ready[id]; });
+    bool flag = true;
+    while(flag)
+    {
+        {
+            std::unique_lock lk(_mutex[id]);
+            flag = _ready[id];
+        }
+    }
 }
 
 bool MultiThread::status(unsigned id)
