@@ -44,16 +44,6 @@ DedispersionPlan<DdtrTraits>::DedispersionPlan(BeamConfigType const& beam_config
 template <typename DdtrTraits>
 data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::reset(TimeFrequencyType const& data)
 {
-
-    if(_beam_config.affinities().size()>1)
-    {
-        cpu_set_t cpuset;
-        CPU_ZERO(&cpuset);
-        CPU_SET(_beam_config.affinities()[1], &cpuset);
-        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
-    }
-
     _strategy = std::make_shared<DedispersionStrategy<NumericalT>>(data, _config, _memory);
 
     _max_delay = _strategy->maxshift();

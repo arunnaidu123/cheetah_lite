@@ -202,8 +202,6 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
                                                             , band
                                                             );
             start_channel += plan->dedispersion_strategy()->channels_per_band()[band];
-
-            std::cout<<"affinity: "<<plan->affinities()[band+1]<<"\n";
         }
 
     }
@@ -213,10 +211,12 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
         plan->dedispersion_strategy()->ddtr_threads().ready(band);
     }
 
+
     for(unsigned int band=0; band<plan->dedispersion_strategy()->number_of_bands(); ++band)
     {
         plan->dedispersion_strategy()->ddtr_threads().finish(band);
     }
+
 
     DmTrialsType& dmtrials = *(_dm_trials_ptr);
 
