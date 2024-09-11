@@ -4,6 +4,7 @@ set(MODULE_KLOTSKI_LIB_SRC_CPU
     src/kernels/nasm_integrate.asm
     src/kernels/nasm_klotski.asm
     src/kernels/nasm_downsample.asm
+    src/kernels/nasm_zeros.asm
     ${LIB_SRC_CPU}
     PARENT_SCOPE
 )

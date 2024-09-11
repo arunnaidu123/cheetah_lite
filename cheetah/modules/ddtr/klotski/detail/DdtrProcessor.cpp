@@ -41,6 +41,8 @@ extern "C" void nasm_integrate(std::size_t *data_out_pointers
 
 extern "C" void nasm_downsample(unsigned short *data, unsigned int number_of_elements);
 
+extern "C" void nasm_zeros(int *data, std::size_t bytes);
+
 int serial_dedispersion(std::vector<int>& data_out
                            , std::vector<unsigned short>& data_in
                            , std::vector<unsigned int> dsamps_per_klotski
@@ -187,7 +189,13 @@ template<typename DdtrTraits>
 void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<DedispersionPlanType> plan)
 {
     auto& data_temp = *plan->dedispersion_strategy()->subanded_dm_trials();
-    for(unsigned int value=0; value<data_temp.size(); ++value) std::fill(data_temp[value].begin(), data_temp[value].end(), 0);
+    for(unsigned int value=0; value<data_temp.size(); ++value)
+    {
+        //std::memset(&*data_temp[value].begin(), 0, data_temp[value].size()*sizeof(int));
+        //std::fill(data_temp[value].begin(), data_temp[value].end(), 0);
+        nasm_zeros(&*data_temp[value].begin(), data_temp[value].size()*sizeof(int));
+    }
+
     _plan->current_dm_range(_current_dm_range);
 
     if(plan->dedispersion_strategy()->ddtr_threads().number_of_jobs()==0)
