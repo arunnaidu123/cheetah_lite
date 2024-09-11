@@ -191,9 +191,9 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
     auto& data_temp = *plan->dedispersion_strategy()->subanded_dm_trials();
     for(unsigned int value=0; value<data_temp.size(); ++value)
     {
-        //std::memset(&*data_temp[value].begin(), 0, data_temp[value].size()*sizeof(int));
+        std::memset(&*data_temp[value].begin(), 0, data_temp[value].size()*sizeof(int));
         //std::fill(data_temp[value].begin(), data_temp[value].end(), 0);
-        nasm_zeros(&*data_temp[value].begin(), data_temp[value].size()*sizeof(int));
+        //nasm_zeros(&*data_temp[value].begin(), data_temp[value].size()*sizeof(int));
     }
 
     _plan->current_dm_range(_current_dm_range);
