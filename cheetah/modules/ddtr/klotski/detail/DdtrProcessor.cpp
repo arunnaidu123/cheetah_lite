@@ -189,12 +189,17 @@ template<typename DdtrTraits>
 void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<DedispersionPlanType> plan)
 {
     auto& data_temp = *plan->dedispersion_strategy()->subanded_dm_trials();
+
+    //auto ddtr_memset_start = std::chrono::high_resolution_clock::now();
     for(unsigned int value=0; value<data_temp.size(); ++value)
     {
         std::memset(&*data_temp[value].begin(), 0, data_temp[value].size()*sizeof(int));
         //std::fill(data_temp[value].begin(), data_temp[value].end(), 0);
         //nasm_zeros(&*data_temp[value].begin(), data_temp[value].size()*sizeof(int));
     }
+    //auto ddtr_memset_stop = std::chrono::high_resolution_clock::now();
+    //auto ddtr_memset_time = std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_memset_stop - ddtr_memset_start).count()/1000000.0;
+    //PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr Memset time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_memset_stop - ddtr_memset_start).count()/1000000.0<<" ms";
 
     _plan->current_dm_range(_current_dm_range);
 
@@ -214,20 +219,27 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
 
     }
 
+    //auto ddtr_ready_start = std::chrono::high_resolution_clock::now();
     for(unsigned int band=0; band<plan->dedispersion_strategy()->number_of_bands(); ++band)
     {
         plan->dedispersion_strategy()->ddtr_threads().ready(band);
     }
+    //auto ddtr_ready_stop = std::chrono::high_resolution_clock::now();
+    //auto ddtr_ready_time = std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_ready_stop - ddtr_ready_start).count()/1000000.0;
+    //PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr ready time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_ready_stop - ddtr_ready_start).count()/1000000.0<<" ms";
 
-
+    //auto ddtr_finish_start = std::chrono::high_resolution_clock::now();
     for(unsigned int band=0; band<plan->dedispersion_strategy()->number_of_bands(); ++band)
     {
         plan->dedispersion_strategy()->ddtr_threads().finish(band);
     }
-
+    //auto ddtr_finish_stop = std::chrono::high_resolution_clock::now();
+    //auto ddtr_finish_time = std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_finish_stop - ddtr_finish_start).count()/1000000.0;
+    //PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr finish time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_finish_stop - ddtr_finish_start).count()/1000000.0<<" ms";
 
     DmTrialsType& dmtrials = *(_dm_trials_ptr);
 
+    //auto ddtr_integrate_start = std::chrono::high_resolution_clock::now();
     integrate_reference(dmtrials
                     , data_temp
                     , (plan->dedispersion_strategy()->dmshifts_per_band()[_current_dm_range])
@@ -238,6 +250,10 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
                     );
 
     _start_dm_value += plan->dedispersion_strategy()->ndms()[_current_dm_range];
+    //auto ddtr_integrate_stop = std::chrono::high_resolution_clock::now();
+    //auto ddtr_integrate_time =std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_integrate_stop - ddtr_integrate_start).count()/1000000.0;
+    //PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr integrate time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_integrate_stop - ddtr_integrate_start).count()/1000000.0<<" ms";
+    //std::cout<<" Beam id: "<<plan->beam_id()<<" "<<_current_dm_range<<" "<<ddtr_memset_time<<" "<<ddtr_ready_time<<" "<<ddtr_finish_time<<" "<<ddtr_integrate_time<<"\n";
 }
 
 } // namespace klotski

@@ -530,8 +530,8 @@ temp_loop4:
         jge donot_copy
         mov rax, r15
         mov r15, qword [rsp+TEMP_LOCATION]
-        vmovdqu16 zword [rsp+r15+64], zmm1
         vmovdqu16 zword [rsp+r15], zmm0
+        vmovdqu16 zword [rsp+r15+64], zmm1
         add r15, rax
         vmovdqu16 zmm0, zword [rsp+r15]
 
