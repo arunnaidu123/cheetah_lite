@@ -491,102 +491,172 @@ dmindex_loop3:
 
         xor r13, r13
 dmindex_loop4:
-        mov rax, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
-        mul r13
-        mov r14, qword [rsp+DATAOUT_LOCATION]
-        add rax, r14
-        mov rsi, rax ; save location in data_out
-
-        mov rax, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
-        mul r11
-        mov r14, rax ; r14 = global_location
-        ; account for the shift per dm
-
+;--------------extimate shift------------------------------
         mov rax, SIZE_OF_FLOAT
         mul r13
         mov r15, qword [rsp+DMINDEX_SHIFTS_LOCATION]
         add rax, r15
         mov r15d, dword[rsp+rax]
         mov qword [rsp+CURRENT_SHIFT], r15
-        mov rcx, qword [rsp+RCX_REG]
-
-
-        vxorpd zmm1, zmm1, zmm1
-        mov rbx, qword [rsp+CURRENT_SHIFT]; rbx = shift_size
-        xor rdi, rdi
-temp_loop4:
-        mov rax, rdi
-        add rax, rsi
-        vmovdqu16 zmm0, zword [rsp+rax]
-        vmovdqu16 zword [rsp+rax], zmm1
-
-        mov rax, rdi
+;------------------------------------------------------------
+        mov rax, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
+        mul r11
+        mov r14, rax ; r14 = global_location
+        mov rax, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
         add rax, r14
-        mov r15, rbx
-        cmp rax, r15 ; cmp global_location , shift
-        jge continue5
-        sub r15, rax
-        cmp r15, SIZE_OF_ZMM
+        cmp r15, rax
         jge donot_copy
-        mov rax, r15
-        mov r15, qword [rsp+TEMP_LOCATION]
-        vmovdqu16 zword [rsp+r15], zmm0
-        vmovdqu16 zword [rsp+r15+64], zmm1
-        add r15, rax
-        vmovdqu16 zmm0, zword [rsp+r15]
-
-        mov r9, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
-        mov rax, rbx
-        idiv r9
-        mul r9
-        mov r9, rax
-        mov rax, r14
-        mov r15, rbx
-        add rax, r15
-        sub rax, r9
-        jmp copy
-continue5:
-        mov r15, rbx
-        sub rax, r15
-        mov r15, qword [rsp+DSAMPS_OUTPUT_SIZE]
-        sub r15, SIZE_OF_ZMM
-        cmp rax, r15
-        jg continue6
-        mov r15, rbx
-        add rax, r15
-        jmp copy
-continue6:
-        add r15, SIZE_OF_ZMM
-        cmp rax, r15
+        mov rdi, qword [rsp+DSAMPS_OUTPUT_SIZE]
+        add rdi, r15
+        cmp r14, rdi
         jge donot_copy
-        sub r15, rax
-        mov rax, qword [rsp+TEMP_LOCATION]
-        vmovdqu16 zword [rsp+rax], zmm1
-        vmovdqu16 zword [rsp+rax+64], zmm0
-        add rax, r15
-        vmovdqu16 zmm0, zword [rsp+rax]
-        mov rax, qword [rsp+DSAMPS_OUTPUT_SIZE]
-        sub rax, SIZE_OF_ZMM
-        mov r15, rbx
-        add rax, r15
-copy:
-        mov r15, rbx
-        sub rax, r15
-        mov r15, rax
+        cmp r15, r14
+        ;jg first_partial_copy
+        jg donot_copy
+        mov rdi, qword [rsp+DSAMPS_OUTPUT_SIZE]
+        cmp r14, rdi
+        ;jg second_partial_copy
+        jg donot_copy
+        mov rdi, qword [rsp+TEMP_LOCATION]
+        add rdi, rsp
+        mov rsi, qword [rsp+RCX_REG]
         mov rax, qword [rsp+DSAMPS_OUTPUT_SIZE]
         mul r13
-        add rax, r15
+        add rsi, rax
+        add rsi, r14
+        mov rcx, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
+        rep movsb
 
-        vmovdqu16 zmm2, zword [rcx+rax]
-        vpaddd zmm2, zmm2, zmm0
 
-        vmovdqu16 zword [rcx+rax], zmm2
+        mov rax, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
+        mul r13
+        mov r8, qword [rsp+DATAOUT_LOCATION]
+        add r8, rax
+
+        mov rsi, qword [rsp+TEMP_LOCATION]
+        add rsi, rsp
+
+        xor r9, r9
+        mov rax, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
+copy_loop:
+        vmovdqu16 zmm0, zword[rsp+r8]
+        vmovdqu16 zmm1, zword[rsi+r9]
+        vpaddd zmm0, zmm0, zmm1
+        vmovdqu16 zword[rsi+r9], zmm1
+        add r9, 64
+        add r8, 64
+        cmp r9, rax
+        jl copy_loop
+
+        mov rdi, qword [rsp+RCX_REG]
+        mov rax, qword [rsp+DSAMPS_OUTPUT_SIZE]
+        mul r13
+        add rdi, rax
+        add rdi, r14
+        mov rcx, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
+        rep movsb
+
+
+
+
+;        xor r13, r13
+;dmindex_loop4:
+;        mov rax, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
+;        mul r13
+;        mov r14, qword [rsp+DATAOUT_LOCATION]
+;        add rax, r14
+;        mov rsi, rax ; save location in data_out
+;
+;        mov rax, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
+;        mul r11
+;        mov r14, rax ; r14 = global_location
+;        ; account for the shift per dm
+;
+;        mov rax, SIZE_OF_FLOAT
+;        mul r13
+;        mov r15, qword [rsp+DMINDEX_SHIFTS_LOCATION]
+;        add rax, r15
+;        mov r15d, dword[rsp+rax]
+;        mov qword [rsp+CURRENT_SHIFT], r15
+;        mov rcx, qword [rsp+RCX_REG]
+;
+;
+;        vxorpd zmm1, zmm1, zmm1
+;        mov rbx, qword [rsp+CURRENT_SHIFT]; rbx = shift_size
+;        xor rdi, rdi
+;temp_loop4:
+;        mov rax, rdi
+;        add rax, rsi
+;        vmovdqu16 zmm0, zword [rsp+rax]
+;        vmovdqu16 zword [rsp+rax], zmm1
+;
+;        mov rax, rdi
+;        add rax, r14
+;        mov r15, rbx
+;        cmp rax, r15 ; cmp global_location , shift
+;        jge continue5
+;        sub r15, rax
+;        cmp r15, SIZE_OF_ZMM
+;        jge donot_copy
+;        mov rax, r15
+;        mov r15, qword [rsp+TEMP_LOCATION]
+;        vmovdqu16 zword [rsp+r15], zmm0
+;        vmovdqu16 zword [rsp+r15+64], zmm1
+;        add r15, rax
+;        vmovdqu16 zmm0, zword [rsp+r15]
+;
+;        mov r9, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
+;        mov rax, rbx
+;        idiv r9
+;        mul r9
+;        mov r9, rax
+;        mov rax, r14
+;        mov r15, rbx
+;        add rax, r15
+;        sub rax, r9
+;        jmp copy
+;continue5:
+;        mov r15, rbx
+;        sub rax, r15
+;        mov r15, qword [rsp+DSAMPS_OUTPUT_SIZE]
+;        sub r15, SIZE_OF_ZMM
+;        cmp rax, r15
+;        jg continue6
+;        mov r15, rbx
+;        add rax, r15
+;        jmp copy
+;continue6:
+;        add r15, SIZE_OF_ZMM
+;        cmp rax, r15
+;        jge donot_copy
+;        sub r15, rax
+;        mov rax, qword [rsp+TEMP_LOCATION]
+;        vmovdqu16 zword [rsp+rax], zmm1
+;        vmovdqu16 zword [rsp+rax+64], zmm0
+;        add rax, r15
+;        vmovdqu16 zmm0, zword [rsp+rax]
+;        mov rax, qword [rsp+DSAMPS_OUTPUT_SIZE]
+;        sub rax, SIZE_OF_ZMM
+;        mov r15, rbx
+;        add rax, r15
+;copy:
+;        mov r15, rbx
+;        sub rax, r15
+;        mov r15, rax
+;        mov rax, qword [rsp+DSAMPS_OUTPUT_SIZE]
+;        mul r13
+;        add rax, r15
+;
+;        vmovdqu16 zmm2, zword [rcx+rax]
+;        vpaddd zmm2, zmm2, zmm0
+;
+;        vmovdqu16 zword [rcx+rax], zmm2
+;donot_copy:
+;        add rdi, SIZE_OF_ZMM
+;        mov r15, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
+;        cmp rdi, r15
+;        jl temp_loop4
 donot_copy:
-        add rdi, SIZE_OF_ZMM
-        mov r15, qword [rsp+SAMPS_PER_ITERATION_INT_SIZE]
-        cmp rdi, r15
-        jl temp_loop4
-
         inc r13
         mov r14, qword [rsp+NDMS]
         cmp r13, r14
