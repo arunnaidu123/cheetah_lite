@@ -48,7 +48,7 @@ class PipelineHandler
         typedef data::TimeFrequency<Cpu, NumericalT> TimeFrequencyType;
 
     public:
-        PipelineHandler(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config);
+        PipelineHandler(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config);
         virtual ~PipelineHandler() = 0;
 
         /**

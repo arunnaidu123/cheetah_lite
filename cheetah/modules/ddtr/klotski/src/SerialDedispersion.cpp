@@ -80,7 +80,7 @@ void dedisperse_klotski_input_array(
                         , int dsamps_output
                        )
 {
-    std::size_t samps_per_iteration = 1024;
+    std::size_t samps_per_iteration = 256;
     variables[0] = (ksamps+samps_per_iteration)*sizeof(short); //DATA_SIZE
     variables[1] = ksamps*nchans*sizeof(short); //OVERLAP_SIZE
     variables[2] = 4*samps_per_iteration*ndms; //DATAOUT_SIZE

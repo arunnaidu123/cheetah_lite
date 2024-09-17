@@ -51,7 +51,7 @@ struct CommonTypes
     typedef typename BufferFillerType::AggregationBufferType BufferType;
     typedef data::DmTrials<Cpu, float> DmTrialsType;
     typedef std::function<void(std::shared_ptr<DmTrialsType>)> DedispersionHandler;
-    typedef typename pipelines::search_pipeline::BeamConfig<NumericalRep> BeamConfigType;
+    typedef typename pipelines::search_pipeline::BeamConfigType<NumericalRep> BeamConfigType;
 };
 
 

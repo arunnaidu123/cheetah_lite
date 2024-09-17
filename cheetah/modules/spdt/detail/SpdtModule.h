@@ -43,6 +43,7 @@ class SpdtModule
         typedef typename SpdtTraits::SpdtHandler SpdtHandler;
         typedef typename SpdtTraits::Config Config;
         typedef typename SpdtTraits::DmTrialsType DmTrialsType;
+        typedef typename SpdtTraits::BeamConfigType BeamConfigType;
 
         typedef panda::ConfigurableTask<typename SpdtTraits::Pool
                                       , SpdtHandler const&
@@ -50,7 +51,7 @@ class SpdtModule
                                       > TaskType;
 
     public:
-        SpdtModule(Config const& config, SpdtHandler const& sp_handler);
+        SpdtModule(BeamConfigType const& beam_config, Config const& config, SpdtHandler const& sp_handler);
 
         void operator()(std::shared_ptr<DmTrialsType> data);
 

@@ -34,7 +34,7 @@ namespace search_pipeline {
 
 template<typename NumericalT, typename RfimOutputHandler, typename RfiPolicy>
 template<typename... HandlerArgs>
-RfiDetectionPipeline<NumericalT, RfimOutputHandler, RfiPolicy>::RfiDetectionPipeline(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, HandlerArgs&&... handler_args)
+RfiDetectionPipeline<NumericalT, RfimOutputHandler, RfiPolicy>::RfiDetectionPipeline(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config, HandlerArgs&&... handler_args)
     : BaseT(config, beam_config)
     , _rfim_handler(*this, std::forward<HandlerArgs>(handler_args)...)
     , _bandpass_handler(*this)

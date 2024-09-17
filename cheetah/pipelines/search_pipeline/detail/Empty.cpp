@@ -33,7 +33,7 @@ namespace search_pipeline {
 
 
 template<typename NumericalT>
-Empty<NumericalT>::Empty(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config)
+Empty<NumericalT>::Empty(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config)
     : BaseT(config, beam_config)
     , _count(0)
     , _exit_after(config.empty_config().exit_after())

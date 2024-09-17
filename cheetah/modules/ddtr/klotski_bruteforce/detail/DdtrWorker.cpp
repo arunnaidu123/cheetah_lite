@@ -47,6 +47,8 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
                                                                     , std::shared_ptr<DedispersionPlan<DdtrTraits>> plan
                                                                     , CallBackT const& call_back)
 {
+    auto ddtr_start = std::chrono::high_resolution_clock::now();
+
     if (agg_buf->capacity() < (std::size_t) plan->dedispersion_strategy()->maxshift())
     {
         panda::Error e("Ddtr klotskBruteforce: data buffer size < maxshift (");
@@ -58,6 +60,7 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
     plan->dm_trials()->start_time(agg_buf->start_time());
 
     panda::copy(agg_buf->begin(), agg_buf->end(), plan->dedispersion_strategy()->temp_work_area()->begin());
+    std::fill(plan->dedispersion_strategy()->temp_work_area()->begin(), plan->dedispersion_strategy()->temp_work_area()->end(), 0);
     DdtrProcessor<DdtrTraits> ddtr(plan, plan->dm_trials());
 
     while(!ddtr.finished())
@@ -67,6 +70,8 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
 
     DmTrialsType& dmtrials = *(plan->dm_trials());
     call_back(dmtrials, plan->dedispersion_strategy()->ndms());
+    auto ddtr_stop = std::chrono::high_resolution_clock::now();
+    PANDA_LOG<<" Ddtr time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_stop - ddtr_start).count()/1000000.0<<" ms";
 
     return plan->dm_trials();
 }

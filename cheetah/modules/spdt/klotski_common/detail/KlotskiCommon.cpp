@@ -66,6 +66,7 @@ extern "C" void nasm_filter_spdt( std::size_t* stack_variables
 template<class SpdtTraits, typename ImplConfigType, typename AlgoConfigType>
 std::shared_ptr<typename SpdtTraits::SpType> KlotskiCommon<SpdtTraits, ImplConfigType, AlgoConfigType>::operator()(panda::PoolResource<panda::Cpu>& cpu, std::shared_ptr<typename SpdtTraits::DmTrialsType> data)
 {
+    //auto spdt_start = std::chrono::high_resolution_clock::now();
     std::vector<float> spdt_cands;
     auto& dmtrials = *data;
 
@@ -83,7 +84,8 @@ std::shared_ptr<typename SpdtTraits::SpType> KlotskiCommon<SpdtTraits, ImplConfi
                         , spdt_cands[idx] // sigma
                         );
     }
-
+    //auto spdt_stop = std::chrono::high_resolution_clock::now();
+    //std::cout<<"spdt: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(spdt_stop - spdt_start).count()/1000000.0<<"\n";
     return sp_candidate_list;
 }
 

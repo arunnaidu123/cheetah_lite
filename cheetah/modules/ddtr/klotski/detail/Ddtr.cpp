@@ -36,28 +36,28 @@ template<typename DdtrTraits>
 Ddtr<DdtrTraits>::Ddtr(BeamConfigType const& beam_config, ddtr::Config const& config)
     : _plan(std::make_shared<DedispersionPlan>(beam_config, config, 0))
 {
-    if(beam_config.affinities().size()>1)
-    {
-        cpu_set_t cpuset;
-        CPU_ZERO(&cpuset);
-        CPU_SET(beam_config.affinities()[1], &cpuset);
-        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
-    }
+//    if(beam_config.affinities().size()>1)
+//    {
+//        cpu_set_t cpuset;
+//        CPU_ZERO(&cpuset);
+//        CPU_SET(beam_config.affinities()[1], &cpuset);
+//        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+//        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
+//    }
 }
 
 template<typename DdtrTraits>
 Ddtr<DdtrTraits>::Ddtr(Ddtr&& other)
     : _plan(std::move(other._plan))
 {
-    if(_plan->affinities().size()>1)
-    {
-        cpu_set_t cpuset;
-        CPU_ZERO(&cpuset);
-        CPU_SET(_plan->affinities()[1], &cpuset);
-        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
-    }
+//    if(_plan->affinities().size()>1)
+//    {
+//        cpu_set_t cpuset;
+//        CPU_ZERO(&cpuset);
+//        CPU_SET(_plan->affinities()[1], &cpuset);
+//        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+//        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
+//    }
 }
 
 template<typename DdtrTraits>

@@ -47,7 +47,7 @@ SinglePulseFactory<NumericalT>::~SinglePulseFactory()
 
 template<typename NumericalT>
 template<template <typename> class RfimPolicyTempl>
-SinglePulseImpl<NumericalT>* SinglePulseFactory<NumericalT>::create_policy(BeamConfig<NumericalT> const& beam_config) const
+SinglePulseImpl<NumericalT>* SinglePulseFactory<NumericalT>::create_policy(BeamConfigType<NumericalT> const& beam_config) const
 {
     //if(!_config.rfim_config().algo_defined()) {
         return new SinglePulseImpl<NumericalT>(_config, beam_config);
@@ -58,7 +58,7 @@ SinglePulseImpl<NumericalT>* SinglePulseFactory<NumericalT>::create_policy(BeamC
 }
 
 template<typename NumericalT>
-SinglePulseImpl<NumericalT>* SinglePulseFactory<NumericalT>::create(BeamConfig<NumericalT> const& beam_config) const
+SinglePulseImpl<NumericalT>* SinglePulseFactory<NumericalT>::create(BeamConfigType<NumericalT> const& beam_config) const
 {
     //if(!_config.rfim_config().algo_defined()) {
         return new SinglePulseImpl<NumericalT>(_config, beam_config);

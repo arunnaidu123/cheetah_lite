@@ -68,6 +68,7 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
         typedef typename SpdtTraits::DedispersionHandler DmHandler;
         typedef typename SpdtTraits::BufferType BufferType;
         typedef typename SpdtTraits::TimeFrequencyType TimeFrequencyType;
+        typedef typename SpdtTraits::BeamConfigType BeamConfigType;
 
     public:
         /**
@@ -75,7 +76,7 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
          * @details passes the arguments to BaseT
          * @param sp_handler A functor to be called with the spdt results. Its signature should be '''void(std::shared_ptr<data::SpCcl<NumericalT>>)'''.
          */
-        Spdt(ConfigType const& config, SpdtHandler const& sp_handler);
+        Spdt(BeamConfigType const& beam_config, ConfigType const& config, SpdtHandler const& sp_handler);
         ~Spdt();
 
         /**

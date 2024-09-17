@@ -63,7 +63,7 @@ class SinglePulseImpl : public PipelineHandler<NumericalT>
 
     public:
         //SinglePulseImpl(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, DmHandler const& dm_handler = [](BufferType const&, std::shared_ptr<DmTrialType>){});
-        SinglePulseImpl(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config);
+        SinglePulseImpl(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config);
         SinglePulseImpl(SinglePulseImpl&&);
         ~SinglePulseImpl();
 

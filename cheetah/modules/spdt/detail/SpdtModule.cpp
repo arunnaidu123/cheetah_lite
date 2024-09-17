@@ -83,9 +83,9 @@ class SpdtAlgoFactory
 };
 
 template<typename SpdtTraits, template<typename> class... SpdtAlgorithms>
-SpdtModule<SpdtTraits, SpdtAlgorithms...>::SpdtModule(Config const& config, SpdtHandler const& spdt_handler)
+SpdtModule<SpdtTraits, SpdtAlgorithms...>::SpdtModule(BeamConfigType const&  beam_config, Config const& config, SpdtHandler const& spdt_handler)
     : _spdt_handler(spdt_handler)
-    , _task(config.pool(), _spdt_handler)
+    , _task(beam_config.pool(), _spdt_handler)
 {
     SpdtAlgoFactory<SpdtTraits> algo_factory(config);
     utils::TaskConfigurationSetter<SpdtAlgorithms<SpdtTraits>...>::configure(_task, algo_factory);

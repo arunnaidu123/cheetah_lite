@@ -50,11 +50,11 @@ class SinglePulseFactory
         SinglePulseFactory(CheetahConfig<NumericalT> const& config);
         ~SinglePulseFactory();
 
-        SinglePulseImpl<NumericalT>* create(BeamConfig<NumericalT> const& beam_config) const;
+        SinglePulseImpl<NumericalT>* create(BeamConfigType<NumericalT> const& beam_config) const;
 
     protected:
         template<template<typename> class RfimPolicyTempl>
-        SinglePulseImpl<NumericalT>* create_policy(BeamConfig<NumericalT> const& beam_config) const;
+        SinglePulseImpl<NumericalT>* create_policy(BeamConfigType<NumericalT> const& beam_config) const;
 
     private:
         CheetahConfig<NumericalT> const& _config;

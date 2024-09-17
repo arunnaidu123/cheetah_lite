@@ -34,8 +34,8 @@ namespace spdt {
 
 
 template<class ConfigType, typename NumericalRep>
-Spdt<ConfigType, NumericalRep>::Spdt(ConfigType const& config, SpdtHandler const& spdt_handler)
-    : BaseT(config, spdt_handler)
+Spdt<ConfigType, NumericalRep>::Spdt(BeamConfigType const& beam_config, ConfigType const& config, SpdtHandler const& spdt_handler)
+    : BaseT(beam_config, config, spdt_handler)
 {
 }
 

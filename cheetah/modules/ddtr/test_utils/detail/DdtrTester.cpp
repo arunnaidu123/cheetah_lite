@@ -66,6 +66,7 @@ void DdtrTester<TestTraits>::TearDown()
 template<template<typename> class DdtrAlgoT, typename NumericalT>
 DdtrTesterTraits<DdtrAlgoT, NumericalT>::DdtrTesterTraits()
     : _dm_call_count(0u)
+    //, _beam_config(_config.pool_manager())
     , _handler(_dm_data, _dm_call_count)
 {
 }
@@ -78,6 +79,7 @@ typename DdtrTesterTraits<DdtrAlgoT, NumericalT>::Api& DdtrTesterTraits<DdtrAlgo
         _config.template config<typename DdtrAlgo::Config>().active(true);
         configure(_config); // call configuration method
         _config.set_pool(pool);
+        //_beam_config(_config.pool_manager());
         _api.reset(new Api(_beam_config, _config, _handler));
     }
     return *_api;

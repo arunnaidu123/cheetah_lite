@@ -54,7 +54,7 @@ class SinglePulse : public SinglePulseImpl<NumericalT>
         typedef typename Ddtr::DedispersionHandler DmHandler;
 
     public:
-        SinglePulse(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config);
+        SinglePulse(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config);
         SinglePulse(SinglePulse&&);
         ~SinglePulse();
 

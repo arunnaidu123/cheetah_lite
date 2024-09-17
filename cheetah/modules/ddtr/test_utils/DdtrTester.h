@@ -165,7 +165,7 @@ struct DdtrTesterTraits :
 
         DmDataContainerType _dm_data;
         std::size_t _dm_call_count;
-        typename Api::BeamConfigType _beam_config;
+        typename Api::BeamConfig _beam_config;
         std::unique_ptr<Api> _api; // must be last member
         generators::ProfileManager _manager;
         DdtrHandler _handler;

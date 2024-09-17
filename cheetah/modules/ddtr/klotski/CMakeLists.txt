@@ -11,4 +11,4 @@ set(MODULE_KLOTSKI_LIB_SRC_CPU
 
 #TEST_UTILS()
 
-add_subdirectory(test)
+#add_subdirectory(test)

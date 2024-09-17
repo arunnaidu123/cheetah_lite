@@ -56,7 +56,7 @@ class PipelineHandlerFactory
         typedef PipelineHandler<NumericalT> HandlerType;
 
     private:
-        typedef std::function<HandlerType*(CheetahConfig<NumericalT> const&, BeamConfig<NumericalT> const&)> FactoryType;
+        typedef std::function<HandlerType*(CheetahConfig<NumericalT> const&, BeamConfigType<NumericalT> const&)> FactoryType;
 
     public:
         PipelineHandlerFactory(CheetahConfig<NumericalT>& config);
@@ -70,12 +70,12 @@ class PipelineHandlerFactory
         /**
          * @brief create a handler of the named type
          */
-        HandlerType* create(std::string const& type, BeamConfig<NumericalT> const&) const;
+        HandlerType* create(std::string const& type, BeamConfigType<NumericalT> const&) const;
 
         /**
          * @brief create a handler of the named type with a MixInTimer to record the time of each invocation
          */
-        HandlerType* create_timed(std::string const& type, BeamConfig<NumericalT> const&) const;
+        HandlerType* create_timed(std::string const& type, BeamConfigType<NumericalT> const&) const;
 
     private:
         /**

@@ -105,7 +105,7 @@ struct SinglePulseTests
         noise_config.mean(96.0);
         noise_config.std_deviation(10.0);
         generators::GaussianNoise<data::TimeFrequency<Cpu, NumericalT>> noise(noise_config);
-        BeamConfig<uint8_t> beam_config;
+        BeamConfigType<uint8_t> beam_config(config.pool_manager());
 
         //Start epoch
         typename utils::ModifiedJulianClock::time_point epoch(utils::julian_day(50000.0));

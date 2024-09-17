@@ -149,7 +149,7 @@ DdtrModule<DdtrTraits, DdtrAlgorithms...>::DdtrModule(BeamConfigType const& beam
                                                      , AlgoFactoryType const& factory
                                                      , AggBufferArgs&&... agg_buffer_args
                                                      )
-    : _task(config.pool(), std::forward<Handler>(handler), _plan_setter)
+    : _task(beam_config.pool(), std::forward<Handler>(handler), _plan_setter)
     , _buffer([this](std::shared_ptr<typename DdtrTraits::BufferType> buffer)
               {
                   _task.submit(buffer);

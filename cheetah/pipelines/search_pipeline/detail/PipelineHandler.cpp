@@ -33,7 +33,7 @@ namespace pipelines {
 namespace search_pipeline {
 
 template<typename NumericalT>
-PipelineHandler<NumericalT>::PipelineHandler(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config)
+PipelineHandler<NumericalT>::PipelineHandler(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config)
     : _config(config)
     , _out(beam_config.data_config().data_exporter())
 {

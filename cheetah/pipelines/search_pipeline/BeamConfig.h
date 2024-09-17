@@ -47,7 +47,9 @@ namespace search_pipeline {
 template<typename NumericalT>
 class BeamConfig : public utils::Config
 {
+    public:
         typedef utils::Config BaseT;
+        typedef typename utils::Config::PoolManagerType PoolManagerType;
         typedef DataConfig<NumericalT> DataConfigType;
 
     public:
@@ -119,6 +121,10 @@ class BeamConfig : public utils::Config
         io::producers::rcpt::SkaUdpConfig _rcpt_config;
         DataConfigType _data_config;
 };
+
+template<typename NumericalT>
+using BeamConfigType = panda::PoolSelector<typename BeamConfig<NumericalT>::PoolManagerType, BeamConfig<NumericalT>>;
+
 
 } // namespace search_pipeline
 } // namespace pipelines

@@ -34,14 +34,14 @@ Ddtr<ConfigType, NumericalRep>::Ddtr(BeamConfigType const& beam_config, ConfigTy
     : BaseT(beam_config, config, handler)
 {
     //std::cout<<"Affinity: "<<beam_config.affinities().size()<<"\n";
-    if(beam_config.affinities().size())
-    {
-        cpu_set_t cpuset;
-        CPU_ZERO(&cpuset);
-        CPU_SET(beam_config.affinities()[0], &cpuset);
-        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
-    }
+    //if(beam_config.affinities().size())
+    //{
+    //    cpu_set_t cpuset;
+    //    CPU_ZERO(&cpuset);
+    //    CPU_SET(beam_config.affinities()[0], &cpuset);
+    //    int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+    //    if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
+    //}
 }
 
 template<typename ConfigType, typename NumericalRep>

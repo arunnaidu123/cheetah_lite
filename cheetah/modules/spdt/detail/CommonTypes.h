@@ -63,6 +63,7 @@ struct CommonTypes : public ddtr::CommonTypes<ConfigType, NumericalT>
 
         typedef std::function<void(std::shared_ptr<SpType>)> SpdtHandler;
         typedef typename BaseT::DedispersionHandler DedispersionHandler;
+        typedef typename pipelines::search_pipeline::BeamConfigType<NumericalRep> BeamConfigType;
 };
 
 
