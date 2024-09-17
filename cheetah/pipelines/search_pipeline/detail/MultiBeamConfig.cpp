@@ -35,10 +35,11 @@ inline static const std::string& beam_tag()
 }
 
 template<typename NumericalT>
-MultiBeamConfig<NumericalT>::MultiBeamConfig()
+MultiBeamConfig<NumericalT>::MultiBeamConfig(PoolManagerType& pool_manager)
     : BaseT("beams")
+    , _pool_manager(pool_manager)
 {
-    add_factory(beam_tag(), []() { return new BeamConfig<NumericalT>(); } );
+    add_factory(beam_tag(), [this]() { return new BeamConfigType<NumericalT>(_pool_manager); } );
 }
 
 template<typename NumericalT>

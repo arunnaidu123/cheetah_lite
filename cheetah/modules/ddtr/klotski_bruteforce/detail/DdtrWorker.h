@@ -60,7 +60,7 @@ class DdtrWorker
          * @brief call the dedispersion algorithm using the provided device
          */
         template<typename BufferType, typename CallBackT>
-        std::shared_ptr<DmTrialsType> operator()(BufferType const&
+        std::shared_ptr<DmTrialsType> operator()(std::shared_ptr<BufferType>
                                                , std::shared_ptr<DedispersionPlan<DdtrTraits>>
                                                , CallBackT const&);
 

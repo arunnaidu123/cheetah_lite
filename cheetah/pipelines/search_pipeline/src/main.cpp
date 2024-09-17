@@ -62,7 +62,7 @@ struct SelectUdpBeam : public io::producers::rcpt::SkaUdpStream<Stream>
     {
         int rv;
         pipelines::search_pipeline::BeamLauncher<typename BaseT::UdpStream, NumericalT> beam( config.beams_config()
-                                                                          , [&](pipelines::search_pipeline::BeamConfig<NumericalT> const& config) -> typename BaseT::Config const&
+                                                                          , [&](pipelines::search_pipeline::BeamConfigType<NumericalT> const& config) -> typename BaseT::Config const&
                                                                             { return config.template udp_rcpt_config<Stream>(); }
                                                                           , runtime_handler_factory);
         rv = beam.exec();
@@ -87,14 +87,14 @@ int main(int argc, char** argv) {
         if( (rv=config.parse(argc, argv)) ) return rv;
 
         // -- create computation unit to run --
-        std::function<pipelines::search_pipeline::PipelineHandlerFactory::HandlerType*(pipelines::search_pipeline::BeamConfig<NumericalT> const&)> runtime_handler_factory;
+        std::function<pipelines::search_pipeline::PipelineHandlerFactory::HandlerType*(pipelines::search_pipeline::BeamConfigType<NumericalT> const&)> runtime_handler_factory;
         if(config.time_handler_invocation()) {
-            runtime_handler_factory = [&](pipelines::search_pipeline::BeamConfig<NumericalT> const& beam_config) {
+            runtime_handler_factory = [&](pipelines::search_pipeline::BeamConfigType<NumericalT> const& beam_config) {
                  return pipeline_factory.create_timed(config.pipeline_name(), beam_config);
             };
         }
         else {
-            runtime_handler_factory = [&](pipelines::search_pipeline::BeamConfig<NumericalT> const& beam_config) {
+            runtime_handler_factory = [&](pipelines::search_pipeline::BeamConfigType<NumericalT> const& beam_config) {
                 return pipeline_factory.create(config.pipeline_name(), beam_config);
             };
         }
@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
 
         std::string const& stream_name = config.stream_name();
         if(stream_name == "sigproc") {
-            pipelines::search_pipeline::BeamLauncher<sigproc::SigProcFileStream, NumericalT> beam( config.beams_config(), [&](pipelines::search_pipeline::BeamConfig<NumericalT> const& config) -> sigproc::Config const& { return config.sigproc_config(); }, runtime_handler_factory);
+            pipelines::search_pipeline::BeamLauncher<sigproc::SigProcFileStream, NumericalT> beam( config.beams_config(), [&](pipelines::search_pipeline::BeamConfigType<NumericalT> const& config) -> sigproc::Config const& { return config.sigproc_config(); }, runtime_handler_factory);
             rv = beam.exec();
             config.pool_manager().wait();
         }

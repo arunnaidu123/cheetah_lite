@@ -25,6 +25,7 @@
 #define SKA_CHEETAH_MODULES_DDTR_BUFFERING_H
 
 #include "CommonDedispersionPlan.h"
+#include "AggregationBufferFiller.h"
 #include <memory>
 
 namespace ska {

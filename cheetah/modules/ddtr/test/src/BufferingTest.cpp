@@ -53,7 +53,7 @@ class TestDdtrTraits
 {
     public:
         typedef BufferingTest::TimeFrequencyType TimeFrequencyType;
-        typedef ska::panda::AggregationBufferFiller<TimeFrequencyType, AggregationBufferFactoryTemplate<TimeFrequencyType>> BufferFillerType;
+        typedef ddtr::AggregationBufferFiller<typename TimeFrequencyType::NumericalRep> BufferFillerType;
         typedef typename BufferFillerType::AggregationBufferType BufferType;
 };
 
@@ -79,13 +79,8 @@ TEST_F(BufferingTest, test_buffer_handler_call)
 {
     TestDedispersionPlan plan;
     unsigned int handler_calls=0;
-    Buffering<TestDdtrTraits<TimeFrequencyBufferFactory>, TestDedispersionPlan> tbuffer([&](typename TestDdtrTraits<>::BufferType&& buffer)
+    Buffering<TestDdtrTraits<TimeFrequencyBufferFactory>, TestDedispersionPlan> tbuffer([&](std::shared_ptr<typename TestDdtrTraits<>::BufferType> buffer)
         {
-            if(buffer.composition().empty())
-            {
-                PANDA_LOG_WARN << "received an empty buffer";
-                return;
-            }
             handler_calls += 1;
         }
         , plan
@@ -105,13 +100,8 @@ TEST_F(BufferingTest, test_buffer_overlap)
 {
     TestDedispersionPlan plan;
     unsigned int handler_calls=0;
-    Buffering<TestDdtrTraits<TimeFrequencyBufferFactory>, TestDedispersionPlan> tbuffer([&](typename TestDdtrTraits<>::BufferType&& buffer)
+    Buffering<TestDdtrTraits<TimeFrequencyBufferFactory>, TestDedispersionPlan> tbuffer([&](std::shared_ptr<typename TestDdtrTraits<>::BufferType> buffer)
         {
-            if(buffer.composition().empty())
-            {
-                PANDA_LOG_WARN << "received an empty buffer";
-                return;
-            }
             handler_calls += 1;
 
         }

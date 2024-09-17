@@ -44,6 +44,7 @@ namespace cpu {
 template<typename DdtrTraits>
 class DdtrProcessor
 {
+        typedef typename DdtrTraits::BufferType BufferType;
         typedef typename DdtrTraits::value_type NumericalRep;
         typedef typename DdtrTraits::DmTrialsType DmTrialsType;
         typedef typename data::FrequencyTime<Cpu, NumericalRep> FrequencyTimeType;
@@ -51,7 +52,7 @@ class DdtrProcessor
 
     public:
         DdtrProcessor( std::shared_ptr<DedispersionPlanType>
-                     , FrequencyTimeType&
+                     , BufferType&
                      , std::shared_ptr<DmTrialsType> dm_trials_ptr
                      );
 
@@ -86,7 +87,7 @@ class DdtrProcessor
 
     private:
         std::shared_ptr<DedispersionPlanType>  _plan;
-        FrequencyTimeType& _ft_data;
+        BufferType& _ft_data;
         std::shared_ptr<DmTrialsType> _dm_trials_ptr;
         std::size_t _current_dm_range;
         std::size_t _current_dm_idx;

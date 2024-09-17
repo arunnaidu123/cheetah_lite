@@ -168,7 +168,6 @@ DedispersionStrategy<NumericalRep>::DedispersionStrategy(const data::TimeFrequen
     _dmshifts_per_klotski.resize(_number_of_dm_ranges);
     _dsamps_per_klotski.resize(_number_of_dm_ranges);
     _dmshifts_per_klotski_excess.resize(_number_of_dm_ranges);
-
     make_strategy(cpu_memory);
 
 }
@@ -184,7 +183,6 @@ DedispersionStrategy<NumericalRep>::~DedispersionStrategy()
 template<typename NumericalRep>
 void DedispersionStrategy<NumericalRep>::resize(size_t const number_of_samples, size_t const cpu_memory)
 {
-
     if(number_of_samples == (std::size_t)_nsamps)
     {
         return;
@@ -298,6 +296,10 @@ void DedispersionStrategy<NumericalRep>::make_strategy(size_t const cpu_memory)
                 for(unsigned int channel=0; channel<channels_per_klotski; ++channel)
                 {
                     _dmshifts_per_channel[range][band][klotski][channel] = _dm_step[range].value()*_dm_constant.value()*(1.0/((fch1_klotski-_foff.value()*channel)*(fch1_klotski-_foff.value()*channel))-1.0/(fch1_klotski*fch1_klotski))/_tsamp[range].value();
+                    if((_ndms[range]*_dmshifts_per_channel[range][band][klotski][channel])>32.0)
+                    {
+                        throw panda::Error("reduce the number of channels per klotski");
+                    }
                 }
             }
             start_channel_of_band += _channels_per_band[band];

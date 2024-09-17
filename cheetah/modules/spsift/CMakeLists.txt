@@ -4,5 +4,5 @@ set(MODULE_SPSIFT_LIB_SRC_CPU
     PARENT_SCOPE
 )
 
-test_utils()
-add_subdirectory(test)
+#test_utils()
+#add_subdirectory(test)

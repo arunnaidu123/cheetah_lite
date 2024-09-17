@@ -30,7 +30,7 @@ namespace ddtr {
 namespace cpu {
 
 template <typename DdtrTraits>
-DedispersionPlan<DdtrTraits>::DedispersionPlan(ConfigType const& config, std::size_t memory)
+DedispersionPlan<DdtrTraits>::DedispersionPlan(BeamConfigType const& , ConfigType const& config, std::size_t memory)
     : _algo_config(config)
     , _memory(memory)
 {
@@ -46,7 +46,8 @@ DedispersionPlan<DdtrTraits>::~DedispersionPlan()
 }
 
 template <typename DdtrTraits>
-data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::reset(TimeFrequencyType const& data)
+template <typename DataType>
+data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::reset(DataType const& data)
 {
     _strategy = std::make_shared<DedispersionStrategy<DdtrTraits>>(data, _algo_config, _memory);
     _dm_trial_metadata = this->generate_dmtrials_metadata(data.sample_interval(), _strategy->number_of_spectra(), _strategy->buffer_overlap());

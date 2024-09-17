@@ -33,7 +33,7 @@ namespace cpu {
 
 template<typename DdtrTraits>
 DdtrProcessor<DdtrTraits>::DdtrProcessor(std::shared_ptr<DedispersionPlanType> plan
-                                        , FrequencyTimeType& data
+                                        , BufferType& data
                                         , std::shared_ptr<DmTrialsType> dm_trials_ptr
                                         )
     : _plan(plan)
@@ -95,12 +95,12 @@ DdtrProcessor<DdtrTraits>& DdtrProcessor<DdtrTraits>::operator++()
         for (std::size_t chan_idx=0; chan_idx < _ft_data.number_of_channels(); ++chan_idx)
         {
             std::size_t delay = static_cast<std::size_t>(plan_dm_factors[chan_idx] * plan_dm_trial/downsampling_factor);
-
             std::size_t shift = chan_idx*_ft_data.number_of_spectra();
             std::transform (current_trial.begin(), current_trial.end()
                            , _ft_data.begin()+shift+delay, current_trial.begin(), [&](float x, NumericalRep y){return ((float)x+y);});
         }
         std::transform(current_trial.begin(), current_trial.end(), current_trial.begin(), [&](float x){return x/_ft_data.number_of_channels();});
+        //std::cout<<"max_value "<<(int)(*std::max_element(current_trial.begin(), current_trial.end()))<<"\n";
     }
     _current_dm_idx += _plan->algo_config().number_of_dms()[_current_dm_range];
     ++_current_dm_range;

@@ -24,7 +24,7 @@
 #ifndef SKA_CHEETAH_PIPELINES_SEARCH_PIPELINE_SINGLEPULSE_H
 #define SKA_CHEETAH_PIPELINES_SEARCH_PIPELINE_SINGLEPULSE_H
 
-#include "cheetah/pipelines/search_pipeline/Dedispersion.h"
+#include "detail/SinglePulseImpl.h"
 #include <memory>
 
 namespace ska {
@@ -44,22 +44,24 @@ class BeamConfig;
  */
 
 template<typename NumericalT>
-class SinglePulse : public Dedispersion<NumericalT>
+class SinglePulse : public SinglePulseImpl<NumericalT>
 {
-        typedef Dedispersion<NumericalT> BaseT;
+        typedef SinglePulseImpl<NumericalT> BaseT;
         typedef typename BaseT::TimeFrequencyType TimeFrequencyType;
-        typedef typename BaseT::DmHandler DmHandler;
         typedef typename BaseT::DmTrialType DmTrialType;
+        typedef typename BaseT::BufferType BufferType;
+        typedef modules::ddtr::Ddtr<modules::ddtr::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Ddtr;
+        typedef typename Ddtr::DedispersionHandler DmHandler;
 
     public:
-        SinglePulse(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, DmHandler const& dm_handler = [](DmTrialType){});
+        SinglePulse(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config);
         SinglePulse(SinglePulse&&);
         ~SinglePulse();
 
         void operator()(TimeFrequencyType&) override;
 
     private:
-        std::unique_ptr<Dedispersion<NumericalT>> _spimpl;
+        std::unique_ptr<SinglePulseImpl<NumericalT>> _spimpl;
 };
 
 

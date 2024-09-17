@@ -26,6 +26,7 @@
 
 #include "cheetah/modules/ddtr/cpu/DedispersionStrategy.h"
 #include "cheetah/data/TimeFrequency.h"
+#include "cheetah/modules/ddtr/detail/AggregationBuffer.h"
 #include "cheetah/modules/ddtr/Config.h"
 #include "cheetah/modules/ddtr/cpu/Config.h"
 
@@ -58,19 +59,21 @@ class DedispersionPlan
         typedef typename TimeFrequencyType::TimeType TimeType;
         typedef std::vector<FrequencyType> FrequencyListType;
         typedef ddtr::Config ConfigType;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
 
     public:
         /**
          * @param memory The maximum memory available on the device (in number of DdtrTraits::value_type values)
          */
-        DedispersionPlan(ConfigType const& config, std::size_t memory);
+        DedispersionPlan(BeamConfigType const&, ConfigType const& config, std::size_t memory);
         ~DedispersionPlan();
 
         /**
          * @brief reset the plan to be compatible with the TimeFrequency metadata
          * @details note that the number_of_spectra of this TimeFrequencyType object is ignored
          */
-        data::DimensionSize<data::Time> reset(TimeFrequencyType const&);
+        template <typename DataType>
+        data::DimensionSize<data::Time> reset(DataType const&);
 
         /**
          * @brief reset the plan to be compatible with the value

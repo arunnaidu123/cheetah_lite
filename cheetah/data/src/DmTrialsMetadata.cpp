@@ -33,6 +33,11 @@ std::size_t  DmTrialsMetadata::Metadata::size() const
     return _parent._number_of_samples/_downsampling_factor;
 }
 
+std::size_t  DmTrialsMetadata::Metadata::downsampling_factor() const
+{
+    return _downsampling_factor;
+}
+
 DmTrialsMetadata::DmTrialsMetadata(TimeType fundamental_sampling_interval, std::size_t fundamental_sample_count)
     : _sampling_interval(fundamental_sampling_interval)
     , _number_of_samples(fundamental_sample_count)
@@ -128,6 +133,25 @@ std::size_t  DmTrialsMetadata::total_data_size() const
         total_size+=trial.size();
     }
     return total_size;
+}
+
+std::vector<unsigned> DmTrialsMetadata::number_of_ranges() const
+{
+    std::vector<unsigned> nranges;
+    unsigned ndms = 0;
+    unsigned samples = _metadata[0].size();
+    for(unsigned int dm=0; dm<_metadata.size(); ++dm)
+    {
+        ndms += 1;
+        if(_metadata[dm].size()!=samples)
+        {
+            samples = _metadata[dm].size();
+            nranges.push_back(ndms);
+            ndms=0;
+        }
+    }
+    nranges.push_back(ndms);
+    return nranges;
 }
 
 } // namespace data

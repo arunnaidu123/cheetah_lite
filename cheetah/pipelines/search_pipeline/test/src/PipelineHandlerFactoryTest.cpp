@@ -53,7 +53,7 @@ void PipelineHandlerFactoryTest::TearDown()
 TEST_F(PipelineHandlerFactoryTest, test_create)
 {
     search_pipeline::CheetahConfig<uint8_t> config;
-    BeamConfig<uint8_t> beam_config;
+    BeamConfigType<uint8_t> beam_config(config.pool_manager());
     search_pipeline::PipelineHandlerFactory factory(config);
     for(auto const& handler : factory.available() ) {
         std::cout << "testing handler '" << handler << "'" << std::endl;
@@ -75,7 +75,7 @@ TEST_F(PipelineHandlerFactoryTest, test_create)
 TEST_F(PipelineHandlerFactoryTest, test_tdas_config)
 {
     search_pipeline::CheetahConfig<uint8_t> config;
-    BeamConfig<uint8_t> beam_config;
+    BeamConfigType<uint8_t> beam_config(config.pool_manager());
     search_pipeline::PipelineHandlerFactory factory(config);
 
     // Add DM ranges for the dedispersion

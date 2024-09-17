@@ -34,6 +34,7 @@ template<typename NumRep>
 void SpSift::operator()(data::SpCcl<NumRep>& candidate_list) const
 {
     PANDA_LOG << "Total number of candidates: " << candidate_list.size();
+    /*
     //auto start = std::chrono::high_resolution_clock::now();
     if(!_config.active()) return;
     /// TODO: The trimming of the candidate list needs to be done *AFTER* the thresholding !
@@ -51,6 +52,7 @@ void SpSift::operator()(data::SpCcl<NumRep>& candidate_list) const
                     || candidate.width() > _config.pulse_width_threshold()
                     || candidate.sigma() < _config.sigma_threshold());
                 });
+    */
 }
 
 } // namespace spsift

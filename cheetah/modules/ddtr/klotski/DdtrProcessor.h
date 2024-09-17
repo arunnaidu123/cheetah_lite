@@ -101,6 +101,8 @@ class DdtrProcessor
                                 , unsigned int start_dm_value
                                 );
 
+        static void call_serial_dedispersion(std::shared_ptr<DedispersionPlanType> plan, unsigned start_channel, unsigned band);
+
     private:
         std::shared_ptr<DedispersionPlanType> _plan;
         std::shared_ptr<DmTrialsType> _dm_trials_ptr;

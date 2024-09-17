@@ -141,6 +141,15 @@ typename DmTrials<Arch,T,Alloc>::TimeType DmTrials<Arch,T,Alloc>::duration() con
     return _metadata->duration();
 }
 
+template <typename Arch, typename T, typename Alloc>
+void DmTrials<Arch,T,Alloc>::swap(DmTrials& b)
+{
+    std::swap(_metadata, b._metadata);
+    _data.swap(b._data);
+    _trials.swap(b._trials);
+    std::swap(_start_time, b._start_time);
+    std::swap(_duration, b._duration);
+}
 
 } // namespace data
 } // namespace cheetah

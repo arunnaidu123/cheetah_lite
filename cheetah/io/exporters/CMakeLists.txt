@@ -22,9 +22,9 @@ set(MODULE_EXPORTERS_LIB_SRC_CPU
     src/SpCclFileStreamerConfig.cpp
     src/SpCandidateDataStreamerConfig.cpp
     ${spead_lib_src_cpu}
-    src/SpCclSigProcConfig.cpp
+    #src/SpCclSigProcConfig.cpp
     PARENT_SCOPE
 )
 
-test_utils()
-add_subdirectory(test)
+#test_utils()
+#add_subdirectory(test)

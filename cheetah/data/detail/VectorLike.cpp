@@ -169,7 +169,7 @@ std::size_t VectorLike<VectorType>::capacity() const
 template <typename VectorType>
 void VectorLike<VectorType>::swap(VectorLike& v)
 {
-    return _data.swap(v);
+    return _data.swap(v._data);
 }
 
 template <typename VectorType>

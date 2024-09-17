@@ -50,9 +50,10 @@ class Ddtr
         typedef cpu::Config Config;
         typedef Cpu Architecture;
         typedef typename DdtrTraits::value_type NumericalRep;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
 
     public:
-        Ddtr(ddtr::Config const& algo_config);
+        Ddtr(BeamConfigType const& beam_config, ddtr::Config const& algo_config);
         Ddtr(Ddtr const&) = delete;
         Ddtr(Ddtr&&);
         ~Ddtr();
@@ -64,7 +65,7 @@ class Ddtr
          * @return DmTime sequence i.e. timeseries for each DM trial value
          */
         std::shared_ptr<DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>& cpu
-                                               , BufferType const& data
+                                               , std::shared_ptr<BufferType> data
                                                );
 
         /**
@@ -76,7 +77,7 @@ class Ddtr
          */
         template <typename CallBackT>
         std::shared_ptr<DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>& cpu
-                                               , BufferType const& data
+                                               , std::shared_ptr<BufferType> data
                                                , CallBackT const& call_back);
 
 

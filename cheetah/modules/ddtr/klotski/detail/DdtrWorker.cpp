@@ -43,27 +43,24 @@ DdtrWorker<DdtrTraits>::DdtrWorker()
 template<typename DdtrTraits>
 template<typename BufferType, typename CallBackT>
 std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTraits>::operator()(
-                                                                      BufferType const& agg_buf
+                                                                      std::shared_ptr<BufferType> agg_buf
                                                                     , std::shared_ptr<DedispersionPlan<DdtrTraits>> plan
                                                                     , CallBackT const& call_back)
 {
-
-
-    if (agg_buf.data_size() < (std::size_t) plan->dedispersion_strategy()->maxshift())
+    if (agg_buf->capacity() < (std::size_t) plan->dedispersion_strategy()->maxshift())
     {
         panda::Error e("DdtrKlotski: data buffer size < maxshift (");
-        e << agg_buf.data_size() << "<" << plan->dedispersion_strategy()->maxshift() << ")";
+        e << agg_buf->capacity() << "<" << plan->dedispersion_strategy()->maxshift() << ")";
         throw e;
     }
-    auto const& data = agg_buf.buffer();
+    auto ddtr_start = std::chrono::high_resolution_clock::now();
+    panda::copy(agg_buf->begin(), agg_buf->end(), plan->dedispersion_strategy()->temp_work_area()->begin());
+    //std::shared_ptr<DmTrialsType> dmtrials_ptr = DmTrialsType::make_shared(plan->dm_trial_metadata(), agg_buf->start_time());
 
-    corner_turn::corner_turn( &*data.begin()
-                           , &*(plan->dedispersion_strategy()->temp_work_area()->begin())
-                           , data.number_of_channels()
-                           , data.number_of_spectra()
-                           );
-
-    std::shared_ptr<DmTrialsType> dmtrials_ptr = DmTrialsType::make_shared(plan->dm_trial_metadata(), data.start_time());
+    auto dmtrials_ptr = plan->dm_trials();
+    auto spdt_dmtrials_ptr = plan->spdt_dm_trials();
+    dmtrials_ptr->start_time(agg_buf->start_time());
+    spdt_dmtrials_ptr->start_time(agg_buf->start_time());
 
     DdtrProcessor<DdtrTraits> ddtr(plan, dmtrials_ptr);
 
@@ -71,11 +68,14 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
     {
         ++ddtr;
     }
-
+    auto ddtr_stop = std::chrono::high_resolution_clock::now();
+    PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_stop - ddtr_start).count()/1000000.0<<" ms";
+    //std::cout<<plan->beam_id()<<" "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_stop - ddtr_start).count()/1000000.0<<"\n";
     DmTrialsType& dmtrials = *(dmtrials_ptr);
     call_back(dmtrials, plan->dedispersion_strategy()->ndms());
 
-    return dmtrials_ptr;
+    dmtrials_ptr->swap(*spdt_dmtrials_ptr);
+    return spdt_dmtrials_ptr;
 }
 
 } // namespace klotski

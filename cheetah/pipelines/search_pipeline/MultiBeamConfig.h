@@ -42,11 +42,13 @@ namespace search_pipeline {
 template<typename NumericalT>
 class MultiBeamConfig : public utils::Config
 {
+    public:
         typedef utils::Config BaseT;
-        typedef panda::ConfigModuleIteratorWrapper<BeamConfig<NumericalT>> ConstIterator;
+        typedef typename BaseT::PoolManagerType PoolManagerType;
+        typedef panda::ConfigModuleIteratorWrapper<BeamConfigType<NumericalT>> ConstIterator;
 
     public:
-        MultiBeamConfig();
+        MultiBeamConfig(PoolManagerType&);
         ~MultiBeamConfig();
 
         /**
@@ -61,6 +63,9 @@ class MultiBeamConfig : public utils::Config
 
     protected:
         void add_options(OptionsDescriptionEasyInit& add_options) override;
+
+    private:
+        PoolManagerType& _pool_manager;
 
 };
 

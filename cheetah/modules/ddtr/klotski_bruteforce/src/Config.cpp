@@ -35,7 +35,7 @@ Config::Config()
     : utils::Config("klotski_bruteforce")
     , _active(false)
     , _cache_size(1024*1024)
-    , _max_channels_per_klotski_bruteforce(256)
+    , _max_channels_per_klotski_bruteforce(512)
 {
 }
 

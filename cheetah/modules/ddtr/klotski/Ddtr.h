@@ -62,6 +62,7 @@ class Ddtr
 
         /** TimeFrequencyType */
         typedef typename DdtrTraits::TimeFrequencyType TimeFrequencyType;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
 
     private:
         typedef typename DdtrTraits::DedispersionHandler DedispersionHandler;
@@ -75,9 +76,10 @@ class Ddtr
         typedef std::vector<FrequencyType> FrequencyListType;
 
     public:
-        Ddtr(ddtr::Config const& config);
+        Ddtr(BeamConfigType const& beam_config, ddtr::Config const& config);
         Ddtr(Ddtr const&) = delete;
         Ddtr(Ddtr&&);
+        ~Ddtr();
 
         /**
          * @brief dedispersion of time frequency data on CPU
@@ -89,7 +91,7 @@ class Ddtr
          */
         template <typename CallBackT>
         std::shared_ptr<DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>&
-                                                , BufferType const& data
+                                                , std::shared_ptr<BufferType> data
                                                 , CallBackT const& call_back);
 
         /**
@@ -98,7 +100,7 @@ class Ddtr
          * @param data  A TimeFrequency block
          * @return DmTime sequence i.e. timeseries for each DM trial value
          */
-        std::shared_ptr<DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>&, BufferType const& data);
+        std::shared_ptr<DmTrialsType> operator()(panda::PoolResource<cheetah::Cpu>&, std::shared_ptr<BufferType> data);
 
         /**
          * @brief sets plan for ddtr

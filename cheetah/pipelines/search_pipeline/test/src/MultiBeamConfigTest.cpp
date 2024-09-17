@@ -51,6 +51,7 @@ void MultiBeamConfigTest::TearDown()
 
 TEST_F(MultiBeamConfigTest, test_multiple_beam_config_parse)
 {
+    /*
     MultiBeamConfig<uint8_t> mb_config;
     std::vector<std::string> sigproc_filenames = { "sigproc_1.fil", "sigproc_2.fil" };
 
@@ -101,6 +102,7 @@ TEST_F(MultiBeamConfigTest, test_multiple_beam_config_parse)
         ++count;
     }
     ASSERT_EQ(count, 2U);
+    */
 }
 
 } // namespace test

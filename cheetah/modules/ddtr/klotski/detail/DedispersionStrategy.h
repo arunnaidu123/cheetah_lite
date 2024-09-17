@@ -29,6 +29,7 @@
 #include "cheetah/modules/ddtr/DedispersionTrialPlan.h"
 #include "cheetah/data/Units.h"
 #include "cheetah/data/TimeFrequency.h"
+#include "cheetah/utils/MultiThread.h"
 
 namespace ska {
 namespace cheetah {
@@ -225,6 +226,19 @@ class DedispersionStrategy
          */
         void resize(size_t const number_of_samples, size_t const cpu_memory);
 
+        static void test (unsigned )
+        {
+            std::cout<<"called the function\n";
+        }
+        void initialize_threads()
+        {
+            _ddtr_threads.add_job(1,test,3);
+        }
+
+        utils::MultiThread& ddtr_threads()
+        {
+            return _ddtr_threads;
+        }
 
     private:
         /**
@@ -258,6 +272,8 @@ class DedispersionStrategy
                             , unsigned int klotski
                             , unsigned int range
                             );
+
+
 
     private:
         std::size_t _cpu_memory; // Available CPU memory for DDTR
@@ -296,6 +312,7 @@ class DedispersionStrategy
         DmConstantType _dm_constant; // _dm_constant
         FloatArrayType _dmshifts_per_klotski_excess;
         bool _precise;
+        utils::MultiThread _ddtr_threads;
 };
 
 } // namespace klotski

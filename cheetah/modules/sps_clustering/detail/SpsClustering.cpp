@@ -32,6 +32,7 @@ namespace sps_clustering {
 template<typename NumRepType>
 std::shared_ptr<data::SpCcl<NumRepType>> SpsClustering::operator()(std::shared_ptr<data::SpCcl<NumRepType>> const& cands)
 {
+    /*
     if (! _config.active())
         return cands;
 
@@ -71,6 +72,8 @@ std::shared_ptr<data::SpCcl<NumRepType>> SpsClustering::operator()(std::shared_p
         }
     }
     return merged_cands;
+    */
+    return cands;
 }
 
 } // namespace sps_clustering

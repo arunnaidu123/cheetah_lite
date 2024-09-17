@@ -47,16 +47,6 @@ void Config::add_options(OptionsDescriptionEasyInit& add_options)
     BaseT::add_options(add_options);
 }
 
-cpu::Config const& Config::cpu_algo_config() const
-{
-    return BaseT::config<cpu::Config>();
-}
-
-cpu::Config& Config::cpu_algo_config()
-{
-    return BaseT::config<cpu::Config>();
-}
-
 klotski::Config const& Config::klotski_algo_config() const
 {
     return BaseT::config<klotski::Config>();
@@ -75,6 +65,16 @@ klotski_bruteforce::Config const& Config::klotski_bruteforce_algo_config() const
 klotski_bruteforce::Config& Config::klotski_bruteforce_algo_config()
 {
     return BaseT::config<klotski_bruteforce::Config>();
+}
+
+cpu::Config const& Config::cpu_algo_config() const
+{
+    return BaseT::config<cpu::Config>();
+}
+
+cpu::Config& Config::cpu_algo_config()
+{
+    return BaseT::config<cpu::Config>();
 }
 
 RfiExcisionConfig const& Config::rfiexcision_config() const

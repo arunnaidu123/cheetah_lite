@@ -76,7 +76,8 @@ struct SinglePulseTests
 
         //Configure high density low DMs
         modules::ddtr::DedispersionConfig dd_config_low;
-        config.sps_config().ddtr_config().dedispersion_config(dd_config_low);
+        config.ddtr_config().dedispersion_config(dd_config_low);
+        config.spdt_config().klotski_config().active(true);
         dd_config_low.dm_start(modules::ddtr::DedispersionConfig::Dm(0.0 * data::parsecs_per_cube_cm));
         dd_config_low.dm_end(modules::ddtr::DedispersionConfig::Dm(100.0 * data::parsecs_per_cube_cm));
         dd_config_low.dm_step(modules::ddtr::DedispersionConfig::Dm(0.1 * data::parsecs_per_cube_cm));
@@ -89,14 +90,14 @@ struct SinglePulseTests
         dd_config_high.dm_end(modules::ddtr::DedispersionConfig::Dm(300.0 * data::parsecs_per_cube_cm));
         dd_config_high.dm_step(modules::ddtr::DedispersionConfig::Dm(1.0 * data::parsecs_per_cube_cm));
 */
-        auto& cpu_config = config.sps_config().cpu_config();
-        cpu_config.activate();
+        auto& cpu_config = config.ddtr_config().klotski_algo_config();
+        cpu_config.active(true);
 
         //Set sps priority
-        config.sps_config().set_priority(0);
+        config.ddtr_config().set_priority(0);
 
         //Set the size of the dedispersion buffer
-        config.sps_config().ddtr_config().dedispersion_samples(1<<17);
+        config.ddtr_config().dedispersion_samples(1<<17);
 
         //Set up noise parameters for data to be passed through
         //the pipeline
@@ -104,18 +105,18 @@ struct SinglePulseTests
         noise_config.mean(96.0);
         noise_config.std_deviation(10.0);
         generators::GaussianNoise<data::TimeFrequency<Cpu, NumericalT>> noise(noise_config);
-        BeamConfig<uint8_t> beam_config;
+        BeamConfigType<uint8_t> beam_config(config.pool_manager());
 
         //Start epoch
         typename utils::ModifiedJulianClock::time_point epoch(utils::julian_day(50000.0));
         TestSinglePulsePipeline<NumericalT> pipeline(config, beam_config);
 
         double tsamp_us = 64.0;
-        double f_low = 1.2;
-        double f_high = 1.8;
+        double f_low = 1.3;
+        double f_high = 1.63;
         std::size_t total_nsamps = std::size_t(10.0 / (tsamp_us * 1e-6));
         data::DimensionSize<data::Time> number_of_samples(1<<15);
-        data::DimensionSize<data::Frequency> number_of_channels(1024);
+        data::DimensionSize<data::Frequency> number_of_channels(3700);
         std::size_t loop_count = total_nsamps/number_of_samples + 10;
         for (std::size_t ii=0; ii<loop_count; ++ii)
         {

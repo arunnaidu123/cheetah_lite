@@ -83,6 +83,7 @@ void Buffering<DdtrTraits, PlanType>::agg_buffer_init(TimeFrequencyType const& d
         PANDA_LOG << "setting dedispersion buffer size to " << number_of_spectra << " spectra";
         //_agg_buf_filler.resize(data.number_of_channels() * number_of_spectra);
         _agg_buf_filler.resize(number_of_spectra, data::DimensionSize<data::Frequency>(data.number_of_channels()));
+        _agg_buf_filler.metadata(data.metadata());
 
         PANDA_LOG << "setting buffer overlap to " << overlap << " spectra";
         //_agg_buf_filler.set_overlap(data.number_of_channels() * overlap);

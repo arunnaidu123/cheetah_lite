@@ -109,7 +109,7 @@ struct RfiTests
         noise_config.mean(96.0);
         noise_config.std_deviation(10.0);
         generators::GaussianNoise<data::TimeFrequency<Cpu, uint8_t>> noise(noise_config);
-        BeamConfig<uint8_t> beam_config;
+        BeamConfigType<uint8_t> beam_config(config.pool_manager());
 
         RfiDetectionPipeline<NumericalT, TestOutputHandler> pipeline(config, beam_config);
 

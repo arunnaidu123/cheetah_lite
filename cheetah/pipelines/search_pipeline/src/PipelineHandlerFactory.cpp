@@ -42,7 +42,7 @@ namespace search_pipeline {
 
 template<typename T, typename NumericalT>
 static
-T* make_handler(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config) {
+T* make_handler(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config) {
     return new T(config, beam_config);
 }
 
@@ -89,7 +89,7 @@ class TimedPipeline : public PipelineHandler<NumericalT>
         typedef PipelineHandler<NumericalT> BaseT;
 
     public:
-        TimedPipeline(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, PipelineHandler<NumericalT>* handler)
+        TimedPipeline(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config, PipelineHandler<NumericalT>* handler)
             : BaseT(config, beam_config)
             , _handler(handler)
         {
@@ -134,16 +134,16 @@ PipelineHandlerFactory::~PipelineHandlerFactory()
 template<typename TypeFactory>
 void PipelineHandlerFactory::add_factory(std::string const& handler_name, TypeFactory const& factory)
 {
-    typedef typename std::remove_pointer<decltype(std::declval<TypeFactory>()(_config, std::declval<BeamConfig<NumericalT> const&>()))>::type Type;
+    typedef typename std::remove_pointer<decltype(std::declval<TypeFactory>()(_config, std::declval<BeamConfigType<NumericalT> const&>()))>::type Type;
     _map.insert( std::make_pair( handler_name
-                               , [factory](CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config)
+                               , [factory](CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config)
                                  {
                                      return factory(config, beam_config);
                                  }
                                )
                );
     _timed_map.insert( std::make_pair( handler_name
-                                     , [factory](CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config)
+                                     , [factory](CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config)
                                        {
                                                 auto handler = factory(config, beam_config);
                                                 try {
@@ -162,7 +162,7 @@ void PipelineHandlerFactory::add_type(std::string const& handler_name, TypeFacto
     _types.push_back(handler_name);
     //_map.insert(std::make_pair(handler_name, static_cast<PipelineHandlerFactory::FactoryType>(factory)));
     // add a timer type
-    typedef typename std::remove_pointer<decltype(std::declval<TypeFactory>()(_config, std::declval<BeamConfig<NumericalT> const&>()))>::type Type;
+    typedef typename std::remove_pointer<decltype(std::declval<TypeFactory>()(_config, std::declval<BeamConfigType<NumericalT> const&>()))>::type Type;
     _map.insert(std::make_pair(handler_name, &make_handler<PipelineWrapper<NumericalT, Type>, NumericalT>));
     _timed_map.insert(std::make_pair(handler_name, &make_handler<TimerWrapper<NumericalT, Type>, NumericalT>));
 }
@@ -172,7 +172,7 @@ std::vector<std::string> PipelineHandlerFactory::available() const
     return _types;
 }
 
-PipelineHandlerFactory::HandlerType* PipelineHandlerFactory::create(std::string const& handler_name, BeamConfig<NumericalT> const& beam_config) const
+PipelineHandlerFactory::HandlerType* PipelineHandlerFactory::create(std::string const& handler_name, BeamConfigType<NumericalT> const& beam_config) const
 {
     auto it = _map.find(handler_name);
     if(it == _map.end())
@@ -181,7 +181,7 @@ PipelineHandlerFactory::HandlerType* PipelineHandlerFactory::create(std::string 
     return it->second(_config, beam_config);
 }
 
-PipelineHandlerFactory::HandlerType* PipelineHandlerFactory::create_timed(std::string const& handler_name, BeamConfig<NumericalT> const& beam_config) const
+PipelineHandlerFactory::HandlerType* PipelineHandlerFactory::create_timed(std::string const& handler_name, BeamConfigType<NumericalT> const& beam_config) const
 {
     auto it = _timed_map.find(handler_name);
     if(it == _timed_map.end())

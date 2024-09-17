@@ -49,7 +49,7 @@ class Empty : public PipelineHandler<NumericalT>
         typedef typename BaseT::TimeFrequencyType TimeFrequencyType;
 
     public:
-        Empty(CheetahConfig<NumericalT> const&, BeamConfig<NumericalT> const&);
+        Empty(CheetahConfig<NumericalT> const&, BeamConfigType<NumericalT> const&);
         ~Empty() override;
 
         /**

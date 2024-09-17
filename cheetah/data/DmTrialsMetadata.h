@@ -84,6 +84,11 @@ class DmTrialsMetadata
                  */
                 std::size_t size() const;
 
+                /**
+                 * @brief      return the size (number of samples)
+                 */
+                std::size_t downsampling_factor() const;
+
             private:
                 DmTrialsMetadata const& _parent;
                 DmType _dm;
@@ -195,6 +200,8 @@ class DmTrialsMetadata
          * @brief      Return the number of samples
          */
         std::size_t number_of_samples() const;
+
+        std::vector<unsigned> number_of_ranges() const;
 
     private:
         TimeType _sampling_interval;

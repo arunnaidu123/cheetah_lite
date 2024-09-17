@@ -33,27 +33,48 @@ namespace ddtr {
 namespace klotski {
 
 template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(ddtr::Config const& config)
-    : _plan(std::make_shared<DedispersionPlan>(config, 0))
+Ddtr<DdtrTraits>::Ddtr(BeamConfigType const& beam_config, ddtr::Config const& config)
+    : _plan(std::make_shared<DedispersionPlan>(beam_config, config, 0))
 {
+//    if(beam_config.affinities().size()>1)
+//    {
+//        cpu_set_t cpuset;
+//        CPU_ZERO(&cpuset);
+//        CPU_SET(beam_config.affinities()[1], &cpuset);
+//        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+//        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
+//    }
 }
 
 template<typename DdtrTraits>
 Ddtr<DdtrTraits>::Ddtr(Ddtr&& other)
     : _plan(std::move(other._plan))
 {
+//    if(_plan->affinities().size()>1)
+//    {
+//        cpu_set_t cpuset;
+//        CPU_ZERO(&cpuset);
+//        CPU_SET(_plan->affinities()[1], &cpuset);
+//        int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+//        if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
+//    }
+}
+
+template<typename DdtrTraits>
+Ddtr<DdtrTraits>::~Ddtr()
+{
 }
 
 template<typename DdtrTraits>
 template<typename CallBackT>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>&, BufferType const& data, CallBackT const& call_back)
+std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>&, std::shared_ptr<BufferType> data, CallBackT const& call_back)
 {
     std::lock_guard<std::mutex> lk(_mutex);
     return _worker(data, _plan, call_back);
 }
 
 template<typename DdtrTraits>
-std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>& cpu, BufferType const& data)
+std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>& cpu, std::shared_ptr<BufferType> data)
 {
     return (*this)(cpu, data, [](DmTrialsType const&, std::vector<unsigned int> const&){});
 }

@@ -78,7 +78,6 @@ template<template<typename> class DdtrAlgoT, typename NumericalT>
 struct DdtrTesterTraits :
     DdtrTesterTraitsBase<DdtrAlgoT<ddtr::CommonTypes<ddtr::Config
                                                    , NumericalT
-                                                   , ddtr::TimeFrequencyBufferFactory
                                                    >
                                  >
                         >
@@ -86,7 +85,6 @@ struct DdtrTesterTraits :
     public:
         typedef DdtrTesterTraitsBase<DdtrAlgoT<ddtr::CommonTypes<ddtr::Config
                                                    , NumericalT
-                                                   , ddtr::TimeFrequencyBufferFactory
                                                    >
                                  >
                         > BaseT;
@@ -98,6 +96,7 @@ struct DdtrTesterTraits :
         typedef typename DdtrAlgo::TimeFrequencyType TimeFrequencyType;
 
     protected:
+
         struct TestConfig : public ddtr::Config
         {
             typedef typename DdtrTesterTraits<DdtrAlgoT, NumericalRep>::PoolType PoolType;
@@ -166,7 +165,7 @@ struct DdtrTesterTraits :
 
         DmDataContainerType _dm_data;
         std::size_t _dm_call_count;
-
+        typename Api::BeamConfig _beam_config;
         std::unique_ptr<Api> _api; // must be last member
         generators::ProfileManager _manager;
         DdtrHandler _handler;

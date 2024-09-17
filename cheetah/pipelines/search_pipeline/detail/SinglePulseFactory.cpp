@@ -46,32 +46,31 @@ SinglePulseFactory<NumericalT>::~SinglePulseFactory()
 }
 
 template<typename NumericalT>
-template<template <typename> class RfimPolicyTempl, typename DmHandler>
-Dedispersion<NumericalT>* SinglePulseFactory<NumericalT>::create_policy(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const
+template<template <typename> class RfimPolicyTempl>
+SinglePulseImpl<NumericalT>* SinglePulseFactory<NumericalT>::create_policy(BeamConfigType<NumericalT> const& beam_config) const
 {
-    if(!_config.rfim_config().algo_defined()) {
-        return new SinglePulseImpl<NumericalT>(_config, beam_config, std::forward<DmHandler>(dm_handler));
-    }
-    else {
-        return new RfimSinglePulseImpl<NumericalT, RfimPolicyTempl>(_config, beam_config, std::forward<DmHandler>(dm_handler));
-    }
+    //if(!_config.rfim_config().algo_defined()) {
+        return new SinglePulseImpl<NumericalT>(_config, beam_config);
+    //}
+    //else {
+    //    return new RfimSinglePulseImpl<NumericalT, RfimPolicyTempl>(_config, beam_config, std::forward<DmHandler>(dm_handler));
+    //}
 }
 
 template<typename NumericalT>
-template<typename DmHandler>
-Dedispersion<NumericalT>* SinglePulseFactory<NumericalT>::create(BeamConfig<NumericalT> const& beam_config, DmHandler&& dm_handler) const
+SinglePulseImpl<NumericalT>* SinglePulseFactory<NumericalT>::create(BeamConfigType<NumericalT> const& beam_config) const
 {
-    if(!_config.rfim_config().algo_defined()) {
-        return new SinglePulseImpl<NumericalT>(_config, beam_config, std::forward<DmHandler>(dm_handler));
-    }
-    else {
-        if(_config.rfim_config().flag_policy()) {
-            return create_policy<modules::rfim::FlagPolicy>(beam_config, std::forward<DmHandler>(dm_handler));
-        }
-        else {
-            return create_policy<modules::rfim::LastUnflagged>(beam_config, std::forward<DmHandler>(dm_handler));
-        }
-    }
+    //if(!_config.rfim_config().algo_defined()) {
+        return new SinglePulseImpl<NumericalT>(_config, beam_config);
+    //}
+    //else {
+    //    if(_config.rfim_config().flag_policy()) {
+    //        return create_policy<modules::rfim::FlagPolicy>(beam_config, std::forward<DmHandler>(dm_handler));
+    //    }
+    //    else {
+    //        return create_policy<modules::rfim::LastUnflagged>(beam_config, std::forward<DmHandler>(dm_handler));
+    //    }
+    //}
 }
 
 } // namespace search_pipeline

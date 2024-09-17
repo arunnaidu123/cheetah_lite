@@ -33,7 +33,7 @@ namespace ddtr {
 namespace cpu {
 
 template<typename DdtrTraits>
-Ddtr<DdtrTraits>::Ddtr(ddtr::Config const&)
+Ddtr<DdtrTraits>::Ddtr(BeamConfigType const&, ddtr::Config const&)
 {
 }
 
@@ -51,7 +51,7 @@ Ddtr<DdtrTraits>::~Ddtr()
 template<typename DdtrTraits>
 inline
 std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>& /*cpu*/
-    , BufferType const& data)
+    , std::shared_ptr<BufferType> data)
 {
     return _worker(data, _plan, [](std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> ){});
 }
@@ -60,7 +60,7 @@ template<typename DdtrTraits>
 template<typename CallBackT>
 inline
 std::shared_ptr<typename Ddtr<DdtrTraits>::DmTrialsType> Ddtr<DdtrTraits>::operator()(panda::PoolResource<cheetah::Cpu>& /*cpu*/
-    , BufferType const& data
+    , std::shared_ptr<BufferType> data
     , CallBackT const& call_back)
 {
     return _worker(data, _plan, call_back);

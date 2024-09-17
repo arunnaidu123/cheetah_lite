@@ -29,14 +29,19 @@ namespace search_pipeline {
 
 
 template<typename NumericalT>
-SinglePulseImpl<NumericalT>::SinglePulseImpl(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, DmHandler const& dm_handler)
-    : BaseT(config, beam_config, dm_handler)
-    , _sps_handler(*this)
+SinglePulseImpl<NumericalT>::SinglePulseImpl(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config)
+    : BaseT(config, beam_config)
+    , _spdt_handler(*this)
+    , _ddtr_handler(*this)
     , _spclusterer(config.sps_clustering_config())
     , _spsifter(config.spsift_config())
-    , _sps(config.sps_config(), dm_handler, [this](std::shared_ptr<SpType> data)
+    , _spdt(beam_config, config.spdt_config(), [this](std::shared_ptr<SpType> sp_data)
                                             {
-                                                _sps_handler(data);
+                                                _spdt_handler(sp_data);
+                                            })
+    , _ddtr(beam_config, config.ddtr_config(), [this](std::shared_ptr<DmTrialType> data)
+                                            {
+                                                _ddtr_handler(data);
                                             })
 {
 }
@@ -47,7 +52,13 @@ SinglePulseImpl<NumericalT>::~SinglePulseImpl()
 }
 
 template<typename NumericalT>
-SinglePulseImpl<NumericalT>::SpsHandler::SpsHandler(SinglePulseImpl<NumericalT>& p)
+SinglePulseImpl<NumericalT>::SpdtHandler::SpdtHandler(SinglePulseImpl<NumericalT>& p)
+    : _pipeline(p)
+{
+}
+
+template<typename NumericalT>
+SinglePulseImpl<NumericalT>::DdtrHandler::DdtrHandler(SinglePulseImpl<NumericalT>& p)
     : _pipeline(p)
 {
 }
@@ -55,11 +66,11 @@ SinglePulseImpl<NumericalT>::SpsHandler::SpsHandler(SinglePulseImpl<NumericalT>&
 template<typename NumericalT>
 void SinglePulseImpl<NumericalT>::operator()(TimeFrequencyType& data)
 {
-    _sps(data);
+    _ddtr(data);
 }
 
 template<typename NumericalT>
-void SinglePulseImpl<NumericalT>::SpsHandler::operator()(std::shared_ptr<SpType> const& data) const
+void SinglePulseImpl<NumericalT>::SpdtHandler::operator()(std::shared_ptr<SpType> const& data) const
 {
     _pipeline._thread.exec([this, data]()
                            {
@@ -69,8 +80,15 @@ void SinglePulseImpl<NumericalT>::SpsHandler::operator()(std::shared_ptr<SpType>
 }
 
 template<typename NumericalT>
+void SinglePulseImpl<NumericalT>::DdtrHandler::operator()(std::shared_ptr<DmTrialType> data)
+{
+    _pipeline._spdt(data);
+}
+
+template<typename NumericalT>
 void SinglePulseImpl<NumericalT>::do_post_processing(std::shared_ptr<SpType> const& data)
 {
+    //PANDA_LOG<<"number of candidates "<<data->size();
     this->_spsifter(*data);
     std::shared_ptr<SpType> new_data = this->_spclusterer(data);
     this->out().send(ska::panda::ChannelId("sps_events"), new_data);

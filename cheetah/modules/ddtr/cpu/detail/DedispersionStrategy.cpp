@@ -30,7 +30,8 @@ namespace ddtr {
 namespace cpu {
 
 template <typename DdtrTraits>
-DedispersionStrategy<DdtrTraits>::DedispersionStrategy(const TimeFrequencyType& chunk
+template <typename DataType>
+DedispersionStrategy<DdtrTraits>::DedispersionStrategy(const DataType& chunk
                                                       , const ddtr::Config& config
                                                       , int const& memory)
     :    _memory(memory)
@@ -56,7 +57,8 @@ DedispersionStrategy<DdtrTraits>::~DedispersionStrategy()
 }
 
 template <typename DdtrTraits>
-data::DimensionSize<data::Time> DedispersionStrategy<DdtrTraits>::make_strategy(const TimeFrequencyType& chunk, const ddtr::Config& config)
+template<typename DataType>
+data::DimensionSize<data::Time> DedispersionStrategy<DdtrTraits>::make_strategy(const DataType& chunk, const ddtr::Config& config)
 {
     Dm max_dm = config.max_dm();
 

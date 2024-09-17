@@ -28,6 +28,7 @@
 #include "cheetah/modules/ddtr/klotski/detail/DedispersionStrategy.h"
 #include "cheetah/modules/ddtr/Config.h"
 #include "cheetah/data/TimeFrequency.h"
+#include "cheetah/utils/MultiThread.h"
 
 namespace ska {
 namespace cheetah {
@@ -52,9 +53,10 @@ class DedispersionPlan
         typedef typename TimeFrequencyType::TimeType TimeType;
         typedef std::vector<FrequencyType> FrequencyListType;
         typedef ddtr::Config ConfigType;
+        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
 
     public:
-        DedispersionPlan(ConfigType const& config, std::size_t memory=0);
+        DedispersionPlan(BeamConfigType const& beam_config, ConfigType const& config, std::size_t memory=0);
 
         /**
          * @brief takes in TF chunk and gernerates a strategy object returning the
@@ -97,7 +99,28 @@ class DedispersionPlan
          */
         std::shared_ptr<DmTrialsType> const& dm_trials();
 
+        std::shared_ptr<DmTrialsType> const& spdt_dm_trials();
+
+        std::vector<unsigned> const& affinities();
+
+        unsigned current_dm_range() { return _current_dm_range;}
+
+        void current_dm_range(unsigned val)
+        {
+            _current_dm_range = val;
+        }
+
+        static void call_serial_dedispersion(std::shared_ptr<DedispersionPlan> plan, unsigned start_channel, unsigned band);
+
+        void initialize_threads();
+
+        std::string const& beam_id()
+        {
+            return _beam_config.id();
+        }
+
     private:
+        BeamConfigType const& _beam_config;
         ConfigType const& _config;
         std::shared_ptr<DedispersionStrategyType> _strategy;
         std::shared_ptr<data::DmTrialsMetadata> _dm_trial_metadata;
@@ -107,6 +130,9 @@ class DedispersionPlan
         std::vector<double> _dm_factors;
         std::size_t _number_of_spectra;
         std::shared_ptr<DmTrialsType> _dm_trials_ptr;
+        std::shared_ptr<DmTrialsType> _spdt_dm_trials_ptr;
+        unsigned _current_dm_range;
+        //utils::MultiThread _ddtr_threads;
 };
 
 } // namespace klotski

@@ -65,7 +65,7 @@ class RfiDetectionPipeline : public PipelineHandler<NumericalT>
 
     public:
         template<typename... HandlerArgs>
-        RfiDetectionPipeline(CheetahConfig<NumericalT> const& config, BeamConfig<NumericalT> const& beam_config, HandlerArgs&&...);
+        RfiDetectionPipeline(CheetahConfig<NumericalT> const& config, BeamConfigType<NumericalT> const& beam_config, HandlerArgs&&...);
         virtual ~RfiDetectionPipeline();
 
         void operator()(TimeFrequencyType&) override;
