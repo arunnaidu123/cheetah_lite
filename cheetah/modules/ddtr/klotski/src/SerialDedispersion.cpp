@@ -27,6 +27,7 @@
 #include <thread>
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 namespace ska {
 namespace cheetah {
@@ -49,7 +50,7 @@ namespace klotski {
  */
 extern "C" void nasm_dedisperse( std::size_t* variables
                            , std::size_t total_size
-                           , unsigned short *data_in
+                           , unsigned char *data_in
                            , int *data_out
                            , unsigned int* counts_array
                            , unsigned int* total_shift
@@ -81,9 +82,10 @@ void dedisperse_klotski_input_array(
                        )
 {
     std::size_t samps_per_iteration = 256;
-    variables[0] = (ksamps+samps_per_iteration)*sizeof(short); //DATA_SIZE
-    variables[1] = ksamps*nchans*sizeof(short); //OVERLAP_SIZE
-    variables[2] = 4*samps_per_iteration*ndms; //DATAOUT_SIZE
+    std::size_t overlap = 64;
+    variables[0] = (overlap+samps_per_iteration)*sizeof(char); //DATA_SIZE
+    variables[1] = overlap*nchans*sizeof(char); //OVERLAP_SIZE
+    variables[2] = sizeof(short)*samps_per_iteration*ndms; //DATAOUT_SIZE
     variables[3] = counts_array.size()*sizeof(int); //COUNTS_ARRAY_SIZE
     variables[4] = total_shift.size()*sizeof(int); //INDEX_SHIFTS_SIZE
     variables[5] = total_index.size()*sizeof(int); //INDEX_SIZE
@@ -91,7 +93,7 @@ void dedisperse_klotski_input_array(
     variables[7] = samps_per_iteration*sizeof(int); //TEMP_SIZE
     variables[8] = dmindex_shifts.size()*sizeof(int); //DMINDEX_SHIFTS_SIZE
     variables[9] = nchans*sizeof(int); //START_DM_SHIFTS_SIZE
-    variables[10] = tsamps*sizeof(short); //TSAMPS_SIZE
+    variables[10] = tsamps*sizeof(char); //TSAMPS_SIZE
     variables[11] = 512; //DATA_LOCATION
     variables[12] = variables[11] + variables[0]; //OVERLAP_LOCATION
     variables[13] = variables[12] + variables[1]; //DATAOUT_LOCATION
@@ -140,7 +142,7 @@ void dedisperse_klotski( std::size_t nchans
                     , std::size_t tsamps
                     , std::size_t dsamps
                     , std::size_t ndms
-                    , unsigned short* data_in
+                    , unsigned char* data_in
                     , int* data_temp
                     , std::vector<unsigned int>& total_base
                     , std::vector<unsigned int>& total_index
@@ -187,7 +189,7 @@ void dedisperse_klotski( std::size_t nchans
  */
 
 int serial_dedispersion(std::vector<int>& data_out
-                           , std::vector<unsigned short>& data_in
+                           , std::vector<unsigned char>& data_in
                            , std::vector<unsigned int> dsamps_per_klotski
                            , int nsamps
                            , int number_of_dms
@@ -202,7 +204,6 @@ int serial_dedispersion(std::vector<int>& data_out
                            , unsigned channels_offset
                            )
 {
-
     int number_of_subbands = nchans/max_channels_per_klotski;
     if(nchans%max_channels_per_klotski!=0) number_of_subbands+=1;
     unsigned int ksamps = 512; // TODO: mostly any efficieny factor need to investigate its relation with the hardware used.

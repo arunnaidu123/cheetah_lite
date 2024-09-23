@@ -99,7 +99,7 @@ class DedispersionStrategy
         /**
          * @brief return pointer to temp_work_area which hold the intermediate results mostly the FT data
          */
-        std::shared_ptr<std::vector<unsigned short>> temp_work_area();
+        std::shared_ptr<std::vector<unsigned char>> temp_work_area();
 
         /**
          * @brief returns pointer to subanded_dm_trials which holds the subbanded dedispersed data
@@ -284,7 +284,7 @@ class DedispersionStrategy
         std::vector<std::vector<std::vector<unsigned int>>> _dmshifts_per_band; //  2D array containg the dmshift per dmindex per band
         IntArrayType _dmshifts_per_klotski; //  3D array containg the dmshift per dmindex per klotski per band
         std::vector<std::vector<std::vector<unsigned int>>> _dsamps_per_klotski; // 2D array containing the information about the dedispersion samples per klotski per band
-        std::shared_ptr<std::vector<unsigned short>> _temp_work_area; // tempory work area which contains the tranformed input data
+        std::shared_ptr<std::vector<unsigned char>> _temp_work_area; // tempory work area which contains the tranformed input data
         std::shared_ptr<std::vector<std::vector<int>>> _subanded_dm_trials; // output area containg the subbanded DMtrial data
         IntArrayType _total_base; // base DM indices for each iteration
         IntArrayType _total_index; // DM indices for each iteration

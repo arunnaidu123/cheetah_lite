@@ -55,7 +55,6 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
     }
     auto ddtr_start = std::chrono::high_resolution_clock::now();
     panda::copy(agg_buf->begin(), agg_buf->end(), plan->dedispersion_strategy()->temp_work_area()->begin());
-    //std::shared_ptr<DmTrialsType> dmtrials_ptr = DmTrialsType::make_shared(plan->dm_trial_metadata(), agg_buf->start_time());
 
     auto dmtrials_ptr = plan->dm_trials();
     auto spdt_dmtrials_ptr = plan->spdt_dm_trials();
@@ -70,7 +69,6 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
     }
     auto ddtr_stop = std::chrono::high_resolution_clock::now();
     PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_stop - ddtr_start).count()/1000000.0<<" ms";
-    //std::cout<<plan->beam_id()<<" "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_stop - ddtr_start).count()/1000000.0<<"\n";
     DmTrialsType& dmtrials = *(dmtrials_ptr);
     call_back(dmtrials, plan->dedispersion_strategy()->ndms());
 

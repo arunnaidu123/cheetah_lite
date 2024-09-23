@@ -81,40 +81,6 @@ data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::reset(TimeFrequenc
 }
 
 template <typename DdtrTraits>
-void DedispersionPlan<DdtrTraits>::initialize_threads()
-{
-    //if(_ddtr_threads.number_of_jobs()==0)
-    {
-        //unsigned start_channel = 0;
-        //_ddtr_threads->resize(this->dedispersion_strategy()->number_of_bands());
-
-        /*
-        for(unsigned int band=0; band<this->dedispersion_strategy()->number_of_bands(); ++band)
-        {
-            _ddtr_threads->emplace_back(utils::SingleThread(this->affinities()[band+1], serial_dedispersion
-                             ,  std::ref((*this->dedispersion_strategy()->subanded_dm_trials())[band])
-                             , std::ref(*this->dedispersion_strategy()->temp_work_area())
-                             , this->dedispersion_strategy()->dsamps_per_klotski()[this->current_dm_range()][band]
-                             , this->dedispersion_strategy()->nsamps()/std::pow(2,this->current_dm_range())
-                             , this->dedispersion_strategy()->ndms()[this->current_dm_range()]
-                             , this->dedispersion_strategy()->max_channels_per_klotski()
-                             , this->dedispersion_strategy()->channels_per_band()[band]
-                             , this->dedispersion_strategy()->dmshifts_per_klotski()[this->current_dm_range()][band]
-                             , this->dedispersion_strategy()->total_base()[this->current_dm_range()][band]
-                             , this->dedispersion_strategy()->total_index()[this->current_dm_range()][band]
-                             , this->dedispersion_strategy()->total_shift()[this->current_dm_range()][band]
-                             , this->dedispersion_strategy()->counts_array()[this->current_dm_range()][band]
-                             , this->dedispersion_strategy()->start_dm_shifts()[this->current_dm_range()]
-                             , start_channel
-                             ));
-
-            start_channel += this->dedispersion_strategy()->channels_per_band()[band];
-        }
-        */
-    }
-}
-
-template <typename DdtrTraits>
 std::shared_ptr<data::DmTrialsMetadata> DedispersionPlan<DdtrTraits>::generate_dmtrials_metadata(TimeType sample_interval, std::size_t nspectra) const
 {
     if (nspectra < _strategy->maxshift()) {

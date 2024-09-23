@@ -39,12 +39,12 @@ extern "C" void nasm_integrate(std::size_t *data_out_pointers
                                 , std::size_t total_size_of_stack
                                 );
 
-extern "C" void nasm_downsample(unsigned short *data, unsigned int number_of_elements);
+extern "C" void nasm_downsample(unsigned char *data, unsigned int number_of_elements);
 
 extern "C" void nasm_zeros(int *data, std::size_t bytes);
 
 int serial_dedispersion(std::vector<int>& data_out
-                           , std::vector<unsigned short>& data_in
+                           , std::vector<unsigned char>& data_in
                            , std::vector<unsigned int> dsamps_per_klotski
                            , int nsamps
                            , int number_of_dms
@@ -94,8 +94,8 @@ DdtrProcessor<DdtrTraits>& DdtrProcessor<DdtrTraits>::operator++()
 {
     threaded_dedispersion(_plan);
 
-    nasm_downsample(&*(*_plan->dedispersion_strategy()->temp_work_area()).begin()
-                   , _plan->dedispersion_strategy()->nsamps()*_plan->dedispersion_strategy()->nchans());
+    //nasm_downsample(&*(*_plan->dedispersion_strategy()->temp_work_area()).begin()
+    //               , _plan->dedispersion_strategy()->nsamps()*_plan->dedispersion_strategy()->nchans());
 
     ++_current_dm_range;
 
@@ -224,6 +224,7 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
     {
         plan->dedispersion_strategy()->ddtr_threads().ready(band);
     }
+
     //auto ddtr_ready_stop = std::chrono::high_resolution_clock::now();
     //auto ddtr_ready_time = std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_ready_stop - ddtr_ready_start).count()/1000000.0;
     //PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr ready time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_ready_stop - ddtr_ready_start).count()/1000000.0<<" ms";
@@ -233,6 +234,7 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
     {
         plan->dedispersion_strategy()->ddtr_threads().finish(band);
     }
+
     //auto ddtr_finish_stop = std::chrono::high_resolution_clock::now();
     //auto ddtr_finish_time = std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_finish_stop - ddtr_finish_start).count()/1000000.0;
     //PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr finish time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_finish_stop - ddtr_finish_start).count()/1000000.0<<" ms";

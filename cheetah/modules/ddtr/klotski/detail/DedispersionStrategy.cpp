@@ -58,7 +58,10 @@ void DedispersionStrategy<NumericalRep>::update_details( int ndms
     for(int dm_index=0; dm_index<ndms; ++dm_index)
     {
         int shift = (int)(dm_shift*dm_index+dm_shift_excess[dm_index]);
-        if(shift!=current_shift || temp[base_count]==dm_index)
+        bool value = false;
+        if((unsigned)base_count<temp.size()) value = (temp[base_count]==dm_index);
+
+        if(shift!=current_shift || value)
         {
             for(int c=0; c<count; ++c)
             {
@@ -296,7 +299,7 @@ void DedispersionStrategy<NumericalRep>::make_strategy(size_t const cpu_memory)
                 for(unsigned int channel=0; channel<channels_per_klotski; ++channel)
                 {
                     _dmshifts_per_channel[range][band][klotski][channel] = _dm_step[range].value()*_dm_constant.value()*(1.0/((fch1_klotski-_foff.value()*channel)*(fch1_klotski-_foff.value()*channel))-1.0/(fch1_klotski*fch1_klotski))/_tsamp[range].value();
-                    if((_ndms[range]*_dmshifts_per_channel[range][band][klotski][channel])>32.0)
+                    if((_ndms[range]*_dmshifts_per_channel[range][band][klotski][channel])>64.0)
                     {
                         throw panda::Error("reduce the number of channels per klotski");
                     }
@@ -365,7 +368,7 @@ void DedispersionStrategy<NumericalRep>::make_strategy(size_t const cpu_memory)
     }
 
     _number_of_dmtrials_samples = _dsamps_per_klotski[0][_number_of_bands-1][_klotskis_per_band[_number_of_bands-1]-1];
-    _temp_work_area = std::make_shared<std::vector<unsigned short>>(_nsamps*_nchans);
+    _temp_work_area = std::make_shared<std::vector<unsigned char>>(_nsamps*_nchans);
 
     _subanded_dm_trials = std::make_shared<std::vector<std::vector<int>>>(_number_of_bands, std::vector<int>(_number_of_dmtrials_samples*_ndms[0]));
 }
@@ -420,7 +423,7 @@ std::vector<std::vector<std::vector<unsigned int>>> const& DedispersionStrategy<
 }
 
 template <typename NumericalRep>
-std::shared_ptr<std::vector<unsigned short>> DedispersionStrategy<NumericalRep>::temp_work_area()
+std::shared_ptr<std::vector<unsigned char>> DedispersionStrategy<NumericalRep>::temp_work_area()
 {
     return _temp_work_area;
 }
