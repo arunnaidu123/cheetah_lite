@@ -123,26 +123,25 @@ class AggregationBufferFiller
          */
         void full_buffer_handler(FullBufferHandlerT const& handler);
 
+        /**
+         * @brief resize the current buffer
+         */
         void resize(std::size_t number_of_spectra, std::size_t number_of_channels) const;
 
+        /**
+         * @brief return the timefrequency metadata
+         */
         typename data::TimeFrequencyMetadata const& metadata() const;
 
+        /**
+         * @brief set time frequency metadata
+         */
         void metadata(typename data::TimeFrequencyMetadata const& metadata);
 
-        void add_nsec(struct timespec& temp, long nsec) {
-            temp.tv_nsec += nsec;
-            if (temp.tv_nsec >= 1000000000) {
-                long sec = temp.tv_nsec / 1000000000;
-
-                temp.tv_sec += sec;
-                temp.tv_nsec -= sec * 1000000000;
-            } else if (temp.tv_nsec < 0) {
-                long sec = temp.tv_nsec / 1000000000;
-                sec -= 1;
-                temp.tv_nsec -= sec * 1000000000;
-                temp.tv_sec += sec;
-            }
-        }
+        /**
+         * @brief add nano seconds the time object
+         */
+        void add_nsec(struct timespec& temp, long nsec);
 
     private:
         FullBufferHandlerT _fn;

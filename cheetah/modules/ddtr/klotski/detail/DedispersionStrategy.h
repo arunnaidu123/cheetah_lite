@@ -226,19 +226,10 @@ class DedispersionStrategy
          */
         void resize(size_t const number_of_samples, size_t const cpu_memory);
 
-        static void test (unsigned )
-        {
-            std::cout<<"called the function\n";
-        }
-        void initialize_threads()
-        {
-            _ddtr_threads.add_job(1,test,3);
-        }
-
-        utils::MultiThread& ddtr_threads()
-        {
-            return _ddtr_threads;
-        }
+        /**
+         * @brief return the ddtr_threads object
+         */
+        utils::MultiThread& ddtr_threads();
 
     private:
         /**

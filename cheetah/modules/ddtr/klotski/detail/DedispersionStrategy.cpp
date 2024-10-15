@@ -284,9 +284,9 @@ void DedispersionStrategy<NumericalRep>::make_strategy(size_t const cpu_memory)
                 if(klotski==_klotskis_per_band[band]-1 && _channels_per_band[band]%_max_channels_per_klotski != 0) channels_per_klotski=_channels_per_band[band]%_max_channels_per_klotski;
 
                 float fch1_klotski = _fch1.value() - start_channel*_foff.value();
-                float fch1_band = _fch1.value();
+                float fch1_value = _fch1.value();
 
-                float temp_shift = _dm_step[range].value()*_dm_constant.value()*(1.0/((fch1_klotski)*(fch1_klotski))-1.0/(fch1_band*fch1_band))/_tsamp[range].value();
+                float temp_shift = _dm_step[range].value()*_dm_constant.value()*(1.0/((fch1_klotski)*(fch1_klotski))-1.0/(fch1_value*fch1_value))/_tsamp[range].value();
                 _dmshifts_per_klotski[range][band][klotski].resize(_ndms[range]);
                 _dmshifts_per_klotski_excess[range][band][klotski].resize(_ndms[range]);
 
@@ -576,6 +576,12 @@ template <typename NumericalRep>
 unsigned int const& DedispersionStrategy<NumericalRep>::number_of_dmtrials_samples() const
 {
     return _number_of_dmtrials_samples;
+}
+
+template <typename NumericalRep>
+utils::MultiThread& DedispersionStrategy<NumericalRep>::ddtr_threads()
+{
+    return _ddtr_threads;
 }
 
 } // namespace klotski

@@ -223,6 +223,9 @@ class AggregationBuffer
          */
         void metadata(typename data::TimeFrequencyMetadata const& metadata);
 
+        /**
+         * @brief resize the buffer
+         */
         void resize(std::size_t number_of_spectra, std::size_t number_of_channels);
 
 

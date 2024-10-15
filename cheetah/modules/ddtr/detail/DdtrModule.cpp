@@ -139,7 +139,6 @@ template<typename Handler
 DdtrModule<DdtrTraits, DdtrAlgorithms...>::DdtrModule(BeamConfigType const& beam_config, ConfigType const& config, Handler&& handler)
     : DdtrModule(beam_config, config, std::forward<Handler>(handler), AlgoFactoryType(beam_config, config))
 {
-    std::cout<<"DDTRT modules Affinity: "<<beam_config.affinities().size()<<"\n";
 }
 
 template<typename DdtrTraits, template<typename> class... DdtrAlgorithms>

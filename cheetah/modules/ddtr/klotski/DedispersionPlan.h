@@ -99,25 +99,30 @@ class DedispersionPlan
          */
         std::shared_ptr<DmTrialsType> const& dm_trials();
 
+        /**
+         * @brief returns pointer to the SPDT DmTrials
+         */
         std::shared_ptr<DmTrialsType> const& spdt_dm_trials();
 
+        /**
+         * @brief returns beam affinities
+         */
         std::vector<unsigned> const& affinities();
 
-        unsigned current_dm_range() { return _current_dm_range;}
+        /**
+         * @brief returns current dm range
+         */
+        unsigned current_dm_range() const;
 
-        void current_dm_range(unsigned val)
-        {
-            _current_dm_range = val;
-        }
+        /**
+         * @brief sets current dm range
+         */
+        void current_dm_range(unsigned val);
 
-        static void call_serial_dedispersion(std::shared_ptr<DedispersionPlan> plan, unsigned start_channel, unsigned band);
-
-        void initialize_threads();
-
-        std::string const& beam_id()
-        {
-            return _beam_config.id();
-        }
+        /**
+         * @brief returns beam id
+         */
+        std::string const& beam_id() const;
 
     private:
         BeamConfigType const& _beam_config;
@@ -132,7 +137,6 @@ class DedispersionPlan
         std::shared_ptr<DmTrialsType> _dm_trials_ptr;
         std::shared_ptr<DmTrialsType> _spdt_dm_trials_ptr;
         unsigned _current_dm_range;
-        //utils::MultiThread _ddtr_threads;
 };
 
 } // namespace klotski

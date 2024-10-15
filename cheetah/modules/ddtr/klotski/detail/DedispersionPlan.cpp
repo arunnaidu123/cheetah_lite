@@ -99,26 +99,6 @@ std::shared_ptr<data::DmTrialsMetadata> DedispersionPlan<DdtrTraits>::generate_d
     return meta_data;
 }
 
-template<typename DdtrTraits>
-void DedispersionPlan<DdtrTraits>::call_serial_dedispersion(std::shared_ptr<DedispersionPlan<DdtrTraits>> plan, unsigned start_channel, unsigned band)
-{
-    serial_dedispersion( std::ref((*plan->dedispersion_strategy()->subanded_dm_trials())[band])
-                             , std::ref(*plan->dedispersion_strategy()->temp_work_area())
-                             , plan->dedispersion_strategy()->dsamps_per_klotski()[plan->current_dm_range()][band]
-                             , plan->dedispersion_strategy()->nsamps()/std::pow(2,plan->current_dm_range())
-                             , plan->dedispersion_strategy()->ndms()[plan->current_dm_range()]
-                             , plan->dedispersion_strategy()->max_channels_per_klotski()
-                             , plan->dedispersion_strategy()->channels_per_band()[band]
-                             , plan->dedispersion_strategy()->dmshifts_per_klotski()[plan->current_dm_range()][band]
-                             , plan->dedispersion_strategy()->total_base()[plan->current_dm_range()][band]
-                             , plan->dedispersion_strategy()->total_index()[plan->current_dm_range()][band]
-                             , plan->dedispersion_strategy()->total_shift()[plan->current_dm_range()][band]
-                             , plan->dedispersion_strategy()->counts_array()[plan->current_dm_range()][band]
-                             , plan->dedispersion_strategy()->start_dm_shifts()[plan->current_dm_range()]
-                             , start_channel
-                             );
-}
-
 template <typename DdtrTraits>
 data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::buffer_overlap() const
 {
@@ -167,6 +147,23 @@ std::vector<unsigned> const& DedispersionPlan<DdtrTraits>::affinities()
     return _beam_config.affinities();
 }
 
+template <typename DdtrTraits>
+unsigned DedispersionPlan<DdtrTraits>::current_dm_range() const
+{
+    return _current_dm_range;
+}
+
+template <typename DdtrTraits>
+void DedispersionPlan<DdtrTraits>::current_dm_range(unsigned val)
+{
+    _current_dm_range = val;
+}
+
+template <typename DdtrTraits>
+std::string const& DedispersionPlan<DdtrTraits>::beam_id() const
+{
+    return _beam_config.id();
+}
 
 } // namespace klotski
 } // namespace ddtr

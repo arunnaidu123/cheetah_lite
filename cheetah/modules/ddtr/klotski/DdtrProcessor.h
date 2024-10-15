@@ -101,6 +101,9 @@ class DdtrProcessor
                                 , unsigned int start_dm_value
                                 );
 
+        /**
+         * @brief calls serial dedispersion kernel to perform dedispersion with in a band.
+         */
         static void call_serial_dedispersion(std::shared_ptr<DedispersionPlanType> plan, unsigned start_channel, unsigned band);
 
     private:
