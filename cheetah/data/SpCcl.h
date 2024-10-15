@@ -27,6 +27,7 @@
 #include "cheetah/data/SpCandidate.h"
 #include "cheetah/data/DmTrials.h"
 #include "cheetah/data/VectorLike.h"
+#include "cheetah/data/TimeFrequency.h"
 #include "pss/astrotypes/units/TimeUnits.h"
 #include "cheetah/utils/Architectures.h"
 #include "panda/DataChunk.h"
@@ -55,6 +56,10 @@ class SpCcl
         typedef SpCandidate<Cpu, float> SpCandidateType;
         typedef SpCandidateType::Dm Dm;
         typedef data::DmTrials<cheetah::Cpu, float> DmTrialsType;
+        typedef std::vector<SpCandidateType>::iterator Iterator;
+        typedef std::vector<SpCandidateType>::const_iterator ConstIterator;
+        typedef TimeFrequency<Cpu, NumericalRep> TimeFrequencyType;
+        typedef typename TimeFrequencyType::FrequencyType FrequencyType;
     //private:
     //    typedef std::vector<SpCandidateType> InnerType;
     //    typedef VectorLike<InnerType> BaseT;
@@ -62,6 +67,7 @@ class SpCcl
     public:
         SpCcl();
         SpCcl(std::shared_ptr<DmTrialsType> const& data);
+        SpCcl(utils::ModifiedJulianClock::time_point const& start_time);
         ~SpCcl();
 
         /**
@@ -125,6 +131,31 @@ class SpCcl
         utils::ModifiedJulianClock::time_point start_time(SpCandidateType const&) const;
 
         std::size_t size() const;
+
+        Iterator begin()
+        {
+            return _data.begin();
+        }
+
+        ConstIterator begin() const
+        {
+            return _data.begin();
+        }
+
+        Iterator end()
+        {
+            return _data.end();
+        }
+
+        ConstIterator end() const
+        {
+            return _data.end();
+        }
+
+        std::vector<SpCandidateType> const& data() const
+        {
+            return _data;
+        }
 
     protected:
         void dm_max_min(Dm);

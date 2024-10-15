@@ -66,7 +66,6 @@ void DdtrTester<TestTraits>::TearDown()
 template<template<typename> class DdtrAlgoT, typename NumericalT>
 DdtrTesterTraits<DdtrAlgoT, NumericalT>::DdtrTesterTraits()
     : _dm_call_count(0u)
-    //, _beam_config(_config.pool_manager())
     , _handler(_dm_data, _dm_call_count)
 {
 }
@@ -79,7 +78,7 @@ typename DdtrTesterTraits<DdtrAlgoT, NumericalT>::Api& DdtrTesterTraits<DdtrAlgo
         _config.template config<typename DdtrAlgo::Config>().active(true);
         configure(_config); // call configuration method
         _config.set_pool(pool);
-        //_beam_config(_config.pool_manager());
+        _beam_config.set_pool(pool);
         _api.reset(new Api(_beam_config, _config, _handler));
     }
     return *_api;
@@ -190,7 +189,7 @@ POOL_ALGORITHM_TYPED_TEST_P(DdtrTester, test_no_ranges_specified)
 POOL_ALGORITHM_TYPED_TEST_P(DdtrTester, test_handlers)
 {
 
-
+    //std::cout<<"generating pulse \n";
     TypeParam traits;
     typedef typename TypeParam::NumericalRep NumericalRep;
     typedef typename TypeParam::Dm Dm;
@@ -205,9 +204,10 @@ POOL_ALGORITHM_TYPED_TEST_P(DdtrTester, test_handlers)
 
     // keep sending data until we get a callback
     std::size_t count=0;
-    std::size_t chunk_samples=10000;
+    std::size_t chunk_samples=10240;
     for(int ii=0; ii < 4; ++ii)
     {
+        std::cout<< " passing pulse \n";
         SCOPED_TRACE("In loop on TF block count " + std::to_string(count));
         std::shared_ptr<DataType> data = DataType::make_shared
                         (pss::astrotypes::DimensionSize<pss::astrotypes::units::Time>(chunk_samples)

@@ -52,8 +52,8 @@ class SinglePulseImpl : public PipelineHandler<NumericalT>
     public:
         typedef PipelineHandler<NumericalT> BaseT;
         typedef typename data::TimeFrequency<cheetah::Cpu, NumericalT> TimeFrequencyType;
-        typedef modules::ddtr::Ddtr<modules::ddtr::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Ddtr;
-        typedef modules::spdt::Spdt<modules::spdt::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Spdt;
+        typedef modules::ddtr::Ddtr<search_pipeline::BeamConfigType<NumericalT>, modules::ddtr::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Ddtr;
+        typedef modules::spdt::Spdt<search_pipeline::BeamConfigType<NumericalT>, modules::spdt::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Spdt;
         typedef typename Spdt::DmHandler DmHandler;
         typedef typename Spdt::DmTrialType DmTrialType;
         typedef typename Spdt::BufferType BufferType;

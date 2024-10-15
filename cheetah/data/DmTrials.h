@@ -170,12 +170,40 @@ class DmTrials
 
         void swap(DmTrials& b);
 
+
+        void done()
+        {
+            std::lock_guard lk(_mu);
+            _ready = true;
+            _cv.notify_one();
+        }
+
+        void wait()
+        {
+            std::unique_lock lk(_mu);
+            _cv.wait(lk, [this]{ return (_ready); });
+        }
+
+        void lock()
+        {
+            std::lock_guard lk(_mu);
+            _ready = false;
+        }
+
+        std::mutex& mutex()
+        {
+            return _mu;
+        }
+
     private:
         std::shared_ptr<DmTrialsMetadata> _metadata;
         SeriesType _data;
         std::vector<DmTrialType> _trials;
         Mjd _start_time;
         TimeType _duration;
+        std::mutex _mu;
+        std::condition_variable _cv;
+        bool _ready;
 };
 
 

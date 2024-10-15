@@ -74,6 +74,8 @@ data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::reset(TimeFrequenc
 
     _dm_trials_ptr = DmTrialsType::make_shared(_dm_trial_metadata, data.start_time());
 
+    _spdt_dm_trials_ptr = DmTrialsType::make_shared(_dm_trial_metadata, data.start_time());
+
     return data::DimensionSize<data::Time>(_number_of_spectra);
 }
 
@@ -131,6 +133,12 @@ template <typename DdtrTraits>
 std::shared_ptr<typename DdtrTraits::DmTrialsType> const& DedispersionPlan<DdtrTraits>::dm_trials()
 {
     return _dm_trials_ptr;
+}
+
+template <typename DdtrTraits>
+std::shared_ptr<typename DdtrTraits::DmTrialsType> const& DedispersionPlan<DdtrTraits>::spdt_dmtrials()
+{
+    return _spdt_dm_trials_ptr;
 }
 
 } // namespace klotski_bruteforce

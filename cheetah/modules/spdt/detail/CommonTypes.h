@@ -44,14 +44,15 @@ namespace spdt {
  * @details
  */
 
-template<typename ConfigType, typename NumericalT>
-struct CommonTypes : public ddtr::CommonTypes<ConfigType, NumericalT>
+template<typename BeamConfigT, typename ConfigType, typename NumericalT>
+struct CommonTypes : public ddtr::CommonTypes<BeamConfigT, ConfigType, NumericalT>
 {
     private:
-        typedef ddtr::CommonTypes<ConfigType, NumericalT> BaseT;
+        typedef ddtr::CommonTypes<BeamConfigT, ConfigType, NumericalT> BaseT;
 
     public:
         typedef ConfigType Config;
+        typedef BeamConfigT BeamConfigType;
         typedef NumericalT NumericalRep;
         typedef NumericalT value_type;
 
@@ -63,7 +64,6 @@ struct CommonTypes : public ddtr::CommonTypes<ConfigType, NumericalT>
 
         typedef std::function<void(std::shared_ptr<SpType>)> SpdtHandler;
         typedef typename BaseT::DedispersionHandler DedispersionHandler;
-        typedef typename pipelines::search_pipeline::BeamConfigType<NumericalRep> BeamConfigType;
 };
 
 

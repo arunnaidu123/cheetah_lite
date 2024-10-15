@@ -10,4 +10,4 @@ set(MODULE_KLOTSKI_BRUTEFORCE_LIB_SRC_CPU
 
 #TEST_UTILS()
 
-#add_subdirectory(test)
+add_subdirectory(test)

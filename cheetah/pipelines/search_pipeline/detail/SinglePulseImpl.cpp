@@ -92,6 +92,7 @@ void SinglePulseImpl<NumericalT>::do_post_processing(std::shared_ptr<SpType> con
     this->_spsifter(*data);
     std::shared_ptr<SpType> new_data = this->_spclusterer(data);
     this->out().send(ska::panda::ChannelId("sps_events"), new_data);
+    PANDA_LOG<<"number of candidates "<<new_data->size();
 }
 
 } // namespace search_pipeline

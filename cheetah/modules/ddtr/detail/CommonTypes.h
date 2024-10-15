@@ -39,11 +39,12 @@ namespace ddtr {
  * @brief Contains common types used through ddtr
  * @details
  */
-template<typename ConfigType, typename NumericalT>
+template<typename BeamConfigT, typename ConfigType, typename NumericalT>
 struct CommonTypes
 {
     typedef ConfigType Config;
     typedef typename ConfigType::PoolType Pool;
+    typedef BeamConfigT BeamConfigType;
     typedef NumericalT NumericalRep;
     typedef NumericalRep value_type;
     typedef data::TimeFrequency<Cpu, NumericalRep> TimeFrequencyType;
@@ -51,7 +52,6 @@ struct CommonTypes
     typedef typename BufferFillerType::AggregationBufferType BufferType;
     typedef data::DmTrials<Cpu, float> DmTrialsType;
     typedef std::function<void(std::shared_ptr<DmTrialsType>)> DedispersionHandler;
-    typedef typename pipelines::search_pipeline::BeamConfigType<NumericalRep> BeamConfigType;
 };
 
 

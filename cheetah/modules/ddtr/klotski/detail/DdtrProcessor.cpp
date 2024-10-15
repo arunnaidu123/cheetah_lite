@@ -94,8 +94,8 @@ DdtrProcessor<DdtrTraits>& DdtrProcessor<DdtrTraits>::operator++()
 {
     threaded_dedispersion(_plan);
 
-    //nasm_downsample(&*(*_plan->dedispersion_strategy()->temp_work_area()).begin()
-    //               , _plan->dedispersion_strategy()->nsamps()*_plan->dedispersion_strategy()->nchans());
+    nasm_downsample(&*(*_plan->dedispersion_strategy()->temp_work_area()).begin()
+                   , _plan->dedispersion_strategy()->nsamps()*_plan->dedispersion_strategy()->nchans());
 
     ++_current_dm_range;
 
@@ -208,8 +208,7 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
         unsigned start_channel = 0;
         for(unsigned int band=0; band<plan->dedispersion_strategy()->number_of_bands(); ++band)
         {
-            plan->dedispersion_strategy()->ddtr_threads().add_job(plan->affinities()[band+2]
-                                                            , call_serial_dedispersion
+            plan->dedispersion_strategy()->ddtr_threads().add_job(call_serial_dedispersion
                                                             , plan
                                                             , start_channel
                                                             , band
@@ -250,6 +249,18 @@ void DdtrProcessor<DdtrTraits>::threaded_dedispersion(std::shared_ptr<Dedispersi
                     , plan->dedispersion_strategy()->ndms()[_current_dm_range]
                     , _start_dm_value
                     );
+
+    //for(unsigned int i=0; i<1024; ++i)
+    //{
+    //    std::cout<<dmtrials[999][i]<<"\t";
+    //    if(i%16==0 && i!=0) std::cout<<"\n";
+    //}
+    //std::cout<<"--------------------------------------------------------------------------------------------\n";
+    //for(unsigned int i=0; i<1024; ++i)
+    //{
+    //    std::cout<<dmtrials[1000][i]<<"\t";
+    //    if(i%16==0 && i!=0) std::cout<<"\n";
+    //}
 
     _start_dm_value += plan->dedispersion_strategy()->ndms()[_current_dm_range];
     //auto ddtr_integrate_stop = std::chrono::high_resolution_clock::now();

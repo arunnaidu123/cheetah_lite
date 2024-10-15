@@ -154,8 +154,11 @@ void dedisperse_klotski( std::size_t nchans
                     )
 {
     // setup variables to pass to kernel
+
     std::vector<std::size_t> variables(32);
+
     dedisperse_klotski_input_array(variables, nchans, ksamps, tsamps, dsamps, ndms, total_base, total_index, total_shift, counts_array, dmindex_shifts, dsamps_output);
+
 
     nasm_dedisperse( &*variables.begin()
                , variables[31]
@@ -168,6 +171,7 @@ void dedisperse_klotski( std::size_t nchans
                , &*dmindex_shifts.begin()
                , start_dm_shifts
                );
+
 }
 
 
@@ -204,6 +208,7 @@ int serial_dedispersion(std::vector<int>& data_out
                            , unsigned channels_offset
                            )
 {
+
     int number_of_subbands = nchans/max_channels_per_klotski;
     if(nchans%max_channels_per_klotski!=0) number_of_subbands+=1;
     unsigned int ksamps = 512; // TODO: mostly any efficieny factor need to investigate its relation with the hardware used.

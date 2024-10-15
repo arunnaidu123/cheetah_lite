@@ -47,6 +47,8 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
                                                                     , std::shared_ptr<DedispersionPlan<DdtrTraits>> plan
                                                                     , CallBackT const& call_back)
 {
+    std::lock_guard<std::mutex> lock(plan->dm_trials()->mutex());
+
     auto ddtr_start = std::chrono::high_resolution_clock::now();
 
     if (agg_buf->capacity() < (std::size_t) plan->dedispersion_strategy()->maxshift())
@@ -56,11 +58,14 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
         throw e;
     }
 
+    auto spdt_dmtrials_ptr = plan->spdt_dmtrials();
+    auto dmtrials_ptr = plan->dm_trials();
 
     plan->dm_trials()->start_time(agg_buf->start_time());
+    plan->spdt_dmtrials()->start_time(agg_buf->start_time());
+
 
     panda::copy(agg_buf->begin(), agg_buf->end(), plan->dedispersion_strategy()->temp_work_area()->begin());
-    std::fill(plan->dedispersion_strategy()->temp_work_area()->begin(), plan->dedispersion_strategy()->temp_work_area()->end(), 0);
     DdtrProcessor<DdtrTraits> ddtr(plan, plan->dm_trials());
 
     while(!ddtr.finished())
@@ -73,7 +78,10 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
     auto ddtr_stop = std::chrono::high_resolution_clock::now();
     PANDA_LOG<<" Ddtr time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_stop - ddtr_start).count()/1000000.0<<" ms";
 
-    return plan->dm_trials();
+    spdt_dmtrials_ptr->wait();
+    dmtrials_ptr->swap(*spdt_dmtrials_ptr);
+
+    return spdt_dmtrials_ptr;
 }
 
 } // namespace klotski_bruteforce

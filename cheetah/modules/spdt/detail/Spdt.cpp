@@ -33,21 +33,21 @@ namespace modules {
 namespace spdt {
 
 
-template<class ConfigType, typename NumericalRep>
-Spdt<ConfigType, NumericalRep>::Spdt(BeamConfigType const& beam_config, ConfigType const& config, SpdtHandler const& spdt_handler)
+template<class BeamConfigType, class ConfigType, typename NumericalRep>
+Spdt<BeamConfigType, ConfigType, NumericalRep>::Spdt(BeamConfigType const& beam_config, ConfigType const& config, SpdtHandler const& spdt_handler)
     : BaseT(beam_config, config, spdt_handler)
 {
 }
 
 
-template<class ConfigType, typename NumericalRep>
-Spdt<ConfigType, NumericalRep>::~Spdt()
+template<class BeamConfigType, class ConfigType, typename NumericalRep>
+Spdt<BeamConfigType, ConfigType, NumericalRep>::~Spdt()
 {
     PANDA_LOG_DEBUG << "~Spdt() destructor";
 }
 
-template<class ConfigType, typename NumericalRep>
-void Spdt<ConfigType, NumericalRep>::operator()(std::shared_ptr<DmTrialsType> data)
+template<class BeamConfigType, class ConfigType, typename NumericalRep>
+void Spdt<BeamConfigType, ConfigType, NumericalRep>::operator()(std::shared_ptr<DmTrialsType> data)
 {
     static_cast<BaseT&>(*this)(data);
 }

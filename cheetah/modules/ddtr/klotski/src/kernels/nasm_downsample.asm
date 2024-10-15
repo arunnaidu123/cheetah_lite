@@ -21,7 +21,7 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ; SOFTWARE.
 ;
-
+SIZE_OF_XMM equ 16
 SIZE_OF_YMM equ 32
 SIZE_OF_ZMM equ 64
 
@@ -46,9 +46,10 @@ nasm_downsample:
 
         xor r10, r10 ; set element = 0
 element_loop:
-        mov rax, SIZE_OF_ZMM
+        mov rax, SIZE_OF_YMM
         mul r10
-        vmovdqu16 zmm1, zword [rdi+rax]
+        vmovdqu16 ymm1, yword [rdi+rax]
+        vpmovzxbw zmm1, ymm1
         vpandd zmm3, zmm1, zmm5
         vpandd zmm4, zmm1, zmm6
         vpsrad zmm4, zmm4, 0x10
@@ -57,9 +58,10 @@ element_loop:
         vdivps zmm3, zmm3, zmm7
         vcvtps2udq zmm3, zmm3, {ru-sae}
         vpmovdw ymm3, zmm3
-        mov rax, SIZE_OF_YMM
+        vpmovwb xmm3, ymm3
+        mov rax, SIZE_OF_XMM
         mul r10
-        vmovdqu yword [rdi+rax], ymm3
+        vmovdqu oword [rdi+rax], xmm3
         inc r10
         mov rax, 32
         mul r10

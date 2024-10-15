@@ -45,9 +45,11 @@ SpCclFileStreamer<NumericalRep>::~SpCclFileStreamer()
 template<typename NumericalRep>
 boost::filesystem::path SpCclFileStreamer<NumericalRep>::next_filename(data::SpCcl<NumericalRep> const& data)
 {
-    if(data.tf_blocks().size() ==0 )
+    if(data.size() ==0 )
         return BaseT::next_filename(data);
-    std::time_t ttp = std::chrono::system_clock::to_time_t(data.tf_blocks()[0]->start_time());
+    //std::time_t ttp = std::chrono::system_clock::to_time_t(data.tf_blocks()[0]->start_time());
+    auto time = std::chrono::system_clock::now();
+    std::time_t ttp = std::chrono::system_clock::to_time_t(time);
     char stem[20];
     std::strftime(stem, sizeof(stem), "%Y_%m_%d_%H:%M:%S", std::gmtime(&ttp));
     boost::filesystem::path file = boost::filesystem::path(this->_prefix + stem + this->_extension);

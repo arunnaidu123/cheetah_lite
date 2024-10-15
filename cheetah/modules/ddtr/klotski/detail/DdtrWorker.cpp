@@ -47,6 +47,8 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
                                                                     , std::shared_ptr<DedispersionPlan<DdtrTraits>> plan
                                                                     , CallBackT const& call_back)
 {
+    std::lock_guard<std::mutex> lock(plan->dm_trials()->mutex());
+
     if (agg_buf->capacity() < (std::size_t) plan->dedispersion_strategy()->maxshift())
     {
         panda::Error e("DdtrKlotski: data buffer size < maxshift (");
@@ -58,6 +60,7 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
 
     auto dmtrials_ptr = plan->dm_trials();
     auto spdt_dmtrials_ptr = plan->spdt_dm_trials();
+
     dmtrials_ptr->start_time(agg_buf->start_time());
     spdt_dmtrials_ptr->start_time(agg_buf->start_time());
 
@@ -68,11 +71,16 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
         ++ddtr;
     }
     auto ddtr_stop = std::chrono::high_resolution_clock::now();
-    PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_stop - ddtr_start).count()/1000000.0<<" ms";
+
     DmTrialsType& dmtrials = *(dmtrials_ptr);
     call_back(dmtrials, plan->dedispersion_strategy()->ndms());
 
+
+    spdt_dmtrials_ptr->wait();
     dmtrials_ptr->swap(*spdt_dmtrials_ptr);
+
+    PANDA_LOG<<" Beam id: "<<plan->beam_id()<<" Ddtr time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_stop - ddtr_start).count()/1000000.0<<" ms";
+
     return spdt_dmtrials_ptr;
 }
 

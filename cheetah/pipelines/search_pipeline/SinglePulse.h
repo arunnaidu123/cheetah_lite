@@ -50,7 +50,7 @@ class SinglePulse : public SinglePulseImpl<NumericalT>
         typedef typename BaseT::TimeFrequencyType TimeFrequencyType;
         typedef typename BaseT::DmTrialType DmTrialType;
         typedef typename BaseT::BufferType BufferType;
-        typedef modules::ddtr::Ddtr<modules::ddtr::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Ddtr;
+        typedef modules::ddtr::Ddtr<search_pipeline::BeamConfigType<NumericalT>, modules::ddtr::ConfigType<typename CheetahConfig<NumericalT>::PoolManagerType>, NumericalT> Ddtr;
         typedef typename Ddtr::DedispersionHandler DmHandler;
 
     public:

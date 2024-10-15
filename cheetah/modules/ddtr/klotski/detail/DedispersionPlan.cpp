@@ -76,7 +76,6 @@ data::DimensionSize<data::Time> DedispersionPlan<DdtrTraits>::reset(TimeFrequenc
     _dm_trials_ptr = DmTrialsType::make_shared(_dm_trial_metadata, data.start_time());
     _spdt_dm_trials_ptr = DmTrialsType::make_shared(_dm_trial_metadata, data.start_time());
 
-
     return data::DimensionSize<data::Time>(_number_of_spectra);
 }
 

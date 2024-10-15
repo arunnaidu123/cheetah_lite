@@ -15,7 +15,6 @@ MultiThread::MultiThread()
 
 MultiThread::~MultiThread()
 {
-    std::cout<<"~MultiThread()\n";
 }
 
 void MultiThread::reset(unsigned id)

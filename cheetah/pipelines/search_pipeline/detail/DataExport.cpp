@@ -92,7 +92,7 @@ struct SigProcStreamer {
     private:
         std::shared_ptr<sigproc::SigProcWriter<HeaderType>> _writer;
 };
-/*
+
 template<typename T>
 struct SpsCandidateStreamer : public DataExportStreamWrapper<io::exporters::SpCclFileStreamer<typename T::TimeFrequencyType::DataType>, T>
 {
@@ -104,7 +104,7 @@ struct SpsCandidateStreamer : public DataExportStreamWrapper<io::exporters::SpCc
         {
         }
 };
-*/
+
 template<typename T>
 struct SpsCandidateDataStreamer : public DataExportStreamWrapper<io::exporters::SpCandidateDataStreamer<typename T::TimeFrequencyType>, T>
 {
@@ -203,14 +203,14 @@ DataExport<NumRep, ExportTraits>::DataExport(io::exporters::DataExportConfig con
            return SigProcStreamer<modules::rfim::ampp::Spectrum<NumRep>, typename ExportTraits::SigProcHeader>(static_cast<sigproc::WriterConfig const&>(c.sink_config()));
         }
     );
-    /*
+
     this->template set_factory<data::SpCcl<NumRep>>(io::exporters::ExporterType("spccl_files"),
         [](io::exporters::DataExportStreamConfig const& c)
         {
             return SpsCandidateStreamer<data::SpCcl<NumRep>>(static_cast<io::exporters::SpCclFileStreamerConfig const&>(c.sink_config()));
         }
     );
-    */
+
 #ifdef ENABLE_SPEAD
     this->template set_factory<data::SpCcl<NumRep>>(io::exporters::ExporterType("spccl_spead"),
         [](io::exporters::DataExportStreamConfig const& c)

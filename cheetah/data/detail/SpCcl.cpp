@@ -51,6 +51,16 @@ SpCcl<NumericalRep>::SpCcl(std::shared_ptr<DmTrialsType> const& data)
 }
 
 template<typename NumericalRep>
+SpCcl<NumericalRep>::SpCcl(utils::ModifiedJulianClock::time_point const& start_time)
+    : _dm_range(Dm(std::numeric_limits<typename Dm::value_type>::max() * parsecs_per_cube_cm),
+                Dm(std::numeric_limits<typename Dm::value_type>::min() * parsecs_per_cube_cm))
+    , _start_time(start_time)
+    , _offset_time(0.0*data::milliseconds)
+    , _data(0)
+{
+}
+
+template<typename NumericalRep>
 SpCcl<NumericalRep>::~SpCcl()
 {
 }

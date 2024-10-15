@@ -42,7 +42,8 @@ SpCclFileStreamerTraits<NumericalRep>::~SpCclFileStreamerTraits()
 template<typename NumericalRep>
 void SpCclFileStreamerTraits<NumericalRep>::write(std::ostream& os, data::SpCcl<NumericalRep> const& candidate_list)
 {
-    if(candidate_list.tf_blocks().empty()) return;
+    if(candidate_list.size() == 0) return;
+
 
     for(auto it = candidate_list.begin(); it != candidate_list.end(); ++it)
     {
@@ -56,6 +57,7 @@ void SpCclFileStreamerTraits<NumericalRep>::write(std::ostream& os, data::SpCcl<
            << std::left << std::setw(_column_width) << "\t" << std::setprecision(6) << candidate.sigma() << "\n";
     }
     os.flush();
+
 }
 
 } // namespace exporters

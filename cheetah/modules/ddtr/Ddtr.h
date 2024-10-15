@@ -48,12 +48,12 @@ template<typename FunctorType, typename... Args> class Method {};
  * @details Note that the ddtr::Config class should also needs to support the algorithms
  *          specific configuration object as given by the my_algo::Ddtr::Config typedef.
  */
-template<typename ConfigType, typename NumericalRep>
-using DdtrAlgos=DdtrModule<CommonTypes<ConfigType, NumericalRep>
+template<typename BeamConfigType, typename ConfigType, typename NumericalRep>
+using DdtrAlgos=DdtrModule<CommonTypes<BeamConfigType, ConfigType, NumericalRep>
                            , cpu::Ddtr
 #ifdef SKA_CHEETAH_ENABLE_NASM
-                           , klotski::Ddtr
                            , klotski_bruteforce::Ddtr
+                           , klotski::Ddtr
 #endif // SKA_CHEETAH_ENABLE_NASM
                        >;
 
@@ -61,16 +61,15 @@ using DdtrAlgos=DdtrModule<CommonTypes<ConfigType, NumericalRep>
  * @brief DDTR module top level API.
  * @details Exposes all available ddtr algorithms to the user for selection via runtime configuration options
  */
-template<typename ConfigType, typename NumericalRep>
-class Ddtr : public DdtrAlgos<ConfigType, NumericalRep>
+template<typename BeamConfigType, typename ConfigType, typename NumericalRep>
+class Ddtr : public DdtrAlgos<BeamConfigType, ConfigType, NumericalRep>
 {
-        typedef DdtrAlgos<ConfigType, NumericalRep> BaseT;
-        typedef CommonTypes<ConfigType, NumericalRep> DdtrTraits;
+        typedef DdtrAlgos<BeamConfigType, ConfigType, NumericalRep> BaseT;
+        typedef CommonTypes<BeamConfigType, ConfigType, NumericalRep> DdtrTraits;
 
     public:
         typedef typename DdtrTraits::DedispersionHandler DedispersionHandler;
         typedef typename DdtrTraits::DmTrialsType DmTrialsType;
-        typedef typename DdtrTraits::BeamConfigType BeamConfigType;
 
     public:
         Ddtr(BeamConfigType const& beam_config, ConfigType const& config, DedispersionHandler);

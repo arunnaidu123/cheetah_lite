@@ -56,7 +56,7 @@ class MultiThread
         ~MultiThread();
 
         template<typename Function, typename... Args>
-        void add_job(unsigned const& affinity, Function&& fn, Args... args);
+        void add_job(Function&& fn, Args... args);
 
         /**
          * @brief instruct the thread to run on a specific core - forwards to pthread_setaffinity_np on LINUX otherwise has no effect

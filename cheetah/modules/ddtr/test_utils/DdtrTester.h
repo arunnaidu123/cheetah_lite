@@ -27,9 +27,11 @@
 #include "cheetah/generators/pulse_profile/ProfileManager.h"
 #include "cheetah/modules/ddtr/Ddtr.h"
 #include "cheetah/utils/test_utils/AlgorithmTester.h"
+#include "cheetah/pipelines/search_pipeline/BeamConfig.h"
 #include "panda/ResourcePool.h"
 #include "panda/test/TestResourcePool.h"
 #include "panda/test/TestHandler.h"
+#include "panda/test/TestPoolManager.h"
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -76,14 +78,14 @@ struct DdtrTesterTraitsBase : public utils::test::PoolAlgorithmTesterTraits<type
 
 template<template<typename> class DdtrAlgoT, typename NumericalT>
 struct DdtrTesterTraits :
-    DdtrTesterTraitsBase<DdtrAlgoT<ddtr::CommonTypes<ddtr::Config
+    DdtrTesterTraitsBase<DdtrAlgoT<ddtr::CommonTypes<pipelines::search_pipeline::BeamConfig<NumericalT>, ddtr::Config
                                                    , NumericalT
                                                    >
                                  >
                         >
 {
     public:
-        typedef DdtrTesterTraitsBase<DdtrAlgoT<ddtr::CommonTypes<ddtr::Config
+        typedef DdtrTesterTraitsBase<DdtrAlgoT<ddtr::CommonTypes<pipelines::search_pipeline::BeamConfig<NumericalT>, ddtr::Config
                                                    , NumericalT
                                                    >
                                  >
@@ -110,11 +112,25 @@ struct DdtrTesterTraits :
                 PoolType* _pool;
         };
 
+        struct TestBeamConfig : public pipelines::search_pipeline::BeamConfig<NumericalRep>
+        {
+            typedef typename DdtrTesterTraits<DdtrAlgoT, NumericalRep>::PoolType PoolType;
+
+            public:
+                TestBeamConfig() : _pool(nullptr) {}
+                PoolType& pool() const { assert(_pool); return *_pool; }
+                void set_pool(PoolType& pool) { _pool = &pool; }
+
+            protected:
+                PoolType* _pool;
+        };
+
+
     public:
-        typedef ddtr::Ddtr<TestConfig, NumericalRep> Api;
+        typedef ddtr::Ddtr<TestBeamConfig, TestConfig, NumericalRep> Api;
         typedef typename Api::DmTrialsType DmType;
         typedef typename std::vector<std::shared_ptr<DmType>> DmDataContainerType;
-
+        typedef typename Api::BeamConfigType BeamConfigType;
     private:
         struct DdtrHandler : public panda::test::TestHandler
         {
@@ -162,10 +178,9 @@ struct DdtrTesterTraits :
 
     protected:
         TestConfig _config;
-
-        DmDataContainerType _dm_data;
+        TestBeamConfig _beam_config;
         std::size_t _dm_call_count;
-        typename Api::BeamConfig _beam_config;
+        DmDataContainerType _dm_data;
         std::unique_ptr<Api> _api; // must be last member
         generators::ProfileManager _manager;
         DdtrHandler _handler;

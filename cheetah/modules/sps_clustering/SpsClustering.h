@@ -27,6 +27,7 @@
 #include "cheetah/modules/sps_clustering/Config.h"
 #include "cheetah/modules/sps_clustering/Fof.h"
 #include "cheetah/data/SpCcl.h"
+#include "cheetah/data/SpCandidate.h"
 
 namespace ska {
 namespace cheetah {
@@ -58,6 +59,7 @@ namespace sps_clustering {
 class SpsClustering
 {
         typedef Fof ClusteringAlgo;
+        typedef data::SpCandidate<Cpu, float> SpCandidateType;
 
     public:
         SpsClustering(Config const& config);

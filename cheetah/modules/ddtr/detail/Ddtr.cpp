@@ -29,38 +29,29 @@ namespace modules {
 namespace ddtr {
 
 
-template<typename ConfigType, typename NumericalRep>
-Ddtr<ConfigType, NumericalRep>::Ddtr(BeamConfigType const& beam_config, ConfigType const& config, DedispersionHandler handler)
+template<typename BeamConfigType, typename ConfigType, typename NumericalRep>
+Ddtr<BeamConfigType, ConfigType, NumericalRep>::Ddtr(BeamConfigType const& beam_config, ConfigType const& config, DedispersionHandler handler)
     : BaseT(beam_config, config, handler)
 {
-    //std::cout<<"Affinity: "<<beam_config.affinities().size()<<"\n";
-    //if(beam_config.affinities().size())
-    //{
-    //    cpu_set_t cpuset;
-    //    CPU_ZERO(&cpuset);
-    //    CPU_SET(beam_config.affinities()[0], &cpuset);
-    //    int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-    //    if (rc != 0) throw panda::Error("Thread: Error calling pthread_setaffinity_np: ");
-    //}
 }
 
-template<typename ConfigType, typename NumericalRep>
-Ddtr<ConfigType, NumericalRep>::~Ddtr()
+template<typename BeamConfigType, typename ConfigType, typename NumericalRep>
+Ddtr<BeamConfigType, ConfigType, NumericalRep>::~Ddtr()
 {
     //_pool.wait();
 }
 
-template<typename ConfigType, typename NumericalRep>
+template<typename BeamConfigType, typename ConfigType, typename NumericalRep>
 template<typename TimeFreqDataT
        , typename data::EnableIfIsTimeFrequency<TimeFreqDataT, bool>>
-void Ddtr<ConfigType, NumericalRep>::operator()(TimeFreqDataT const& tf_data)
+void Ddtr<BeamConfigType, ConfigType, NumericalRep>::operator()(TimeFreqDataT const& tf_data)
 {
     this->_buffer(tf_data);
 }
 
-template<typename ConfigType, typename NumericalRep>
+template<typename BeamConfigType, typename ConfigType, typename NumericalRep>
 template<typename T>
-void Ddtr<ConfigType, NumericalRep>::operator()(std::shared_ptr<T> const& data)
+void Ddtr<BeamConfigType, ConfigType, NumericalRep>::operator()(std::shared_ptr<T> const& data)
 {
     (*this)(*data);
 }

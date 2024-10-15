@@ -32,48 +32,31 @@ namespace sps_clustering {
 template<typename NumRepType>
 std::shared_ptr<data::SpCcl<NumRepType>> SpsClustering::operator()(std::shared_ptr<data::SpCcl<NumRepType>> const& cands)
 {
-    /*
-    if (! _config.active())
+    if (! _config.active() || cands->size()==0)
         return cands;
 
-    data::DimensionIndex<data::Time> offset_samples(0);
-    if(cands->tf_blocks().size() !=0)
-    {
-        offset_samples = data::DimensionIndex<data::Time>(cands->offset_time().value()/1000.0/(cands->tf_blocks()[0]->sample_interval().value()));
-    }
+    std::shared_ptr<data::SpCcl<NumRepType>> merged_cands = std::make_shared<data::SpCcl<NumRepType>>(cands->start_time());
 
-    std::shared_ptr<data::SpCcl<NumRepType>> merged_cands = std::make_shared<data::SpCcl<NumRepType>>(cands->tf_blocks(), offset_samples);
-    std::vector<std::vector<size_t>> groups = _clustered_candidates(*cands);
-
-    PANDA_LOG_DEBUG << "Picking best candidate from  " << groups.size() << " clusters...";
-    std::vector<data::SpCandidate<Cpu, float>> group_cands;
-    for ( auto const& group : groups )
+    SpCandidateType temp;
+    auto const& data = cands->data();
+    auto candidate = data[0];
+    for(unsigned int i=0; i<data.size(); ++i)
     {
-        // use the max sigma candidate as the representative of any group
-        // Filter out all candidates with these indices into a separate vector
-        PANDA_LOG_DEBUG << "Size of each cluster: " << group.size();
-        std::size_t max_sigma_index = group[0];
-        typename data::SpCcl<NumRepType>::SpCandidateType::NumericalRep max_sigma = (*cands)[max_sigma_index].sigma();
-        for (std::size_t ii=1; ii < group.size(); ++ii)
+        if(abs(candidate.tstart().value()-data[i].tstart().value())<10000.0)
         {
-            auto const& candidate = (*cands)[group[ii]];
-            if( candidate.sigma() > max_sigma ) {
-                max_sigma = candidate.sigma();
-                max_sigma_index = group[ii];
+            if(candidate.sigma()<data[i].sigma())
+            {
+                candidate = data[i];
             }
         }
-        PANDA_LOG_DEBUG << "Parameters for max S/N candidate";
-        PANDA_LOG_DEBUG << "DM: " << (*cands)[max_sigma_index].dm();
-        PANDA_LOG_DEBUG << "Width: " << (*cands)[max_sigma_index].width();
-        PANDA_LOG_DEBUG << "S/N: " << (*cands)[max_sigma_index].sigma();
-        if ((*cands)[max_sigma_index].dm() >= (*cands).dm_range().first + (1.0 * pss::astrotypes::units::parsecs_per_cube_cm))
+        else
         {
-            merged_cands->push_back((*cands)[max_sigma_index]);
+            merged_cands->push_back(candidate);
+            if(i+1<data.size()) candidate = data[i];
         }
     }
+    merged_cands->push_back(candidate);
     return merged_cands;
-    */
-    return cands;
 }
 
 } // namespace sps_clustering

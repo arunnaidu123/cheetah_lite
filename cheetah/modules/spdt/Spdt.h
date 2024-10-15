@@ -41,8 +41,8 @@ namespace spdt {
 /**
  * @brief algorithms listed here will be made avaialble via the top level spdt API
  */
-template<typename ConfigType, typename NumericalT>
-using SpdtAlgos=SpdtModule<CommonTypes<ConfigType, NumericalT>
+template<typename BeamConfigType, typename ConfigType, typename NumericalT>
+using SpdtAlgos=SpdtModule<CommonTypes<BeamConfigType, ConfigType, NumericalT>
                                , cpu::Spdt
 #ifdef SKA_CHEETAH_ENABLE_NASM
                                , klotski::Spdt
@@ -54,11 +54,11 @@ using SpdtAlgos=SpdtModule<CommonTypes<ConfigType, NumericalT>
  * @details Exposes all available Spdt algorithms to the user for selection via runtime configuration options
  */
 
-template<class ConfigType, typename NumericalT>
-class Spdt : public SpdtAlgos<ConfigType, NumericalT>
+template<class BeamConfigType, class ConfigType, typename NumericalT>
+class Spdt : public SpdtAlgos<BeamConfigType, ConfigType, NumericalT>
 {
-        typedef SpdtAlgos<ConfigType, NumericalT> BaseT;
-        typedef CommonTypes<ConfigType, NumericalT> SpdtTraits;
+        typedef SpdtAlgos<BeamConfigType, ConfigType, NumericalT> BaseT;
+        typedef CommonTypes<BeamConfigType, ConfigType, NumericalT> SpdtTraits;
 
     public:
         typedef typename SpdtTraits::SpType SpType;
@@ -68,7 +68,6 @@ class Spdt : public SpdtAlgos<ConfigType, NumericalT>
         typedef typename SpdtTraits::DedispersionHandler DmHandler;
         typedef typename SpdtTraits::BufferType BufferType;
         typedef typename SpdtTraits::TimeFrequencyType TimeFrequencyType;
-        typedef typename SpdtTraits::BeamConfigType BeamConfigType;
 
     public:
         /**

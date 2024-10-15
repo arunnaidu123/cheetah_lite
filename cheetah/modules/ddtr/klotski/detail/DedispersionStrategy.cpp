@@ -268,6 +268,7 @@ void DedispersionStrategy<NumericalRep>::make_strategy(size_t const cpu_memory)
         unsigned int start_channel_of_band = 0;
         for(unsigned int band=0; band<_number_of_bands; ++band)
         {
+
             float temp_shift = _dm_step[range].value()*_dm_constant.value()*((1.0/((_fch1.value() - start_channel_of_band*_foff.value())*(_fch1.value() - start_channel_of_band*_foff.value())))-(1.0/(_fch1.value()*_fch1.value())))/_tsamp[range].value();
 
             _dmshifts_per_band[range][band].resize(_ndms[range]);
@@ -288,22 +289,33 @@ void DedispersionStrategy<NumericalRep>::make_strategy(size_t const cpu_memory)
                 float temp_shift = _dm_step[range].value()*_dm_constant.value()*(1.0/((fch1_klotski)*(fch1_klotski))-1.0/(fch1_band*fch1_band))/_tsamp[range].value();
                 _dmshifts_per_klotski[range][band][klotski].resize(_ndms[range]);
                 _dmshifts_per_klotski_excess[range][band][klotski].resize(_ndms[range]);
-                for(unsigned int dm_index=0; dm_index<_ndms[range]; ++dm_index)
-                {
-                    _dmshifts_per_klotski[range][band][klotski][dm_index] = (unsigned int)(temp_shift*dm_index);
-                    if(_precise==true)_dmshifts_per_klotski_excess[range][band][klotski][dm_index] =  (temp_shift*dm_index)-std::floor(temp_shift*dm_index);
-                    else _dmshifts_per_klotski_excess[range][band][klotski][dm_index] = 0.0;
-                }
 
                 _dmshifts_per_channel[range][band][klotski].resize(channels_per_klotski);
+                std::vector<float> temp_shift_channel(channels_per_klotski);
                 for(unsigned int channel=0; channel<channels_per_klotski; ++channel)
                 {
                     _dmshifts_per_channel[range][band][klotski][channel] = _dm_step[range].value()*_dm_constant.value()*(1.0/((fch1_klotski-_foff.value()*channel)*(fch1_klotski-_foff.value()*channel))-1.0/(fch1_klotski*fch1_klotski))/_tsamp[range].value();
+                    temp_shift_channel[channel] = _dm_step[range].value()*_dm_constant.value()*(1.0/((fch1_klotski-_foff.value()*channel)*(fch1_klotski-_foff.value()*channel))-1.0/(_fch1.value()*_fch1.value()))/_tsamp[range].value();
+
+
                     if((_ndms[range]*_dmshifts_per_channel[range][band][klotski][channel])>64.0)
                     {
                         throw panda::Error("reduce the number of channels per klotski");
                     }
                 }
+
+                for(unsigned int dm_index=0; dm_index<_ndms[range]; ++dm_index)
+                {
+                    float excess = 0.0;
+                    for(unsigned int channel=0; channel<channels_per_klotski; ++channel)
+                    {
+                        excess += std::floor(temp_shift_channel[channel]*dm_index)-std::floor(temp_shift*dm_index)-std::floor(_dmshifts_per_channel[range][band][klotski][channel]*dm_index);
+                    }
+                    excess /= (float)channels_per_klotski;
+                    _dmshifts_per_klotski[range][band][klotski][dm_index] = std::floor(temp_shift*dm_index+excess);
+                }
+
+
             }
             start_channel_of_band += _channels_per_band[band];
         }

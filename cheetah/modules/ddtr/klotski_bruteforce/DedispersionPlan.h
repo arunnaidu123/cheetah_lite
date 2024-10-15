@@ -98,6 +98,11 @@ class DedispersionPlan
          */
         std::shared_ptr<DmTrialsType> const& dm_trials();
 
+        /**
+         * @brief returns pointer to the SPDT DmTrials object
+         */
+        std::shared_ptr<DmTrialsType> const& spdt_dmtrials();
+
     private:
         BeamConfigType const& _beam_config;
         ConfigType const& _config;
@@ -109,6 +114,7 @@ class DedispersionPlan
         std::vector<double> _dm_factors;
         std::size_t _number_of_spectra;
         std::shared_ptr<DmTrialsType> _dm_trials_ptr;
+        std::shared_ptr<DmTrialsType> _spdt_dm_trials_ptr;
 };
 
 } // namespace klotski_bruteforce

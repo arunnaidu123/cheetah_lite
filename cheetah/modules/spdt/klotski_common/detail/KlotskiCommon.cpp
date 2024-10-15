@@ -66,7 +66,8 @@ extern "C" void nasm_filter_spdt( std::size_t* stack_variables
 template<class SpdtTraits, typename ImplConfigType, typename AlgoConfigType>
 std::shared_ptr<typename SpdtTraits::SpType> KlotskiCommon<SpdtTraits, ImplConfigType, AlgoConfigType>::operator()(panda::PoolResource<panda::Cpu>& cpu, std::shared_ptr<typename SpdtTraits::DmTrialsType> data)
 {
-    //auto spdt_start = std::chrono::high_resolution_clock::now();
+    data->lock();
+    auto spdt_start = std::chrono::high_resolution_clock::now();
     std::vector<float> spdt_cands;
     auto& dmtrials = *data;
 
@@ -84,8 +85,9 @@ std::shared_ptr<typename SpdtTraits::SpType> KlotskiCommon<SpdtTraits, ImplConfi
                         , spdt_cands[idx] // sigma
                         );
     }
-    //auto spdt_stop = std::chrono::high_resolution_clock::now();
-    //std::cout<<"spdt: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(spdt_stop - spdt_start).count()/1000000.0<<"\n";
+    auto spdt_stop = std::chrono::high_resolution_clock::now();
+    PANDA_LOG<<"spdt: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(spdt_stop - spdt_start).count()/1000000.0;
+    data->done();
     return sp_candidate_list;
 }
 
@@ -178,7 +180,7 @@ void KlotskiCommon<SpdtTraits, ImplConfigType, AlgoConfigType>::perform_search(D
                 if(best_snr!=0)
                 {
                     sp_cands.push_back(((float)best_snr/100.0)); //snr
-                    sp_cands.push_back((float)best_sample-(float)(best_width/2)); // sample (sub tract half the width to center the candidate)
+                    sp_cands.push_back((float)best_sample-(float)(best_width)/2); // sample (sub tract half the width to center the candidate)
                     sp_cands.push_back((float)(best_dm)); // dm
                     sp_cands.push_back((float)(best_width)); // width
                 }

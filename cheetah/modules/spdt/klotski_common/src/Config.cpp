@@ -33,7 +33,7 @@ namespace klotski_common {
 
 Config::Config(std::string module_name)
     : utils::Config(module_name)
-    , _widths({1,2,4,5,6,7,8,9,10,11,12,15,16,17,22,23,24,25,28,29,30,31,32,33,34,100, 150, 300, 400, 512, 768, 1024, 1200, 1400, 1600, 2048, 4096}) // array of widths.
+    , _widths({1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024, 1536, 2048, 3072, 4096}) // array of widths.
     , _number_of_dms_per_iteration(8)
     , _max_width_limit(16*1024) // limit on the width thah can be searched. Dont change it unless you what you are doing.
 {

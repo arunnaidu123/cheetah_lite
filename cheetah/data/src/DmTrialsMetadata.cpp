@@ -142,13 +142,13 @@ std::vector<unsigned> DmTrialsMetadata::number_of_ranges() const
     unsigned samples = _metadata[0].size();
     for(unsigned int dm=0; dm<_metadata.size(); ++dm)
     {
-        ndms += 1;
         if(_metadata[dm].size()!=samples)
         {
             samples = _metadata[dm].size();
             nranges.push_back(ndms);
             ndms=0;
         }
+        ndms += 1;
     }
     nranges.push_back(ndms);
     return nranges;

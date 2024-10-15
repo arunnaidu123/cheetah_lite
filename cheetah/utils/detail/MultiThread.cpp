@@ -3,10 +3,10 @@ namespace cheetah {
 namespace utils {
 
 template<typename Function, typename... Args>
-void MultiThread::add_job(unsigned const& affinity, Function&& fn, Args... args)
+void MultiThread::add_job(Function&& fn, Args... args)
 {
-    _threads.push_back(std::thread([this, affinity, fn, args...](unsigned njobs) {
-                set_core_affinity(affinity);
+    _threads.push_back(std::thread([this, fn, args...](unsigned njobs) {
+                //set_core_affinity(affinity);
                 while(status(njobs))
                 {
                     wait(njobs);

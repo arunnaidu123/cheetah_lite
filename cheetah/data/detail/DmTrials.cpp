@@ -13,6 +13,7 @@ DmTrials<Arch,T,Alloc>::DmTrials(std::shared_ptr<DmTrialsMetadata> metadata, Mjd
     : _metadata(std::move(metadata))
     , _data((_metadata?_metadata->total_data_size():0), allocator)
     , _start_time(std::move(start))
+    , _ready(true)
 {
     if (!_metadata || _metadata->size() == 0)
         throw panda::Error("Empty DmTrialsMetadata passed to DmTrials constructor.");
@@ -33,6 +34,7 @@ DmTrials<Arch,T,Alloc>::DmTrials(DmTrials<OtherArch, OtherT, OtherAlloc> const& 
     , _data(copy._data, allocator)
     , _start_time(copy.start_time())
     , _duration(copy.duration())
+    , _ready(true)
 {
     _trials.reserve(_metadata->size());
     auto it = _data.begin();
