@@ -315,7 +315,6 @@ void DedispersionStrategy<NumericalRep>::make_strategy(size_t const cpu_memory)
                     _dmshifts_per_klotski[range][band][klotski][dm_index] = std::floor(temp_shift*dm_index+excess);
                 }
 
-
             }
             start_channel_of_band += _channels_per_band[band];
         }

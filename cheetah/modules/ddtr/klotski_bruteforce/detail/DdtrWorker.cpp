@@ -75,6 +75,7 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
 
     DmTrialsType& dmtrials = *(plan->dm_trials());
     call_back(dmtrials, plan->dedispersion_strategy()->ndms());
+
     auto ddtr_stop = std::chrono::high_resolution_clock::now();
     PANDA_LOG<<" Ddtr time: "<<std::chrono::duration_cast<std::chrono::nanoseconds>(ddtr_stop - ddtr_start).count()/1000000.0<<" ms";
 

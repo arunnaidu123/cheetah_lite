@@ -75,7 +75,6 @@ std::shared_ptr<typename DdtrWorker<DdtrTraits>::DmTrialsType> DdtrWorker<DdtrTr
     DmTrialsType& dmtrials = *(dmtrials_ptr);
     call_back(dmtrials, plan->dedispersion_strategy()->ndms());
 
-
     spdt_dmtrials_ptr->wait();
     dmtrials_ptr->swap(*spdt_dmtrials_ptr);
 

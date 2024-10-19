@@ -56,7 +56,7 @@ element_loop:
         vpaddd zmm3, zmm3, zmm4
         vcvtdq2ps zmm3, zmm3
         vdivps zmm3, zmm3, zmm7
-        vcvtps2udq zmm3, zmm3, {ru-sae}
+        vcvtps2udq zmm3, zmm3, {rz-sae}
         vpmovdw ymm3, zmm3
         vpmovwb xmm3, ymm3
         mov rax, SIZE_OF_XMM

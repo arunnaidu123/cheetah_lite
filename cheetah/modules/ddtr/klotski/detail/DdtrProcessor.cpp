@@ -95,10 +95,9 @@ DdtrProcessor<DdtrTraits>& DdtrProcessor<DdtrTraits>::operator++()
     threaded_dedispersion(_plan);
 
     nasm_downsample(&*(*_plan->dedispersion_strategy()->temp_work_area()).begin()
-                   , _plan->dedispersion_strategy()->nsamps()*_plan->dedispersion_strategy()->nchans());
+                   , (*_plan->dedispersion_strategy()->temp_work_area()).size());
 
     ++_current_dm_range;
-
     return *this;
 }
 
